@@ -929,17 +929,14 @@
 
                 <!-- Social login with Google centered and styled -->
                 <div class="social-login mt-3">
-                    <ul class="list-unstyled d-flex justify-content-center mb-0">
-                        <li>
-                            <a href="https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&access_type=online&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8080/JobSearchManagement/LoginGoogleHandler&client_id=662818990560-8t0tkh07kp0kktc2mk7177k5gj8dvkdn.apps.googleusercontent.com">
-  Login With Google
-</a>
-"JavaScript:Void(0);" class="btn connect-google">
-                                <i class="fa-brands fa-google"></i> Google+
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+    <ul class="list-unstyled d-flex justify-content-center mb-0">
+        <li>
+            <a href="https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&access_type=online&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8080/JobSearchManagement/LoginGoogleHandler&client_id=662818990560-8t0tkh07kp0kktc2mk7177k5gj8dvkdn.apps.googleusercontent.com" class="btn connect-google">
+                <i class="fa-brands fa-google"></i> Login With Google
+            </a>
+        </li>
+    </ul>
+</div>
 
             </div>
             <div class="modal-footer">

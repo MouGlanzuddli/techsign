@@ -98,7 +98,7 @@ public class LoginGoogleHandler extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("loginGG.jsp?error=internal_error");
+            response.sendRedirect("index.jsp?error=internal_error");
         }
     }
 

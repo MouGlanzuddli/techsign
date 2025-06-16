@@ -466,3 +466,4 @@ VALUES (2, GETDATE(), '192.168.1.2', 'Chrome on Windows');
 -- System log
 INSERT INTO system_logs (user_id, action, description, created_at)
 VALUES (2, 'Login', 'User logged in', GETDATE());
+
