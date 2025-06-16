@@ -921,7 +921,7 @@
                 </div>
             </div>
             <div class="modal-flex-last">
-                <a href="JavaScript:Void(0);">Forget Password?</a>
+               <a href="forgot-password.jsp">Forget Password?</a>
             </div>
         </div>
     </form>
