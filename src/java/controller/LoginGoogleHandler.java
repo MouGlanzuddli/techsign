@@ -42,7 +42,7 @@ public class LoginGoogleHandler extends HttpServlet {
         String code = request.getParameter("code");
 
         if (code == null || code.isEmpty()) {
-            response.sendRedirect("login.jsp?error=google_login_failed");
+            response.sendRedirect("index.jsp?error=google_login_failed");
             return;
         }
 
@@ -62,11 +62,12 @@ public class LoginGoogleHandler extends HttpServlet {
             boolean emailExists = userDao.checkEmailExists(googleUser.getEmail());
 
             User user;
+            HttpSession session = request.getSession();
 
             if (!emailExists) {
-                // Nếu chưa có tài khoản thì tạo mới
+                // Nếu chưa có tài khoản thì tạo mới với role mặc định
                 user = new User();
-                user.setRoleId(2); // Mặc định là Candidate (hoặc 1 tùy hệ thống)
+                user.setRoleId(2); // Mặc định là Candidate, sẽ được cập nhật sau khi chọn role
                 user.setEmail(googleUser.getEmail());
                 user.setPhone(""); // Google không trả số điện thoại
                 user.setPasswordHash(""); // Vì đăng nhập Google, không cần password
@@ -79,22 +80,51 @@ public class LoginGoogleHandler extends HttpServlet {
                 user.setCreatedAt(now);
                 user.setUpdatedAt(now);
 
-                userDao.insertUser(user);
-
-                // Lấy lại user sau khi insert để có ID
-                user = userDao.login(googleUser.getEmail(), "");
+                System.out.println("=== DEBUG LoginGoogleHandler ===");
+                System.out.println("Creating new user: " + user.getEmail());
+                
+                boolean inserted = userDao.insertUser(user);
+                System.out.println("Insert result: " + inserted);
+                
+                if (inserted) {
+                    // Lấy lại user sau khi insert để có ID
+                    user = userDao.getUserByEmail(googleUser.getEmail());
+                    System.out.println("Retrieved user after insert - ID: " + (user != null ? user.getId() : "null"));
+                    
+                    if (user != null && user.getId() > 0) {
+                        // Lưu user tạm thời vào session và chuyển đến trang chọn role
+                        session.setAttribute("tempUser", user);
+                        response.sendRedirect("roleSelection.jsp");
+                    } else {
+                        System.out.println("ERROR: Failed to retrieve user after insert");
+                        response.sendRedirect("index.jsp?error=user_creation_failed");
+                    }
+                } else {
+                    System.out.println("ERROR: Failed to insert user");
+                    response.sendRedirect("index.jsp?error=user_creation_failed");
+                }
             } else {
                 // Nếu đã tồn tại, lấy user theo email
                 user = userDao.getUserByEmail(googleUser.getEmail());
- // Login không cần password cho Google
+                
+                // Lưu user vào session
+                session.setAttribute("user", user);
+
+                // Chuyển hướng theo vai trò hiện tại
+                switch (user.getRoleId()) {
+                    case 1:
+                        response.sendRedirect("adminHome.jsp");
+                        break;
+                    case 2:
+                        response.sendRedirect("candidateHome.jsp");
+                        break;
+                    case 3:
+                        response.sendRedirect("companyHome.jsp");
+                        break;
+                    default:
+                        response.sendRedirect("index.jsp?error=invalid_role");
+                }
             }
-
-            // Lưu user vào session
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-
-            // Chuyển hướng đến trang chính
-            response.sendRedirect("candidateHome.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
