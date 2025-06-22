@@ -850,8 +850,8 @@ function updateStatusStats() {
   if (!container) return
 
   const data = [
-    { status: "Hoạt động", count: realData.accountStats.activeUsers, color: "#10b981" },
-    { status: "Không hoạt động", count: realData.accountStats.inactiveUsers, color: "#f59e0b" },
+    { status: "Hoạt động", count: realData.accountStats.activeUsers, color: "#10b981", icon: "fa-user-check" },
+    { status: "Không hoạt động", count: realData.accountStats.inactiveUsers, color: "#ef4444", icon: "fa-user-times" },
   ]
 
   container.innerHTML = data
@@ -860,7 +860,7 @@ function updateStatusStats() {
     <div class="stat-item">
       <div class="stat-item-header">
         <div class="stat-item-icon" style="background-color: ${item.color}">
-          <i class="fas fa-user-check"></i>
+          <i class="fas ${item.icon}"></i>
         </div>
         <div class="stat-item-info">
           <div class="stat-item-label">${item.status}</div>
