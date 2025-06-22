@@ -24,7 +24,14 @@
         <servlet-name>AdminDashboardServlet</servlet-name>
         <servlet-class>controller.AdminDashboardServlet</servlet-class>
     </servlet>
- 
+    <servlet>
+        <servlet-name>AccountStatisticsServlet</servlet-name>
+        <servlet-class>controller.AccountStatisticsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StatisticsServlet</servlet-name>
+        <servlet-class>controller.StatisticsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginSevlet</servlet-name>
         <url-pattern>/LoginSevlet</url-pattern>
@@ -41,5 +48,12 @@
         <servlet-name>AdminDashboardServlet</servlet-name>
         <url-pattern>/AdminDashboardServlet</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>AccountStatisticsServlet</servlet-name>
+        <url-pattern>/AccountStatisticsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatisticsServlet</servlet-name>
+        <url-pattern>/StatisticsServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

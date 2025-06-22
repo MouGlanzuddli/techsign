@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Statistics API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Statistics API</h1>
+    
+    <div class="test-section">
+        <h2>Kiểm tra StatisticsServlet</h2>
+        <p>Nhấn nút bên dưới để test API lấy dữ liệu thống kê từ TechSignDB:</p>
+        <button onclick="testStatisticsAPI()">Test Statistics API</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function testStatisticsAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>🔄 Đang test API...</p>';
+            
+            fetch('/TechSign/StatisticsServlet', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('✅ API Response:', data);
+                resultDiv.className = 'test-section success';
+                resultDiv.innerHTML = `
+                    <h3>✅ API hoạt động thành công!</h3>
+                    <p><strong>Dữ liệu nhận được:</strong></p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    <h4>📊 Tóm tắt dữ liệu:</h4>
+                    <ul>
+                        <li>👥 Tổng người dùng: ${data.totalUsers || 0}</li>
+                        <li>👨‍💼 Ứng viên: ${data.candidates || 0}</li>
+                        <li>🏢 Nhà tuyển dụng: ${data.employers || 0}</li>
+                        <li>👨‍💻 Admin: ${data.admins || 0}</li>
+                        <li>📈 Lượt truy cập: ${data.totalVisits || 0}</li>
+                        <li>💼 Tin tuyển dụng: ${data.totalJobPosts || 0}</li>
+                        <li>📝 Đơn ứng tuyển: ${data.totalApplications || 0}</li>
+                    </ul>
+                `;
+            })
+            .catch(error => {
+                console.error('❌ API Error:', error);
+                resultDiv.className = 'test-section error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Lỗi API</h3>
+                    <p><strong>Chi tiết lỗi:</strong></p>
+                    <pre>${error.message}</pre>
+                    <p>Hãy kiểm tra:</p>
+                    <ul>
+                        <li>Database có được kết nối không?</li>
+                        <li>StatisticsServlet có được deploy đúng không?</li>
+                        <li>Console log có lỗi gì không?</li>
+                    </ul>
+                `;
+            });
+        }
+
+        // Auto test khi page load
+        window.addEventListener('load', () => {
+            setTimeout(testStatisticsAPI, 1000);
+        });
+    </script>
+</body>
+</html> 

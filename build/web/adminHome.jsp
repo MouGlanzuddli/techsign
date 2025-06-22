@@ -9,12 +9,30 @@
         <link href="<c:url value='assets/css/plugins/admin.css'/>" rel="stylesheet" />
         <link href="<c:url value='assets/css/plugins/chatbox.css'/>" rel="stylesheet" /> <%-- Link to chatbox.css --%>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/statistics-reports.css">
 
 
 
 
     </head>
     <body>
+        
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>        
+        
+        <script>
+        console.log('🔍 Testing Chart.js:', typeof Chart);
+        if (typeof Chart !== 'undefined') {
+            console.log('✅ Chart.js loaded successfully!');
+        } else {
+            console.error('❌ Chart.js failed to load!');
+        }
+        
+        // Global variables
+        window.contextPath = '${pageContext.request.contextPath}';
+        console.log('Context Path:', window.contextPath);
+    </script>
+        
+        
         <header>
             <div class="header-left">
                 <input type="search" placeholder="Tìm kiếm nhanh..." />
@@ -109,7 +127,7 @@
         <script src="<c:url value='assets/js/admin.js'/>"></script>
         <script src="<c:url value='assets/js/chatbox.js'/>"></script> <%-- Link to chatbox.js --%>
 
-
+<script src="${pageContext.request.contextPath}/assets/js/statistics-reports.js?v=<%= System.currentTimeMillis() %>"></script>
 
                <script>
   function updateDashboardStats() {
@@ -135,7 +153,7 @@
         })
         .catch(error => console.error('Lỗi khi lấy dữ liệu:', error));
   }
-  setInterval(updateDashboardStats, 15000); // Gọi updateDashboardStats() mỗi 15 giây
+  setInterval(updateDashboardStats, 600000); // Gọi updateDashboardStats() mỗi 15 giây
   // Call immediately on page load to see initial fetch
   updateDashboardStats();
 
