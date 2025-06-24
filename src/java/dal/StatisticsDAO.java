@@ -285,14 +285,19 @@ public class StatisticsDAO {
     }
     
     // ✅ THỐNG KÊ MỚI: Lấy người dùng mới trong 30 ngày
-    private int getNewUsersLast30Days() throws SQLException {
+    public int getNewUsersLast30Days() throws SQLException {
         String sql = "SELECT COUNT(*) FROM users WHERE created_at >= DATEADD(day, -30, GETDATE())";
-        try (Statement stmt = connection.createStatement(); 
+        try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             return rs.next() ? rs.getInt(1) : 0;
-        } catch (SQLException e) {
-            System.err.println("❌ Error getting new users in last 30 days: " + e.getMessage());
-            return 0;
+        }
+    }
+
+    public int getNewUsersPrevious30Days() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM users WHERE created_at >= DATEADD(day, -60, GETDATE()) AND created_at < DATEADD(day, -30, GETDATE())";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            return rs.next() ? rs.getInt(1) : 0;
         }
     }
 
@@ -377,5 +382,27 @@ public class StatisticsDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Map<Integer, Integer> getHourlyVisitsToday() throws SQLException {
+        Map<Integer, Integer> hourlyVisits = new HashMap<>();
+        for (int i = 0; i < 24; i++) {
+            hourlyVisits.put(i, 0);
+        }
+        
+        String sql = "SELECT DATEPART(hour, login_time) as hour, COUNT(*) as visit_count " +
+                     "FROM login_history " +
+                     "WHERE CAST(login_time AS DATE) = CAST(GETDATE() AS DATE) " +
+                     "GROUP BY DATEPART(hour, login_time)";
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                hourlyVisits.put(rs.getInt("hour"), rs.getInt("visit_count"));
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Error getting hourly visits: " + e.getMessage());
+        }
+        return hourlyVisits;
     }
 }

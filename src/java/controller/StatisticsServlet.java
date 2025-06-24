@@ -1,5 +1,6 @@
 package controller;
 
+import dal.DBContext;
 import dal.StatisticsDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -39,6 +40,9 @@ public class StatisticsServlet extends HttpServlet {
             // ✅ NÂNG CẤP: Lấy tất cả dữ liệu tăng trưởng cần thiết
             statistics.put("monthlyCandidateGrowth", statisticsDAO.getMonthlyCandidateGrowth());
             statistics.put("monthlyEmployerGrowth", statisticsDAO.getMonthlyEmployerGrowth());
+            statistics.put("hourlyVisits", statisticsDAO.getHourlyVisitsToday());
+            statistics.put("newUsersLast30Days", statisticsDAO.getNewUsersLast30Days());
+            statistics.put("newUsersPrev30Days", statisticsDAO.getNewUsersPrevious30Days());
 
             String jsonResponse = new Gson().toJson(statistics);
             

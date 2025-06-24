@@ -211,6 +211,9 @@
 
 .stat-change.positive { color: #10b981; }
 .stat-change.negative { color: #ef4444; }
+.stats-grid .stat-change.neutral, .stat-card .stat-change.neutral {
+  color: #3b82f6;
+}
 
 .stat-icon {
   width: 60px;

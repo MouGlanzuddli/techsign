@@ -60,8 +60,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Tổng tài khoản</h3>
-                                <div class="stat-number blue" id="totalAccounts">1,250</div>
-                                <span class="stat-change positive" id="totalChange">+12% tháng trước</span>
+                                <div class="stat-number blue" id="totalAccounts"></div>
+                                <span class="stat-change" id="totalChange"></span>
                             </div>
                             <div class="stat-icon blue">
                                 <i class="fas fa-users"></i>
@@ -73,8 +73,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Tài khoản mới (30 ngày)</h3>
-                                <div class="stat-number green" id="newAccounts">85</div>
-                                <span class="stat-change positive" id="newChange">+23% tháng trước</span>
+                                <div class="stat-number green" id="newAccounts"></div>
+                                <span class="stat-change" id="newChange"></span>
                             </div>
                             <div class="stat-icon green">
                                 <i class="fas fa-user-plus"></i>
@@ -86,8 +86,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Không hoạt động</h3>
-                                <div class="stat-number red" id="inactiveAccounts">120</div>
-                                <span class="stat-change negative" id="inactiveChange">-5% tháng trước</span>
+                                <div class="stat-number red" id="inactiveAccounts"></div>
+                                <span class="stat-change" id="inactiveChange"></span>
                             </div>
                             <div class="stat-icon red">
                                 <i class="fas fa-user-times"></i>
@@ -98,9 +98,9 @@
                     <div class="stat-card yellow fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Tăng trưởng</h3>
-                                <div class="stat-number yellow" id="growthRate">+7.3%</div>
-                                <span class="stat-change positive">So với tháng trước</span>
+                                <h3>Tăng trưởng tài khoản mới (tháng)</h3>
+                                <div class="stat-number yellow" id="growthRate"></div>
+                                <span class="stat-change" id="growthChange"></span>
                             </div>
                             <div class="stat-icon yellow">
                                 <i class="fas fa-chart-line"></i>
@@ -204,12 +204,12 @@
                     <div class="stat-card blue fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Lượt truy cập hôm nay</h3>
-                                <div class="stat-number blue" id="todayVisits">2,847</div>
-                                <span class="stat-change positive">+15% so với hôm qua</span>
+                                <h3>Tổng lượt truy cập</h3>
+                                <div class="stat-number blue" id="totalVisits"></div>
+                                <span class="stat-change" id="totalVisitsChange"></span>
                             </div>
                             <div class="stat-icon blue">
-                                <i class="fas fa-eye"></i>
+                                <i class="fas fa-chart-line"></i>
                             </div>
                         </div>
                     </div>
@@ -217,12 +217,12 @@
                     <div class="stat-card green fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Người dùng hoạt động</h3>
-                                <div class="stat-number green" id="activeUsers">1,234</div>
-                                <span class="stat-change positive">+8% so với tuần trước</span>
+                                <h3>Lượt truy cập hôm nay</h3>
+                                <div class="stat-number green" id="todayVisits"></div>
+                                <span class="stat-change" id="todayVisitsChange"></span>
                             </div>
                             <div class="stat-icon green">
-                                <i class="fas fa-user-clock"></i>
+                                <i class="fas fa-eye"></i>
                             </div>
                         </div>
                     </div>
@@ -230,12 +230,12 @@
                     <div class="stat-card purple fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Thời gian trung bình</h3>
-                                <div class="stat-number purple" id="avgSessionTime">12:34</div>
-                                <span class="stat-change positive">+2 phút so với tháng trước</span>
+                                <h3>Người dùng hoạt động (tuần)</h3>
+                                <div class="stat-number purple" id="activeUsersWeek"></div>
+                                <span class="stat-change" id="activeUsersWeekChange"></span>
                             </div>
                             <div class="stat-icon purple">
-                                <i class="fas fa-clock"></i>
+                                <i class="fas fa-user-clock"></i>
                             </div>
                         </div>
                     </div>
@@ -243,11 +243,24 @@
                     <div class="stat-card orange fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Tỷ lệ thoát</h3>
-                                <div class="stat-number orange" id="bounceRate">23.5%</div>
-                                <span class="stat-change negative">+1.2% so với tháng trước</span>
+                                <h3>Thời gian trung bình</h3>
+                                <div class="stat-number orange" id="avgSessionTime"></div>
+                                <span class="stat-change" id="avgSessionTimeChange"></span>
                             </div>
                             <div class="stat-icon orange">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card red fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Tỷ lệ thoát</h3>
+                                <div class="stat-number red" id="bounceRate"></div>
+                                <span class="stat-change" id="bounceRateChange"></span>
+                            </div>
+                            <div class="stat-icon red">
                                 <i class="fas fa-sign-out-alt"></i>
                             </div>
                         </div>
@@ -276,6 +289,18 @@
             </div>
             
             <div class="dashboard-wrapper">
+                <div class="update-info-bar">
+                    <div class="update-left">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Cập nhật: <span id="activityLastUpdate">--:--</span></span>
+                    </div>
+                    <div class="update-right">
+                        <button class="btn btn-sm btn-primary" onclick="refreshActivityReports()">
+                            <i class="fas fa-sync-alt"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
                 <div class="activity-filters">
                     <div class="filter-group">
                         <label>Từ ngày:</label>
@@ -306,15 +331,15 @@
                         <div class="summary-stats">
                             <div class="summary-item">
                                 <span class="summary-label">Tổng hoạt động:</span>
-                                <span class="summary-value" id="totalActivities">0</span>
+                                <span class="summary-value" id="totalActivities"></span>
                             </div>
                             <div class="summary-item">
                                 <span class="summary-label">Hoạt động mới:</span>
-                                <span class="summary-value" id="newActivities">0</span>
+                                <span class="summary-value" id="newActivities"></span>
                             </div>
                             <div class="summary-item">
                                 <span class="summary-label">Người dùng tham gia:</span>
-                                <span class="summary-value" id="activeParticipants">0</span>
+                                <span class="summary-value" id="activeParticipants"></span>
                             </div>
                         </div>
                     </div>
@@ -359,8 +384,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Tổng tin tuyển dụng</h3>
-                                <div class="stat-number blue" id="totalJobPosts">456</div>
-                                <span class="stat-change positive">+18% tháng trước</span>
+                                <div class="stat-number blue" id="totalJobPosts"></div>
+                                <span class="stat-change" id="totalJobPostsChange"></span>
                             </div>
                             <div class="stat-icon blue">
                                 <i class="fas fa-briefcase"></i>
@@ -372,8 +397,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Tin đang hoạt động</h3>
-                                <div class="stat-number green" id="activeJobPosts">234</div>
-                                <span class="stat-change positive">+12% tháng trước</span>
+                                <div class="stat-number green" id="activeJobPosts"></div>
+                                <span class="stat-change" id="activeJobPostsChange"></span>
                             </div>
                             <div class="stat-icon green">
                                 <i class="fas fa-check-circle"></i>
@@ -385,8 +410,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Lượt xem trung bình</h3>
-                                <div class="stat-number orange" id="avgJobViews">1,234</div>
-                                <span class="stat-change positive">+25% tháng trước</span>
+                                <div class="stat-number orange" id="avgJobViews"></div>
+                                <span class="stat-change" id="avgJobViewsChange"></span>
                             </div>
                             <div class="stat-icon orange">
                                 <i class="fas fa-eye"></i>
@@ -398,8 +423,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Ứng viên trung bình</h3>
-                                <div class="stat-number purple" id="avgApplications">45</div>
-                                <span class="stat-change positive">+8% tháng trước</span>
+                                <div class="stat-number purple" id="avgApplications"></div>
+                                <span class="stat-change" id="avgApplicationsChange"></span>
                             </div>
                             <div class="stat-icon purple">
                                 <i class="fas fa-users"></i>
@@ -434,8 +459,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Tổng đơn ứng tuyển</h3>
-                                <div class="stat-number blue" id="totalApplications">12,456</div>
-                                <span class="stat-change positive">+32% tháng trước</span>
+                                <div class="stat-number blue" id="totalApplications"></div>
+                                <span class="stat-change" id="totalApplicationsChange"></span>
                             </div>
                             <div class="stat-icon blue">
                                 <i class="fas fa-file-alt"></i>
@@ -447,8 +472,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Đã phê duyệt</h3>
-                                <div class="stat-number green" id="approvedApplications">8,234</div>
-                                <span class="stat-change positive">+28% tháng trước</span>
+                                <div class="stat-number green" id="approvedApplications"></div>
+                                <span class="stat-change" id="approvedApplicationsChange"></span>
                             </div>
                             <div class="stat-icon green">
                                 <i class="fas fa-check"></i>
@@ -460,8 +485,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Đang xử lý</h3>
-                                <div class="stat-number yellow" id="pendingApplications">2,123</div>
-                                <span class="stat-change negative">-5% tháng trước</span>
+                                <div class="stat-number yellow" id="pendingApplications"></div>
+                                <span class="stat-change" id="pendingApplicationsChange"></span>
                             </div>
                             <div class="stat-icon yellow">
                                 <i class="fas fa-clock"></i>
@@ -473,8 +498,8 @@
                         <div class="stat-content">
                             <div class="stat-info">
                                 <h3>Từ chối</h3>
-                                <div class="stat-number red" id="rejectedApplications">2,099</div>
-                                <span class="stat-change negative">+12% tháng trước</span>
+                                <div class="stat-number red" id="rejectedApplications"></div>
+                                <span class="stat-change" id="rejectedApplicationsChange"></span>
                             </div>
                             <div class="stat-icon red">
                                 <i class="fas fa-times"></i>

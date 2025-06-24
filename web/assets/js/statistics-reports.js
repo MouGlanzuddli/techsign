@@ -24,6 +24,7 @@ const realData = {
     activeUsersWeek: 0,
     avgSessionMinutes: 0,
     bounceRate: 0,
+    hourlyVisits: {},
   },
   // Activity Reports
   activityReports: {
@@ -54,9 +55,11 @@ const realData = {
   },
   totalUsers: 0,
   newUsersLast30Days: 0,
+  newUsersPrev30Days: 0,
   monthlyUserGrowth: {},
   monthlyCandidateGrowth: {},
   monthlyEmployerGrowth: {},
+  monthlyInactiveGrowth: {},
 }
 
 // ✅ LOAD ALL REAL DATA from StatisticsServlet
@@ -96,6 +99,7 @@ function loadAllRealData() {
         activeUsersWeek: data.activeUsersWeek || 0,
         avgSessionMinutes: data.avgSessionMinutes || 0,
         bounceRate: data.bounceRate || 0,
+        hourlyVisits: data.hourlyVisits || {},
       }
 
       realData.activityReports = {
@@ -128,9 +132,11 @@ function loadAllRealData() {
       // ✅ CẬP NHẬT DỮ LIỆU THẬT MỚI
       realData.totalUsers = data.totalUsers || 0;
       realData.newUsersLast30Days = data.newUsersLast30Days || 0;
+      realData.newUsersPrev30Days = data.newUsersPrev30Days || 0;
       realData.monthlyUserGrowth = data.monthlyUserGrowth || {};
       realData.monthlyCandidateGrowth = data.monthlyCandidateGrowth || {};
       realData.monthlyEmployerGrowth = data.monthlyEmployerGrowth || {};
+      realData.monthlyInactiveGrowth = data.monthlyInactiveGrowth || {};
 
       console.log("✅ ALL Real data updated:", realData)
       return realData
@@ -364,11 +370,49 @@ function updateAccountStats(data) {
   document.getElementById("totalAccounts").textContent = formatNumber(data.total)
   document.getElementById("newAccounts").textContent = formatNumber(realData.newUsersLast30Days)
   document.getElementById("inactiveAccounts").textContent = formatNumber(data.inactiveUsers)
-  document.getElementById("growthRate").textContent = `+${data.growthRate}%`
+  const growthRate = data.growthRate || 0;
+  document.getElementById("growthRate").textContent = `${growthRate > 0 ? "+" : ""}${growthRate}%`;
+  const growthChangeEl = document.getElementById("growthChange");
+  growthChangeEl.textContent = "So với tháng trước";
+  if (growthRate > 0) {
+    growthChangeEl.className = "stat-change positive";
+  } else if (growthRate < 0) {
+    growthChangeEl.className = "stat-change negative";
+  } else {
+    growthChangeEl.className = "stat-change neutral";
+  }
 
   updateChangeIndicator("totalChange", 12)
-  updateChangeIndicator("newChange", 23)
-  updateChangeIndicator("inactiveChange", -5)
+  // Tính phần trăm tăng trưởng 30 ngày
+  const prev = realData.newUsersPrev30Days || 0;
+  const curr = realData.newUsersLast30Days || 0;
+  let percent = 0;
+  if (prev === 0) {
+    percent = curr > 0 ? 100 : 0;
+  } else {
+    percent = ((curr - prev) / prev * 100).toFixed(1);
+  }
+  const prefix = percent > 0 ? "+" : "";
+  const newChangeEl = document.getElementById("newChange");
+  newChangeEl.textContent = `${prefix}${percent}% so với 30 ngày trước`;
+  const percentNum = parseFloat(percent);
+  if (percentNum >= 0) {
+    newChangeEl.className = "stat-change positive";
+  } else {
+    newChangeEl.className = "stat-change negative";
+  }
+  // TÍNH PHẦN TRĂM THAY ĐỔI SỐ TÀI KHOẢN KHÔNG HOẠT ĐỘNG GIỮA 2 THÁNG
+  const monthlyInactiveGrowth = realData.monthlyInactiveGrowth || {};
+  const inactiveMonths = Object.keys(monthlyInactiveGrowth).sort();
+  const inactiveThisMonth = inactiveMonths.length > 0 ? monthlyInactiveGrowth[inactiveMonths[inactiveMonths.length - 1]] : 0;
+  const inactiveLastMonth = inactiveMonths.length > 1 ? monthlyInactiveGrowth[inactiveMonths[inactiveMonths.length - 2]] : 0;
+  let inactiveChange = 0;
+  if (inactiveLastMonth === 0) {
+    inactiveChange = inactiveThisMonth > 0 ? 100 : 0;
+  } else {
+    inactiveChange = ((inactiveThisMonth - inactiveLastMonth) / inactiveLastMonth * 100).toFixed(1);
+  }
+  updateChangeIndicator("inactiveChange", inactiveChange);
 
   updateAccountTypeStats()
   updateStatusStats()
@@ -506,32 +550,40 @@ function createTrendChart() {
 
 // ✅ Additional chart functions for other sections
 function createAccessChart() {
-  const ctx = document.getElementById("accessChart")
+  const ctx = document.getElementById("accessChart").getContext("2d")
   if (!ctx) return
 
   if (charts.accessChart) {
     charts.accessChart.destroy()
   }
 
-  // Sample hourly data based on real daily visits
-  const hours = Array.from({ length: 24 }, (_, i) => i)
-  const baseVisits = Math.max(1, Math.floor(realData.accessStats.todayVisits / 24))
-  const visits = hours.map((h) => Math.max(0, baseVisits + Math.floor(Math.random() * baseVisits)))
+  const hourlyData = realData.accessStats.hourlyVisits || {}
+  const labels = []
+  const dataPoints = []
+
+  for (let i = 0; i < 24; i++) {
+    labels.push(`${i}:00`)
+    dataPoints.push(hourlyData[i] || 0)
+  }
+  
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Lượt truy cập",
+        data: dataPoints,
+        backgroundColor: "rgba(59, 130, 246, 0.7)",
+        borderColor: "rgba(59, 130, 246, 1)",
+        borderWidth: 2,
+        borderRadius: 5,
+        barThickness: 15,
+      },
+    ],
+  }
 
   charts.accessChart = new Chart(ctx, {
     type: "bar",
-    data: {
-      labels: hours.map((h) => `${h}:00`),
-      datasets: [
-        {
-          label: "Lượt truy cập",
-          data: visits,
-          backgroundColor: "rgba(59, 130, 246, 0.8)",
-          borderColor: "#3b82f6",
-          borderWidth: 1,
-        },
-      ],
-    },
+    data: chartData,
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -539,10 +591,32 @@ function createAccessChart() {
         legend: {
           display: false,
         },
+        tooltip: {
+          backgroundColor: "#333",
+          titleColor: "#fff",
+          bodyColor: "#fff",
+        },
       },
       scales: {
         y: {
           beginAtZero: true,
+          grid: {
+            color: "#e5e7eb",
+          },
+          ticks: {
+            stepSize: 1,
+            callback: function(value) {
+              if (Number.isInteger(value)) {
+                return value;
+              }
+            }
+          },
+          suggestedMax: Math.max(...dataPoints) + 1
+        },
+        x: {
+          grid: {
+            display: false,
+          },
         },
       },
     },
@@ -786,11 +860,18 @@ function updateChangeIndicator(elementId, value) {
   const element = document.getElementById(elementId)
   if (!element) return
 
-  const isPositive = value > 0
-  const prefix = isPositive ? "+" : ""
-
-  element.textContent = `${prefix}${value}% tháng trước`
-  element.className = `stat-change ${isPositive ? "positive" : "negative"}`
+  let prefix = "";
+  let className = "stat-change positive";
+  let valueNum = typeof value === "number" ? value : parseFloat(value);
+  if (valueNum > 0) {
+    prefix = "+";
+    className = "stat-change positive";
+  } else if (valueNum < 0) {
+    className = "stat-change negative";
+  }
+  const valueStr = valueNum.toFixed(1);
+  element.textContent = `${prefix}${valueStr}% so với tháng trước`;
+  element.className = className;
 }
 
 function createCustomLegend(containerId, data) {
@@ -915,6 +996,28 @@ function updateActivityTable() {
   `,
     )
     .join("")
+}
+
+// TĂNG TRƯỞNG NGƯỜI DÙNG THEO THÁNG DƯƠNG LỊCH
+const monthlyGrowth = realData.monthlyUserGrowth || {};
+const months = Object.keys(monthlyGrowth).sort();
+const thisMonth = months.length > 0 ? monthlyGrowth[months[months.length - 1]] : 0;
+const lastMonth = months.length > 1 ? monthlyGrowth[months[months.length - 2]] : 0;
+let userGrowthRate = 0;
+if (lastMonth === 0) {
+  userGrowthRate = thisMonth > 0 ? 100 : 0;
+} else {
+  userGrowthRate = ((thisMonth - lastMonth) / lastMonth * 100).toFixed(1);
+}
+document.getElementById("growthRate").textContent = `${userGrowthRate > 0 ? "+" : ""}${userGrowthRate}%`;
+const growthChangeEl = document.getElementById("growthChange");
+growthChangeEl.textContent = "So với tháng trước";
+if (userGrowthRate > 0) {
+  growthChangeEl.className = "stat-change positive";
+} else if (userGrowthRate < 0) {
+  growthChangeEl.className = "stat-change negative";
+} else {
+  growthChangeEl.className = "stat-change neutral";
 }
 
 console.log("✅ Complete Statistics Reports JavaScript loaded successfully with REAL DATA!")

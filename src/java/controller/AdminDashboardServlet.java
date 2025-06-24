@@ -30,7 +30,7 @@ public class AdminDashboardServlet extends HttpServlet {
             int totalUsers = userDao.getTotalUsers();
             int totalJobPosts = jobPostDao.getTotalJobPosts();
             int securityAlerts = alert.getAlert();
-            int totalVisits = visit.getLoginCount();
+            int totalVisits = visit.getTodaysLoginCount();
 
             if ("XMLHttpRequest".equals(requestType)) {
     response.setContentType("application/json");
@@ -43,7 +43,7 @@ public class AdminDashboardServlet extends HttpServlet {
     request.setAttribute("totalUsers", totalUsers);
     request.setAttribute("totalJobPosts", totalJobPosts);
     request.setAttribute("securityAlerts", securityAlerts);
-    request.setAttribute("totalVisits", totalVisits);
+    request.setAttribute("totalVisitsToday", totalVisits);
     request.getRequestDispatcher("/adminHome.jsp").forward(request, response);
 }
 

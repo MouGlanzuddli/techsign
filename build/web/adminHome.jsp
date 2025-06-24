@@ -81,8 +81,8 @@
 
                     <div class="card-box">
                         <div>
-                            <span>Lượt truy cập</span><br />
-                            <span id="totalVisits" class="number">${totalVisits}</span>
+                            <span>Lượt truy cập hôm nay</span><br />
+                            <span id="totalVisitsToday" class="number">${totalVisitsToday}</span>
                         </div>
                         <i class="fas fa-chart-line"></i>
                     </div>
@@ -148,7 +148,7 @@
             document.querySelector('#totalUsers').innerText = data.totalUsers;
             document.querySelector('#totalJobPosts').innerText = data.totalJobPosts;
             document.querySelector('#securityAlerts').innerText = data.securityAlerts;
-            document.querySelector('#totalVisits').innerText = data.totalVisits;
+            document.querySelector('#totalVisitsToday').innerText = data.totalVisits;
             console.log('Dashboard stats updated.');
         })
         .catch(error => console.error('Lỗi khi lấy dữ liệu:', error));
