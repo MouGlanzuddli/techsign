@@ -402,17 +402,9 @@ function updateAccountStats(data) {
     newChangeEl.className = "stat-change negative";
   }
   // TÍNH PHẦN TRĂM THAY ĐỔI SỐ TÀI KHOẢN KHÔNG HOẠT ĐỘNG GIỮA 2 THÁNG
-  const monthlyInactiveGrowth = realData.monthlyInactiveGrowth || {};
-  const inactiveMonths = Object.keys(monthlyInactiveGrowth).sort();
-  const inactiveThisMonth = inactiveMonths.length > 0 ? monthlyInactiveGrowth[inactiveMonths[inactiveMonths.length - 1]] : 0;
-  const inactiveLastMonth = inactiveMonths.length > 1 ? monthlyInactiveGrowth[inactiveMonths[inactiveMonths.length - 2]] : 0;
-  let inactiveChange = 0;
-  if (inactiveLastMonth === 0) {
-    inactiveChange = inactiveThisMonth > 0 ? 100 : 0;
-  } else {
-    inactiveChange = ((inactiveThisMonth - inactiveLastMonth) / inactiveLastMonth * 100).toFixed(1);
-  }
-  updateChangeIndicator("inactiveChange", inactiveChange);
+  var inactiveChangeEl = document.getElementById("inactiveChange");
+  inactiveChangeEl.textContent = "Trong hệ thống";
+  inactiveChangeEl.style.color = "#2563eb"; // xanh dương
 
   updateAccountTypeStats()
   updateStatusStats()

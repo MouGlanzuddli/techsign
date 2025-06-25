@@ -85,7 +85,7 @@
                     <div class="stat-card red fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Không hoạt động</h3>
+                                <h3>Tài khoản không hoạt động</h3>
                                 <div class="stat-number red" id="inactiveAccounts"></div>
                                 <span class="stat-change" id="inactiveChange"></span>
                             </div>
