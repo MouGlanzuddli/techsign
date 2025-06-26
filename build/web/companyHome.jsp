@@ -90,7 +90,7 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="company-dashboard.jsp">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="UpdateCompanyProfile">Dashboard</a></li>
                             <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
                         </ul>
                     </li>
@@ -131,9 +131,9 @@
                         </div>
                         
                         <div class="col-md-6 mb-3">
-                            <label for="location" class="form-label required-field">Location</label>
-                            <input type="text" class="form-control" id="location" name="location" required>
-                            <div class="invalid-feedback">Please enter a location.</div>
+                            <label for="address" class="form-label required-field">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                            <div class="invalid-feedback">Please enter an address.</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">

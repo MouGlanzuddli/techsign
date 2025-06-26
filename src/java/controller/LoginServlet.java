@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package controller;
 
 import java.sql.Connection;
@@ -18,13 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.*;
 import model.User;
+import dao.CompanyDAO;
+import model.Company;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-/**
- *
- * @author Admin
- */
+
 @WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
    
@@ -102,7 +96,7 @@ public class LoginServlet extends HttpServlet {
                     break;
                 case 3:
                     response.sendRedirect(request.getContextPath() + "/companyHome.jsp");
-                    break;   
+                    break;
                 default:
                     response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_role");
             }
@@ -130,6 +124,16 @@ public class LoginServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
+
+    private boolean isCompanyProfileComplete(Company company) {
+        return company != null
+            && company.getCompanyName() != null && !company.getCompanyName().trim().isEmpty()
+            && company.getIndustryId() != null
+            && company.getAddress() != null && !company.getAddress().trim().isEmpty()
+            && company.getDescription() != null && !company.getDescription().trim().isEmpty()
+            && company.getWebsite() != null && !company.getWebsite().trim().isEmpty();
+    }
+    // </editor-fold>
 
 }

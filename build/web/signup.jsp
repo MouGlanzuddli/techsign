@@ -145,7 +145,7 @@
                                                             <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
                                                             <label>Email</label>
                                                         </div>
-                                                        <div class="form-floating mb-4">
+                                                       <div class="form-floating mb-4">
                                                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                                                             <label>Password</label>
                                                         </div>
@@ -176,7 +176,7 @@
                                                         <div class="form-floating mb-4">
                                                             <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
                                                             <label>Email</label>
-                                                        </div>
+                                                         </div>
                                                         <div class="form-floating mb-4">
                                                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                                                             <label>Password</label>

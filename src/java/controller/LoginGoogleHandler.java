@@ -13,6 +13,8 @@ import dal.DBContext;
 import dal.UserDao;
 import java.util.Date;
 import model.User;
+import dao.CompanyDAO;
+import model.Company;
 
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
@@ -110,9 +112,16 @@ public class LoginGoogleHandler extends HttpServlet {
                     case 2:
                         response.sendRedirect("candidateHome.jsp");
                         break;
-                    case 3:
-                        response.sendRedirect("companyHome.jsp");
+                    case 3: {
+                        CompanyDAO companyDAO = new CompanyDAO(conn);
+                        Company company = companyDAO.getCompanyByUserId(user.getId());
+                        if (company == null || !isCompanyProfileComplete(company)) {
+                            response.sendRedirect("company-dashboard.jsp?requireCompleteProfile=true");
+                        } else {
+                            response.sendRedirect("company-dashboard.jsp");
+                        }
                         break;
+                    }
                     default:
                         response.sendRedirect("index.jsp?error=invalid_role");
                 }
@@ -166,5 +175,14 @@ public class LoginGoogleHandler extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
+    }
+
+    private boolean isCompanyProfileComplete(Company company) {
+        return company != null
+            && company.getCompanyName() != null && !company.getCompanyName().trim().isEmpty()
+            && company.getIndustryId() != null
+            && company.getAddress() != null && !company.getAddress().trim().isEmpty()
+            && company.getDescription() != null && !company.getDescription().trim().isEmpty()
+            && company.getWebsite() != null && !company.getWebsite().trim().isEmpty();
     }
 } // END OF CLASS

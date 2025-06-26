@@ -1,3 +1,15 @@
+<%
+    String companyName = request.getAttribute("companyName") != null ? (String)request.getAttribute("companyName") : "";
+    String email = request.getAttribute("email") != null ? (String)request.getAttribute("email") : "";
+    String phone = request.getAttribute("phone") != null ? (String)request.getAttribute("phone") : "";
+    String website = request.getAttribute("website") != null ? (String)request.getAttribute("website") : "";
+    Integer industryId = request.getAttribute("industryId") != null ? (Integer)request.getAttribute("industryId") : null;
+    String address = request.getAttribute("address") != null ? (String)request.getAttribute("address") : "";
+    String avatarUrl = request.getAttribute("avatarUrl") != null ? (String)request.getAttribute("avatarUrl") : "assets/img/default-avatar.png";
+    String[] industries = {"", "Web & Application", "Banking Services", "UI/UX Design", "IOS/App Application", "Education"};
+    String industryName = (industryId != null && industryId > 0 && industryId < industries.length) ? industries[industryId] : "";
+    boolean missingInfo = companyName.trim().isEmpty() || email.trim().isEmpty() || phone.trim().isEmpty() || website.trim().isEmpty() || industryName.trim().isEmpty() || address.trim().isEmpty();
+%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -78,79 +90,14 @@
 							
 								<li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a class="active" href="index.html">Home Layout 1</a></li>
-										<li><a href="home-2.html">Home Layout 2</a></li>
-										<li><a href="home-3.html">Home Layout 3</a></li>
-										<li><a href="home-4.html">Home Layout 4</a></li>
-										<li><a href="home-5.html">Home Layout 5</a></li>
-										<li><a href="home-6.html">Home Layout 6</a></li>
-										<li><a href="home-7.html">Home Layout 7</a></li>
-										<li><a href="JavaScript:Void(0);">New Homes Layouts<span class="new-update">New</span><span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="home-8.html">Home Layout 8</a></li>                                    
-												<li><a href="home-9.html">Home Layout 9</a></li>                                    
-												<li><a href="home-10.html">Home Layout 10</a></li>
-												<li><a href="home-11.html">Home Layout 11</a></li>
-												<li><a href="home-12.html">Home Layout 12</a></li>																								
-											</ul>	
-										</li>
+										<li><a class="active" href="index.html">Home Layout</a></li>
+										
 									</ul>
 								</li>
 								
-								<li><a href="JavaScript:Void(0);">For Candidate<span class="submenu-indicator"></span></a>
+								<li><a href="JavaScript:Void(0);">Candidate<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="JavaScript:Void(0);">Browse Jobs<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="grid-style-1.html">Job Grid Style 1</a></li>                                    
-												<li><a href="grid-style-2.html">Job Grid Stle 2</a></li>                                    
-												<li><a href="grid-style-3.html">Job Grid Style 3</a></li>
-												<li><a href="grid-style-4.html">Job Grid Style 4</a></li>
-												<li><a href="grid-style-5.html">Job Grid Style 5</a></li>												
-												<li><a href="full-job-grid-1.html">Grid Full Style 1</a></li>
-												<li><a href="full-job-grid-2.html">Grid Full Style 2</a></li>
-												<li><a href="list-style-1.html">Job List Style 1</a></li>
-												<li><a href="list-style-2.html">Job List Style 2</a></li>
-												<li><a href="list-style-2.html">Job List Style 3</a></li>
-												<li><a href="full-job-list-1.html">List Full Style 1</a></li>
-												<li><a href="full-job-list-2.html">List Full Style 2</a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Browse Map Jobs<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="half-map.html">Job Search on Map 01</a></li>                                    
-												<li><a href="half-map-2.html">Job Search on Map 02</a></li>                                    
-												<li><a href="half-map-3.html">Job Search on Map 03</a></li>
-												<li><a href="half-map-list-1.html">Job Search on Map 04</a></li>
-												<li><a href="half-map-list-2.html">Job Search on Map 05</a></li>
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Browse Candidate<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="candidate-grid-1.html">Candidate Grid 01</a></li>                                    
-												<li><a href="candidate-grid-2.html">Candidate Grid 02</a></li>                                    
-												<li><a href="candidate-list-1.html">Candidate List 01</a></li>                                    
-												<li><a href="candidate-list-2.html">Candidate List 02</a></li>
-												<li><a href="candidate-half-map.html">Candidate Half Map 01</a></li>
-												<li><a href="candidate-half-map-list.html">Candidate Half Map 02</a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Single job Detail<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="single-layout-1.html">Single Layout 01</a></li>                                    
-												<li><a href="single-layout-2.html">Single Layout 02</a></li>                                    
-												<li><a href="single-layout-3.html">Single Layout 03</a></li>                                    
-												<li><a href="single-layout-4.html">Single Layout 04</a></li>												
-												<li><a href="single-layout-5.html">Single Layout 05<span class="new-update">New</span></a></li>												
-												<li><a href="single-layout-6.html">Single Layout 06<span class="new-update">New</span></a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Candidate Detail<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="candidate-detail.html">Candidate Detail 01</a></li>                                    
-												<li><a href="candidate-detail-2.html">Candidate Detail 02</a></li>                                    
-												<li><a href="candidate-detail-3.html">Candidate Detail 03</a></li>                                    												
-											</ul>
-										</li>
+										
 										<li><a href="advance-search.html">Advance Search</a></li>
 										<li>
 											<a href="candidate-dashboard.html">Candidate Dashboard<span class="new-update">New</span></a>                                
@@ -158,23 +105,9 @@
 									</ul>
 								</li>
 								
-								<li><a href="JavaScript:Void(0);">For Employer<span class="submenu-indicator"></span></a>
+								<li><a href="JavaScript:Void(0);">Employer<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="JavaScript:Void(0);">Explore Employers<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="employer-grid-1.html">Search Employers 01</a></li>                                    
-												<li><a href="employer-grid-2.html">Search Employers 02</a></li>                                    
-												<li><a href="employer-list-1.html">Search List Employers 01</a></li>
-												<li><a href="employer-half-map.html">Search Employers Map</a></li>
-												<li><a href="employer-half-map-list.html">Search List Employers Map</a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Employer Detail<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="employer-detail.html">Employer Detail 01</a></li>                                    
-												<li><a href="employer-detail-2.html">Employer Detail 02</a></li>                                    											
-											</ul>
-										</li>
+										
 										<li>
 											<a href="employer-dashboard.html">Employer Dashboard<span class="new-update">New</span></a>                                
 										</li>
@@ -183,14 +116,7 @@
 								
 								<li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="about-us.html">About Us</a></li> 
-										<li><a href="404.html">Error Page</a></li>
-										<li><a href="checkout.html">Checkout</a></li>										
-										<li><a href="blog.html">Blogs Page</a></li>                                    
-										<li><a href="blog-detail.html">Blog Detail</a></li>                                    
-										<li><a href="privacy.html">Terms & Privacy</a></li> 
-										<li><a href="pricing.html">Pricing</a></li>  
-										<li><a href="faq.html">FAQ's</a></li>
+										<li><a href="about-us.html">About Us</a></li>
 										<li><a href="contact.html">Contacts</a></li>
 									</ul>
 								</li>
@@ -262,7 +188,7 @@
 						<div class="dash-user-blocks pt-5">
 							<div class="jbs-grid-usrs-thumb">
 								<div class="jbs-grid-yuo">
-									<a href="candidate-detail.html"><figure><img src="assets/img/l-12.png" class="img-fluid circle" alt=""></figure></a>
+									<a href="candidate-detail.html"><figure><img src="<%= avatarUrl %>" class="img-fluid rounded" alt=""></figure></a>
 								</div>
 							</div>
 							<div class="jbs-grid-usrs-caption mb-3">
@@ -270,15 +196,15 @@
 									<span class="label text-light theme-bg">05 Openings</span>
 								</div>
 								<div class="jbs-tiosk">
-									<h4 class="jbs-tiosk-title"><a href="candidate-detail.html"></a></h4>
-									<div class="jbs-tiosk-subtitle"><span><i class="fa-solid fa-location-dot me-2"></i></span></div>
+									<h4 class="jbs-tiosk-title"><%= companyName %></h4>
+									<div class="jbs-tiosk-subtitle"><span><i class="fa-solid fa-location-dot me-2"></i><%= address %></span></div>
 								</div>
 							</div>
 						</div>
 						<div class="dashboard-inner">
 							<ul data-submenu-title="Main Navigation">
 								<li><a href="employer-dashboard.html"><i class="fa-solid fa-gauge-high me-2"></i>User Dashboard</a></li>
-								<li class="active"><a href="employer-profile.html"><i class="fa-regular fa-user me-2"></i>User Profile </a></li>
+								<li class="active"><a href="employer-profile.html"><i class="fa-regular fa-user me-2"></i>My Profile </a></li>
 								<li><a href="employer-jobs.html"><i class="fa-solid fa-business-time me-2"></i>My Jobs</a></li>
 								<li><a href="employer-submit-job.html"><i class="fa-solid fa-pen-ruler me-2"></i>Submit Jobs</a></li>
 								<li><a href="employer-applicants-jobs.html"><i class="fa-solid fa-user-group me-2"></i>Applicants Jobs</a></li>
@@ -297,8 +223,7 @@
 					<div class="dashboard-tlbar d-block mb-4">
 						<div class="row">
 							<div class="colxl-12 col-lg-12 col-md-12">
-								<h1 class="mb-1 fs-3 fw-medium">My Profile</h1>
-								
+								<h1 class="mb-1 fs-3 fw-medium">Update Profile</h1>
 							</div>
 						</div>
 					</div>
@@ -309,12 +234,12 @@
 							<div class="dash-prf-start">
 								<div class="dash-prf-start-upper mb-2">
 									<div class="dash-prf-start-thumb jbs-verified">
-										<figure class="mb-0"><img src="" class="img-fluid rounded" alt=""></figure>
+										<figure class="mb-0"><img src="<%= avatarUrl %>" class="img-fluid rounded" alt=""></figure>
 									</div>
 								</div>
 								<div class="dash-prf-start-bottom">
 									<div class="upload-btn-wrapper small">
-										<button class="btn">Change Avatar</button>
+										<button class="btn">Change Profile</button>
 										<input type="file" name="myfile">
 									</div>
 								</div>
@@ -323,12 +248,12 @@
 								<div class="dash-prfs-caption emplyer">
 									<div class="dash-prfs-flexfirst">
 										<div class="dash-prfs-title">
-											<h4></h4>	
+											<h4><%= companyName %></h4>	
 										</div>
 										<div class="dash-prfs-subtitle">
 											<div class="jbs-job-mrch-lists">
 												<div class="single-mrch-lists">
-													<span></span>.<span><i class="fa-solid fa-location-dot me-1"></i>Canada, USA</span>
+													<span><%= industryName %></span>.<span><i class="fa-solid fa-location-dot me-1"></i><%= address %></span>
 												</div>
 											</div>
 										</div>
@@ -339,7 +264,7 @@
 												<span class="fa-solid fa-star active"></span>
 												<span class="fa-solid fa-star active"></span>
 												<span class="fa-solid fa-star"></span>
-												<span class="aal-reveis"></span>
+												<span class="aal-reveis">4.8</span>
 											</div>
 										</div>
 									</div>
@@ -356,14 +281,14 @@
 											<div class="single-dash-prf-infos-icons"><i class="fa-solid fa-envelope-open-text"></i></div>
 											<div class="single-dash-prf-infos-caption">
 												<p class="text-sm-muted mb-0">Email</p>
-												<h5></h5>
+												<h5><%= email %></h5>
 											</div>
 										</div>
 										<div class="single-dash-prf-infos">
 											<div class="single-dash-prf-infos-icons"><i class="fa-solid fa-phone-volume"></i></div>
 											<div class="single-dash-prf-infos-caption">
 												<p class="text-sm-muted mb-0">Call</p>
-												<h5></h5>
+												<h5><%= phone %></h5>
 											</div>
 										</div>
 										
@@ -378,121 +303,100 @@
 							</div>
 						</div>
 						
-						<!-- Card Row -->
+						
+						<!-- Card Row: My Profile (Create) -->
 						<div class="card">
 							<div class="card-header">
 								<h4>My Profile</h4>
 							</div>
 							<div class="card-body">
-								<form>
+								<% if (missingInfo) { %>
+									<div class="alert alert-warning" style="margin: 1px;">
+										Please fill out the company profile information completely!
+									</div>
+								<% } %>
+                                                            <script>
+                                                            function validateProfileForm() {
+                                                                var email = document.querySelector('input[name="email"]').value.trim();
+                                                                var phone = document.querySelector('input[name="phone"]').value.trim();
+                                                                var emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                                                                var phonePattern = /^0\d{9}$/;
+                                                                var valid = true;
+                                                                var msg = "";
+                                                                if (!emailPattern.test(email)) {
+                                                                    msg += "Email must be in @gmail.com format!\n";
+                                                                    valid = false;
+                                                                }
+                                                                if (!phonePattern.test(phone)) {
+                                                                    msg += "Phone number must be 10 digits and start with 0!\n";
+                                                                    valid = false;
+                                                                }
+                                                                if (!valid) {
+                                                                    alert(msg);
+                                                                }
+                                                                return valid;
+                                                            }
+                                                            </script>
+                                                            <form action="UpdateCompanyProfile" method="post">
+
 									<div class="row">
-									
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
-												<label>Employer Name</label>
-												<input type="text" class="form-control">
+												<label>Company Name</label>
+												<input type="text" name="companyName" class="form-control" value="<%= companyName %>" required>
 											</div>
 										</div>
-										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
-												<label>Email ID</label>
-												<input type="text" class="form-control">
+												<label>Email</label>
+												<input type="email" name="email" class="form-control" value="<%= email %>" required>
 											</div>
 										</div>
-										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
-												<label>Phone No.</label>
-												<input type="text" class="form-control">
+												<label>Phone Number</label>
+												<input type="text" name="phone" class="form-control" value="<%= phone %>" required>
 											</div>
 										</div>
-										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
 												<label>Website</label>
-												<input type="text" class="form-control">
-											</div>
-										</div>
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Founded Year</label>
-												<input type="text" class="form-control">
+												<input type="text" name="website" class="form-control" value="<%= website %>" required>
 											</div>
 										</div>
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
 												<label>Company Category</label>
-												<div class="select-ops">
-													<select>
-														<option value="1">Web & Application</option>
-														<option value="2">Banking Services</option>
-														<option value="3">UI/UX Design</option>
-														<option value="4">IOS/App Application</option>
-														<option value="5">Education</option>
-													</select>
-												</div>
+												<select name="industryId" class="form-control" required>
+													<option value="1" <%= (industryId != null && industryId == 1) ? "selected" : "" %>>Web & Application</option>
+													<option value="3" <%= (industryId != null && industryId == 3) ? "selected" : "" %>>UI/UX Design</option>
+													<option value="4" <%= (industryId != null && industryId == 4) ? "selected" : "" %>>IOS/App Application</option>
+												</select>
 											</div>
 										</div>
-										
-										<div class="col-xl-12 col-lg-12 col-md-12">
-											<div class="form-group">
-												<label>About Company</label>
-												<textarea class="form-control ht-80"></textarea>
-											</div>
-										</div>
-										
-									</div> 
-								</form>
-							</div>
-						</div>
-						<!-- Card Row End -->
-						
-				
-						<!-- Card Row -->
-						<div class="card">
-							<div class="card-header">
-								<h4>Contact Detail</h4>
-							</div>
-							<div class="card-body">
-								<form>
-									<div class="row">
-									
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Your Email</label>
-												<input type="text" class="form-control">
-											</div>
-										</div>
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Phone no.</label>
-												<input type="text" class="form-control">
-											</div>
-										</div>
-										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
 												<label>Address</label>
-												<input type="text" class="form-control">
+												<input type="text" name="address" class="form-control" value="<%= address %>" required>
 											</div>
 										</div>
-										
-									</div> 
+										<div class="col-xl-12 col-lg-12 col-md-12">
+											<div class="form-group">
+												<label>Description</label>
+												<textarea name="description" class="form-control" required><%= request.getAttribute("description") != null ? (String)request.getAttribute("description") : "" %></textarea>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-12 col-lg-6 col-md-12">
+											<button type="submit" class="btn ft--medium btn-primary">Update Profile</button>
+										</div>
+									</div>
 								</form>
 							</div>
 						</div>
 						<!-- Card Row End -->
 						
-						<!-- Submit Busston -->
-						<div class="row">
-							<div class="col-lg-12 col-md-12">
-								<button type="submit" class="btn ft--medium btn-primary">Update Profile</button>
-							</div>	
-						</div>
-	
 					</div>
 					
 					<!-- footer -->

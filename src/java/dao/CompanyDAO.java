@@ -14,13 +14,13 @@ public class CompanyDAO {
 
     // Tạo profile company mới
     public boolean createCompany(Company company) throws SQLException {
-        String sql = "INSERT INTO company_profiles (user_id, company_name, industry, location, description, " +
+        String sql = "INSERT INTO company_profiles (user_id, company_name, industry_id, address, description, " +
                      "website, logo_url, is_searchable, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, company.getUserId());
             stmt.setString(2, company.getCompanyName());
-            stmt.setString(3, company.getIndustry());
-            stmt.setString(4, company.getLocation());
+            stmt.setObject(3, company.getIndustryId(), java.sql.Types.INTEGER);
+            stmt.setString(4, company.getAddress());
             stmt.setString(5, company.getDescription());
             stmt.setString(6, company.getWebsite());
             stmt.setString(7, company.getLogoUrl());
@@ -61,12 +61,12 @@ public class CompanyDAO {
 
     // Cập nhật profile company
     public boolean updateCompany(Company company) throws SQLException {
-        String sql = "UPDATE company_profiles SET company_name = ?, industry = ?, location = ?, " +
+        String sql = "UPDATE company_profiles SET company_name = ?, industry_id = ?, address = ?, " +
                      "description = ?, website = ?, logo_url = ?, is_searchable = ?, updated_at = ? WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, company.getCompanyName());
-            stmt.setString(2, company.getIndustry());
-            stmt.setString(3, company.getLocation());
+            stmt.setObject(2, company.getIndustryId(), java.sql.Types.INTEGER);
+            stmt.setString(3, company.getAddress());
             stmt.setString(4, company.getDescription());
             stmt.setString(5, company.getWebsite());
             stmt.setString(6, company.getLogoUrl());
@@ -79,14 +79,14 @@ public class CompanyDAO {
 
     // Cập nhật profile company (phiên bản đơn giản)
     public boolean updateCompanyProfile(int userId, String companyName, String industry, 
-                                      String location, String description, String website, 
+                                      String address, String description, String website, 
                                       String logoUrl) throws SQLException {
-        String sql = "UPDATE company_profiles SET company_name = ?, industry = ?, location = ?, " +
+        String sql = "UPDATE company_profiles SET company_name = ?, industry_id = ?, address = ?, " +
                      "description = ?, website = ?, logo_url = ?, updated_at = ? WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, companyName);
-            stmt.setString(2, industry);
-            stmt.setString(3, location);
+            stmt.setObject(2, industry, java.sql.Types.INTEGER);
+            stmt.setString(3, address);
             stmt.setString(4, description);
             stmt.setString(5, website);
             stmt.setString(6, logoUrl);
@@ -137,12 +137,12 @@ public class CompanyDAO {
         List<Object> params = new ArrayList<>();
         
         if (industry != null && !industry.trim().isEmpty()) {
-            sql.append(" AND industry LIKE ?");
-            params.add("%" + industry + "%");
+            sql.append(" AND industry_id = ?");
+            params.add(industry);
         }
         
         if (location != null && !location.trim().isEmpty()) {
-            sql.append(" AND location LIKE ?");
+            sql.append(" AND address LIKE ?");
             params.add("%" + location + "%");
         }
         
@@ -175,8 +175,8 @@ public class CompanyDAO {
         company.setId(rs.getInt("id"));
         company.setUserId(rs.getInt("user_id"));
         company.setCompanyName(rs.getString("company_name"));
-        company.setIndustry(rs.getString("industry"));
-        company.setLocation(rs.getString("location"));
+        company.setIndustryId((Integer)rs.getObject("industry_id"));
+        company.setAddress(rs.getString("address"));
         company.setDescription(rs.getString("description"));
         company.setWebsite(rs.getString("website"));
         company.setLogoUrl(rs.getString("logo_url"));

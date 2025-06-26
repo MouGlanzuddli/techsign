@@ -6,8 +6,8 @@ public class Company {
     private int id;
     private int userId;
     private String companyName;
-    private String industry;
-    private String location;
+    private Integer industryId;
+    private String address;
     private String description;
     private String website;
     private String logoUrl;
@@ -17,14 +17,14 @@ public class Company {
 
     public Company() {}
 
-    public Company(int id, int userId, String companyName, String industry, String location,
+    public Company(int id, int userId, String companyName, Integer industryId, String address,
                   String description, String website, String logoUrl, boolean isSearchable, 
                   Date createdAt, Date updatedAt) {
         this.id = id;
         this.userId = userId;
         this.companyName = companyName;
-        this.industry = industry;
-        this.location = location;
+        this.industryId = industryId;
+        this.address = address;
         this.description = description;
         this.website = website;
         this.logoUrl = logoUrl;
@@ -43,11 +43,11 @@ public class Company {
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }
 
-    public String getIndustry() { return industry; }
-    public void setIndustry(String industry) { this.industry = industry; }
+    public Integer getIndustryId() { return industryId; }
+    public void setIndustryId(Integer industryId) { this.industryId = industryId; }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

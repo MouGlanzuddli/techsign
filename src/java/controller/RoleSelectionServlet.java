@@ -12,6 +12,8 @@ import dal.UserDao;
 import model.User;
 import java.sql.Connection;
 import java.util.Date;
+import dao.CompanyDAO;
+import model.Company;
 
 @WebServlet(name="RoleSelectionServlet", urlPatterns={"/RoleSelectionServlet"})
 public class RoleSelectionServlet extends HttpServlet {
@@ -86,9 +88,16 @@ public class RoleSelectionServlet extends HttpServlet {
                     case 2:
                         response.sendRedirect("candidateHome.jsp");
                         break;
-                    case 3:
-                        response.sendRedirect("companyHome.jsp");
+                    case 3: {
+                        CompanyDAO companyDAO = new CompanyDAO(conn);
+                        Company company = companyDAO.getCompanyByUserId(user.getId());
+                        if (company == null || !isCompanyProfileComplete(company)) {
+                            response.sendRedirect("company-dashboard.jsp?requireCompleteProfile=true");
+                        } else {
+                            response.sendRedirect("company-dashboard.jsp");
+                        }
                         break;
+                    }
                     default:
                         response.sendRedirect("index.jsp?error=invalid_role");
                 }
@@ -109,5 +118,14 @@ public class RoleSelectionServlet extends HttpServlet {
             throws ServletException, IOException {
         // Redirect GET requests to role selection page
         response.sendRedirect("roleSelection.jsp");
+    }
+
+    private boolean isCompanyProfileComplete(Company company) {
+        return company != null
+            && company.getCompanyName() != null && !company.getCompanyName().trim().isEmpty()
+            && company.getIndustryId() != null
+            && company.getAddress() != null && !company.getAddress().trim().isEmpty()
+            && company.getDescription() != null && !company.getDescription().trim().isEmpty()
+            && company.getWebsite() != null && !company.getWebsite().trim().isEmpty();
     }
 }
