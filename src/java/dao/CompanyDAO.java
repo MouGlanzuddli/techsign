@@ -15,7 +15,7 @@ public class CompanyDAO {
     // Tạo profile company mới
     public boolean createCompany(Company company) throws SQLException {
         String sql = "INSERT INTO company_profiles (user_id, company_name, industry_id, address, description, " +
-                     "website, logo_url, is_searchable, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "website, logo_url, phone, is_searchable, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, company.getUserId());
             stmt.setString(2, company.getCompanyName());
@@ -24,9 +24,10 @@ public class CompanyDAO {
             stmt.setString(5, company.getDescription());
             stmt.setString(6, company.getWebsite());
             stmt.setString(7, company.getLogoUrl());
-            stmt.setBoolean(8, company.isSearchable());
-            stmt.setTimestamp(9, new Timestamp(company.getCreatedAt().getTime()));
-            stmt.setTimestamp(10, new Timestamp(company.getUpdatedAt().getTime()));
+            stmt.setString(8, company.getPhone());
+            stmt.setBoolean(9, company.isSearchable());
+            stmt.setTimestamp(10, new Timestamp(company.getCreatedAt().getTime()));
+            stmt.setTimestamp(11, new Timestamp(company.getUpdatedAt().getTime()));
             return stmt.executeUpdate() > 0;
         }
     }
@@ -62,7 +63,7 @@ public class CompanyDAO {
     // Cập nhật profile company
     public boolean updateCompany(Company company) throws SQLException {
         String sql = "UPDATE company_profiles SET company_name = ?, industry_id = ?, address = ?, " +
-                     "description = ?, website = ?, logo_url = ?, is_searchable = ?, updated_at = ? WHERE user_id = ?";
+                     "description = ?, website = ?, logo_url = ?, phone = ?, is_searchable = ?, updated_at = ? WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, company.getCompanyName());
             stmt.setObject(2, company.getIndustryId(), java.sql.Types.INTEGER);
@@ -70,9 +71,10 @@ public class CompanyDAO {
             stmt.setString(4, company.getDescription());
             stmt.setString(5, company.getWebsite());
             stmt.setString(6, company.getLogoUrl());
-            stmt.setBoolean(7, company.isSearchable());
-            stmt.setTimestamp(8, new Timestamp(company.getUpdatedAt().getTime()));
-            stmt.setInt(9, company.getUserId());
+            stmt.setString(7, company.getPhone());
+            stmt.setBoolean(8, company.isSearchable());
+            stmt.setTimestamp(9, new Timestamp(company.getUpdatedAt().getTime()));
+            stmt.setInt(10, company.getUserId());
             return stmt.executeUpdate() > 0;
         }
     }
@@ -180,6 +182,7 @@ public class CompanyDAO {
         company.setDescription(rs.getString("description"));
         company.setWebsite(rs.getString("website"));
         company.setLogoUrl(rs.getString("logo_url"));
+        company.setPhone(rs.getString("phone"));
         company.setSearchable(rs.getBoolean("is_searchable"));
         company.setCreatedAt(rs.getTimestamp("created_at"));
         company.setUpdatedAt(rs.getTimestamp("updated_at"));

@@ -40,15 +40,15 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             industryId = null;
         }
-        // 3. Validate dữ liệu backend
+        // 3. Validate input (all error messages in English)
         String errorMsg = null;
-        if (companyName == null || companyName.trim().isEmpty()) errorMsg = "Tên công ty không được để trống!";
-        else if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@gmail\\.com$")) errorMsg = "Email không hợp lệ!";
-        else if (phone == null || !phone.matches("^0\\d{9}$")) errorMsg = "Số điện thoại phải 10 số và bắt đầu bằng 0!";
-        else if (website == null || website.trim().isEmpty()) errorMsg = "Website không được để trống!";
-        else if (industryId == null) errorMsg = "Vui lòng chọn ngành nghề!";
-        else if (address == null || address.trim().isEmpty()) errorMsg = "Địa chỉ không được để trống!";
-        else if (!companyName.matches("^[a-zA-Z0-9\sÀ-ỹ.,'-]+$")) errorMsg = "Tên công ty không được chứa ký tự đặc biệt!";
+        if (companyName == null || companyName.trim().isEmpty()) errorMsg = "Company name must not be empty!";
+        else if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) errorMsg = "Invalid email format!";
+        else if (phone == null || !phone.matches("^0\\d{9}$")) errorMsg = "Phone number must be 10 digits, start with 0, and contain only numbers (no spaces or special characters)!";
+        else if (website == null || !website.matches("^(http:\\/\\/|https:\\/\\/)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}.*$")) errorMsg = "Invalid website format!";
+        else if (industryId == null) errorMsg = "Please select a company category!";
+        else if (address == null || address.trim().length() < 5) errorMsg = "Address is not valid!";
+        else if (!companyName.matches("^[a-zA-Z0-9\\sÀ-ỹ.,'-]+$")) errorMsg = "Company name must not contain special characters!";
         // 4. Xử lý ảnh đại diện (nếu có)
         String avatarUrl = null;
         try {
@@ -85,6 +85,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
             request.setAttribute("avatarUrl", avatarUrl != null ? avatarUrl : "assets/img/default-avatar.png");
             request.setAttribute("email", email);
             request.setAttribute("phone", phone);
+            request.setAttribute("phoneTop", user.getPhone());
             request.setAttribute("error", errorMsg);
             request.getRequestDispatcher("company-dashboard.jsp").forward(request, response);
             return;
@@ -107,6 +108,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
                 company.setDescription(description);
                 company.setWebsite(website);
                 company.setLogoUrl(avatarUrl);
+                company.setPhone(phone);
                 company.setSearchable(true);
                 company.setUpdatedAt(now);
                 System.out.println("[DEBUG] Tạo mới company cho userId: " + userId);
@@ -119,6 +121,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
                 company.setDescription(description);
                 company.setWebsite(website);
                 if (avatarUrl != null) company.setLogoUrl(avatarUrl);
+                company.setPhone(phone);
                 company.setUpdatedAt(now);
                 System.out.println("[DEBUG] Update company cho userId: " + userId);
                 boolean updated = companyDAO.updateCompany(company);

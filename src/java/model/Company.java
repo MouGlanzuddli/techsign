@@ -14,6 +14,7 @@ public class Company {
     private boolean isSearchable;
     private Date createdAt;
     private Date updatedAt;
+    private String phone;
 
     public Company() {}
 
@@ -66,4 +67,7 @@ public class Company {
 
     public Date getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 } 

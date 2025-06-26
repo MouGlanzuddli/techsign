@@ -288,7 +288,7 @@
 											<div class="single-dash-prf-infos-icons"><i class="fa-solid fa-phone-volume"></i></div>
 											<div class="single-dash-prf-infos-caption">
 												<p class="text-sm-muted mb-0">Call</p>
-												<h5><%= phone %></h5>
+												<h5><%= request.getAttribute("phoneTop") != null ? request.getAttribute("phoneTop") : phone %></h5>
 											</div>
 										</div>
 										
@@ -310,6 +310,11 @@
 								<h4>My Profile</h4>
 							</div>
 							<div class="card-body">
+								<% if (request.getAttribute("error") != null) { %>
+									<div class="alert alert-danger" style="margin: 1px;">
+										<%= request.getAttribute("error") %>
+									</div>
+								<% } %>
 								<% if (missingInfo) { %>
 									<div class="alert alert-warning" style="margin: 1px;">
 										Please fill out the company profile information completely!
