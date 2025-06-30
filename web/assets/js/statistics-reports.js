@@ -1110,115 +1110,31 @@ function updateStatusStats() {
 }
 
 function updateActivityTable() {
-  const tbody = document.getElementById("activityTableBody")
-  if (!tbody) return
+  const tbody = document.getElementById("activityTableBody");
+  if (!tbody) return;
 
-  // Tạo dữ liệu hoạt động dựa trên audit_logs thật
-  const activityTypes = {
-    'login': 'Đăng nhập',
-    'register': 'Đăng ký',
-    'job_post': 'Đăng tin tuyển dụng',
-    'application': 'Nộp đơn',
-    'profile_update': 'Cập nhật hồ sơ',
-    'password_change': 'Đổi mật khẩu',
-    'logout': 'Đăng xuất'
-  }
+  tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Đang tải dữ liệu...</td></tr>`;
 
-  // Tạo dữ liệu mẫu dựa trên tổng hoạt động thật
-  const totalActivities = realData.activityReports.totalActivities || 0
-  const sampleCount = Math.min(10, totalActivities) // Hiển thị tối đa 10 hoạt động gần nhất
-  
-  if (sampleCount === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="5" class="text-center text-muted">
-          <i class="fas fa-info-circle"></i> Chưa có hoạt động nào được ghi nhận
-        </td>
-      </tr>
-    `
-    return
-  }
-
-  // Tạo danh sách hoạt động mẫu dựa trên dữ liệu thật
-  const activities = []
-  const activityKeys = Object.keys(activityTypes)
-  
-  for (let i = 0; i < sampleCount; i++) {
-    const activityType = activityKeys[Math.floor(Math.random() * activityKeys.length)]
-    const now = new Date()
-    const timeOffset = Math.floor(Math.random() * 24 * 60 * 60 * 1000) // Trong 24h qua
-    
-    activities.push({
-      time: new Date(now.getTime() - timeOffset).toLocaleString("vi-VN"),
-      user: `user${Math.floor(Math.random() * 1000)}`,
-      activity: activityTypes[activityType],
-      details: getActivityDetails(activityType),
-      ip: `192.168.1.${Math.floor(Math.random() * 255)}`
+  fetch(window.contextPath + "/activityReport")
+    .then(res => res.json())
+    .then(data => {
+      if (!Array.isArray(data) || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted"><i class='fas fa-info-circle'></i> Chưa có hoạt động nào được ghi nhận</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(log => `
+        <tr>
+          <td><div class='activity-time'><i class='fas fa-clock text-muted'></i> ${log.timestamp ? new Date(log.timestamp).toLocaleString('vi-VN') : ''}</div></td>
+          <td><div class='activity-user'><i class='fas fa-user text-primary'></i> user${log.userId ?? 'N/A'}</div></td>
+          <td><span class='activity-badge'>${log.actionType}</span></td>
+          <td><div class='activity-details'>${log.newValue ? log.newValue : (log.oldValue ? log.oldValue : '')}</div></td>
+          <td><code class='text-muted'>${log.ipAddress ?? ''}</code></td>
+        </tr>
+      `).join("");
     })
-  }
-
-  // Sắp xếp theo thời gian (mới nhất trước)
-  activities.sort((a, b) => new Date(b.time) - new Date(a.time))
-
-  tbody.innerHTML = activities
-    .map(
-      (activity) => `
-    <tr>
-      <td>
-        <div class="activity-time">
-          <i class="fas fa-clock text-muted"></i>
-          ${activity.time}
-        </div>
-      </td>
-      <td>
-        <div class="activity-user">
-          <i class="fas fa-user text-primary"></i>
-          ${activity.user}
-        </div>
-      </td>
-      <td>
-        <span class="activity-badge ${getActivityBadgeClass(activity.activity)}">
-          ${activity.activity}
-        </span>
-      </td>
-      <td>
-        <div class="activity-details">
-          ${activity.details}
-        </div>
-      </td>
-      <td>
-        <code class="text-muted">${activity.ip}</code>
-      </td>
-    </tr>
-  `,
-    )
-    .join("")
-}
-
-function getActivityDetails(activityType) {
-  const details = {
-    'login': 'Đăng nhập thành công vào hệ thống',
-    'register': 'Tạo tài khoản mới',
-    'job_post': 'Đăng tin tuyển dụng mới',
-    'application': 'Nộp đơn ứng tuyển',
-    'profile_update': 'Cập nhật thông tin cá nhân',
-    'password_change': 'Thay đổi mật khẩu',
-    'logout': 'Đăng xuất khỏi hệ thống'
-  }
-  return details[activityType] || 'Hoạt động hệ thống'
-}
-
-function getActivityBadgeClass(activity) {
-  const classes = {
-    'Đăng nhập': 'badge-success',
-    'Đăng ký': 'badge-primary',
-    'Đăng tin tuyển dụng': 'badge-warning',
-    'Nộp đơn': 'badge-info',
-    'Cập nhật hồ sơ': 'badge-secondary',
-    'Đổi mật khẩu': 'badge-dark',
-    'Đăng xuất': 'badge-light'
-  }
-  return classes[activity] || 'badge-secondary'
+    .catch(() => {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Lỗi khi tải dữ liệu!</td></tr>`;
+    });
 }
 
 // TĂNG TRƯỞNG NGƯỜI DÙNG THEO THÁNG DƯƠNG LỊCH
