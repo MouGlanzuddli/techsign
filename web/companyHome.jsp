@@ -75,9 +75,9 @@
                 <ul class="nav-menu nav-menu-social align-to-right">
                      
                      <li>
-                        <a href="JavaScript:Void(0);" class="post-job-btn">
-                            Post Job <i class="fas fa-arrow-up"></i>
-                        </a>
+                       <a href="company-submit-job.jsp" class="post-job-btn">
+    Post Job <i class="fas fa-arrow-up"></i>
+</a>
                     </li>
                     <li>
                         <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
@@ -90,7 +90,7 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="JavaScript:Void(0);">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="company-dashboard.jsp">Dashboard</a></li>
                             <li><a class="dropdown-item" href="LogoutServlet""JavaScript:Void(0);">Logout</a></li>
                         </ul>
                     </li>

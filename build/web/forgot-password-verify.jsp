@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -111,8 +112,15 @@
                         </c:if>
                         
                         <div class="email-info">
-                            <i class="fas fa-envelope me-2"></i>
-                            OTP code has been sent to: <strong>${email}</strong>
+                            <p>Email: ${email}</p>
+                            <p>Mã OTP sẽ hết hạn vào: <fmt:formatDate value="${sessionScope.otp_expires_at}" pattern="HH:mm:ss dd/MM/yyyy" /></p>
+                        </div>
+                        
+                        <div class="text-center mb-3">
+                            <a href="${pageContext.request.contextPath}/ForgotPasswordServlet?step=verify&action=resend_otp" class="btn btn-link">
+                                <i class="fas fa-sync-alt me-1"></i>
+                                Gửi lại mã OTP
+                            </a>
                         </div>
                         
                         <form action="${pageContext.request.contextPath}/ForgotPasswordServlet" method="post">
@@ -134,7 +142,12 @@
                                 <input type="password" class="form-control" id="new_password" name="new_password" 
                                        required placeholder="Enter new password">
                                 <div class="password-requirements">
-                                    Password must be at least 6 characters
+                                    Yêu cầu mật khẩu:<br>
+                                    - Từ 8 đến 50 ký tự<br>
+                                    - Phải có ít nhất 1 chữ hoa<br>
+                                    - Phải có ít nhất 1 chữ thường<br>
+                                    - Phải có ít nhất 1 số<br>
+                                    - Phải có ít nhất 1 ký tự đặc biệt (!@#$%^&*()_+\-=\[\]{};':""\|,.<>/?)
                                 </div>
                             </div>
                             

@@ -1,7 +1,7 @@
 package dal;
 
-import model.CompanyProfile;
 import java.sql.*;
+import model.User;
 
 public class CompanyProfileDao {
     private final Connection connection;
@@ -10,53 +10,66 @@ public class CompanyProfileDao {
         this.connection = connection;
     }
 
-    public CompanyProfile getCompanyByUserId(int userId) throws SQLException {
-        String sql = "SELECT * FROM company_profiles WHERE user_id = ?";
-        
+    public CompanyProfileDao() throws SQLException {
+        DBContext dbContext = new DBContext();
+        this.connection = dbContext.getConnection();
+    }
+
+    public int getCompanyProfileIdByUserId(int userId) throws SQLException {
+        String sql = "SELECT id FROM company_profiles WHERE user_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
-            
             if (rs.next()) {
-                return mapResultSetToCompanyProfile(rs);
+                return rs.getInt("id");
             }
         }
-        
-        return null;
+        return -1; // Not found
     }
 
-    public CompanyProfile getCompanyById(int id) throws SQLException {
-        String sql = "SELECT * FROM company_profiles WHERE id = ?";
-        
+    public boolean updateCompanyLogo(int companyProfileId, String logoUrl) throws SQLException {
+        String sql = "UPDATE company_profiles SET logo_url = ?, updated_at = GETDATE() WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setString(1, logoUrl);
+            stmt.setInt(2, companyProfileId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public String getCompanyName(int companyProfileId) throws SQLException {
+        String sql = "SELECT company_name FROM company_profiles WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, companyProfileId);
             ResultSet rs = stmt.executeQuery();
-            
             if (rs.next()) {
-                return mapResultSetToCompanyProfile(rs);
+                return rs.getString("company_name");
             }
         }
-        
         return null;
     }
 
-    private CompanyProfile mapResultSetToCompanyProfile(ResultSet rs) throws SQLException {
-        CompanyProfile company = new CompanyProfile();
-        company.setId(rs.getInt("id"));
-        company.setUserId(rs.getInt("user_id"));
-        company.setIndustryId(rs.getInt("industry_id"));
-        company.setCompanyName(rs.getString("company_name"));
-        company.setWebsite(rs.getString("website"));
-        company.setDescription(rs.getString("description"));
-        company.setAddress(rs.getString("address"));
-        company.setPhone(rs.getString("phone"));
-        company.setLogoUrl(rs.getString("logo_url"));
-        company.setBannerUrl(rs.getString("banner_url"));
-        company.setIconUrl(rs.getString("icon_url"));
-        company.setFeatured(rs.getBoolean("is_featured"));
-        company.setSearchable(rs.getBoolean("is_searchable"));
-        company.setCreatedAt(rs.getTimestamp("created_at"));
-        company.setUpdatedAt(rs.getTimestamp("updated_at"));
-        return company;
+    // Add method to get company logo
+    public String getCompanyLogo(int companyProfileId) throws SQLException {
+        String sql = "SELECT logo_url FROM company_profiles WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, companyProfileId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String logoUrl = rs.getString("logo_url");
+                return logoUrl != null ? logoUrl : "assets/img/l-1.png";
+            }
+        }
+        return "assets/img/l-1.png"; // Default logo
+    }
+
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+            }
+        }
     }
 }
+    
