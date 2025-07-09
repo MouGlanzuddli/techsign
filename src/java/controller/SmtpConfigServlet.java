@@ -80,8 +80,8 @@ public class SmtpConfigServlet extends HttpServlet {
         SmtpConfig config = new SmtpConfig();
         config.setSmtpHost("smtp.gmail.com");
         config.setSmtpPort("587");
-        config.setSmtpUsername("hhqan61@gmail.com");
-        config.setSmtpPassword("cxhrqgtzdxegmorh");
+        config.setSmtpUsername("Quanhhde180071@fpt.edu.vn");
+        config.setSmtpPassword("zwwjlheisoikwoxp");
         config.setFromEmail(fromEmail);
         config.setFromName(fromName);
         config.setSmtpAuth(true);

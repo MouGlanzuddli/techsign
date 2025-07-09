@@ -3,17 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/util/ConnectionManager.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/SendOtpServlet.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/PostJobServlet.java</file>
             <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/Constants.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/model/SmtpConfig.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/util/EmailServiceExtended.java</file>
             <file>file:/D:/KÌ%205/JobSearchManagement/src/java/config/Constants.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/web/company-jobs.jsp</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/model/JobAttachment.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/model/Application.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/CandidateListServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/web/test-job-display.jsp</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/model/JobPosting.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/CompanyJobsServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/CompanyProfileDao.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LoginGoogleHandler.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/SmtpConfigServlet.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/JobDao.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/model/Job.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/RoleSelectionServlet.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/util/DeviceInfoUtil.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/MyJobsServlet.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/web/company-submit-job.jsp</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/DBContext.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/web/company-my-jobs.jsp</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/model/EmailOtp.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/util/EmailService.java</file>
+            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/ForgotPasswordServlet.java</file>
         </group>
     </open-files>
 </project-private>

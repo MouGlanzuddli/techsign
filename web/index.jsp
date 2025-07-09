@@ -57,7 +57,7 @@
 								
 								<li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="JavaScript:Void(0);">Job List<span class="submenu-indicator"></span></a>	
+										<li><a href="${pageContext.request.contextPath}/company-my-jobs">Job List<span class="submenu-indicator"></span></a>	
 										</li>
 										
 										

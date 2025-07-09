@@ -7,6 +7,18 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.sql.Connection;
 import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+import java.security.SecureRandom;
 
 public class EmailServiceExtended extends EmailService {
     
@@ -63,8 +75,8 @@ public class EmailServiceExtended extends EmailService {
     private static boolean sendPasswordResetWithDefaultConfig(String toEmail, String otpCode, String fullName) {
         System.out.println("🔄 SỬ DỤNG CẤU HÌNH MẶC ĐỊNH CHO RESET PASSWORD");
         
-        final String GMAIL_USERNAME = "hhqan61@gmail.com";
-        final String GMAIL_APP_PASSWORD = "uztjygdbmvlvojmu";
+        final String GMAIL_USERNAME = "Quanhhde180071@fpt.edu.vn";
+        final String GMAIL_APP_PASSWORD = "zwwjlheisoikwoxp";
         
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
