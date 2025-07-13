@@ -79,105 +79,25 @@
 							
 								<li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a class="active" href="index.html">Home Layout 1</a></li>
-										<li><a href="home-2.html">Home Layout 2</a></li>
-										<li><a href="home-3.html">Home Layout 3</a></li>
-										<li><a href="home-4.html">Home Layout 4</a></li>
-										<li><a href="home-5.html">Home Layout 5</a></li>
-										<li><a href="home-6.html">Home Layout 6</a></li>
-										<li><a href="home-7.html">Home Layout 7</a></li>
-										<li><a href="JavaScript:Void(0);">New Homes Layouts<span class="new-update">New</span><span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="home-8.html">Home Layout 8</a></li>                                    
-												<li><a href="home-9.html">Home Layout 9</a></li>                                    
-												<li><a href="home-10.html">Home Layout 10</a></li>
-												<li><a href="home-11.html">Home Layout 11</a></li>
-												<li><a href="home-12.html">Home Layout 12</a></li>																								
-											</ul>	
-										</li>
+										<li><a class="active" href="index.html">Home Layout</a></li>
+										
 									</ul>
 								</li>
 								
 								<li><a href="JavaScript:Void(0);">For Candidate<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="JavaScript:Void(0);">Browse Jobs<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="grid-style-1.html">Job Grid Style 1</a></li>                                    
-												<li><a href="grid-style-2.html">Job Grid Stle 2</a></li>                                    
-												<li><a href="grid-style-3.html">Job Grid Style 3</a></li>
-												<li><a href="grid-style-4.html">Job Grid Style 4</a></li>
-												<li><a href="grid-style-5.html">Job Grid Style 5</a></li>												
-												<li><a href="full-job-grid-1.html">Grid Full Style 1</a></li>
-												<li><a href="full-job-grid-2.html">Grid Full Style 2</a></li>
-												<li><a href="list-style-1.html">Job List Style 1</a></li>
-												<li><a href="list-style-2.html">Job List Style 2</a></li>
-												<li><a href="list-style-2.html">Job List Style 3</a></li>
-												<li><a href="full-job-list-1.html">List Full Style 1</a></li>
-												<li><a href="full-job-list-2.html">List Full Style 2</a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Browse Map Jobs<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="half-map.html">Job Search on Map 01</a></li>                                    
-												<li><a href="half-map-2.html">Job Search on Map 02</a></li>                                    
-												<li><a href="half-map-3.html">Job Search on Map 03</a></li>
-												<li><a href="half-map-list-1.html">Job Search on Map 04</a></li>
-												<li><a href="half-map-list-2.html">Job Search on Map 05</a></li>
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Browse Candidate<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="candidate-grid-1.html">Candidate Grid 01</a></li>                                    
-												<li><a href="candidate-grid-2.html">Candidate Grid 02</a></li>                                    
-												<li><a href="candidate-list-1.html">Candidate List 01</a></li>                                    
-												<li><a href="candidate-list-2.html">Candidate List 02</a></li>
-												<li><a href="candidate-half-map.html">Candidate Half Map 01</a></li>
-												<li><a href="candidate-half-map-list.html">Candidate Half Map 02</a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Single job Detail<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="single-layout-1.html">Single Layout 01</a></li>                                    
-												<li><a href="single-layout-2.html">Single Layout 02</a></li>                                    
-												<li><a href="single-layout-3.html">Single Layout 03</a></li>                                    
-												<li><a href="single-layout-4.html">Single Layout 04</a></li>												
-												<li><a href="single-layout-5.html">Single Layout 05<span class="new-update">New</span></a></li>												
-												<li><a href="single-layout-6.html">Single Layout 06<span class="new-update">New</span></a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Candidate Detail<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="candidate-detail.html">Candidate Detail 01</a></li>                                    
-												<li><a href="candidate-detail-2.html">Candidate Detail 02</a></li>                                    
-												<li><a href="candidate-detail-3.html">Candidate Detail 03</a></li>                                    												
-											</ul>
-										</li>
-										<li><a href="advance-search.html">Advance Search</a></li>
+										
 										<li>
 											<a href="candidate-dashboard.html">Candidate Dashboard<span class="new-update">New</span></a>                                
 										</li>
 									</ul>
 								</li>
 								
-								<li><a href="JavaScript:Void(0);">For Employer<span class="submenu-indicator"></span></a>
+								<li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="JavaScript:Void(0);">Explore Employers<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="employer-grid-1.html">Search Employers 01</a></li>                                    
-												<li><a href="employer-grid-2.html">Search Employers 02</a></li>                                    
-												<li><a href="employer-list-1.html">Search List Employers 01</a></li>
-												<li><a href="employer-half-map.html">Search Employers Map</a></li>
-												<li><a href="employer-half-map-list.html">Search List Employers Map</a></li>												
-											</ul>
-										</li>
-										<li><a href="JavaScript:Void(0);">Employer Detail<span class="submenu-indicator"></span></a>
-											<ul class="nav-dropdown nav-submenu">
-												<li><a href="employer-detail.html">Employer Detail 01</a></li>                                    
-												<li><a href="employer-detail-2.html">Employer Detail 02</a></li>                                    											
-											</ul>
-										</li>
+										
 										<li>
-											<a href="employer-dashboard.html">Employer Dashboard<span class="new-update">New</span></a>                                
+											<a href="employer-dashboard.html">Company Dashboard<span class="new-update">New</span></a>                                
 										</li>
 									</ul>
 								</li>
@@ -185,13 +105,7 @@
 								<li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
 										<li><a href="about-us.html">About Us</a></li> 
-										<li><a href="404.html">Error Page</a></li>
-										<li><a href="checkout.html">Checkout</a></li>										
-										<li><a href="blog.html">Blogs Page</a></li>                                    
-										<li><a href="blog-detail.html">Blog Detail</a></li>                                    
-										<li><a href="privacy.html">Terms & Privacy</a></li> 
-										<li><a href="pricing.html">Pricing</a></li>  
-										<li><a href="faq.html">FAQ's</a></li>
+										
 										<li><a href="contact.html">Contacts</a></li>
 									</ul>
 								</li>
@@ -267,35 +181,28 @@
 								</div>
 							</div>
 							<div class="jbs-grid-usrs-caption mb-3">
-								<div class="jbs-kioyer">
-									<div class="jbs-kioyer-groups">
-										<span class="fa-solid fa-star active"></span>
-										<span class="fa-solid fa-star active"></span>
-										<span class="fa-solid fa-star active"></span>
-										<span class="fa-solid fa-star active"></span>
-										<span class="fa-solid fa-star"></span>
-										<span class="aal-reveis"></span>
-									</div>
-								</div>
+								
 								<div class="jbs-tiosk">
-									<h4 class="jbs-tiosk-title"><a href="candidate-detail.html"></a></h4>
-									<div class="jbs-tiosk-subtitle"><span></span></div>
+									<h4 class="jbs-tiosk-title"><a href="candidate-detail.html">${fullName}</a></h4>
+									<div class="jbs-tiosk-subtitle"><span>${jobTitle}</span></div>
 								</div>
 							</div>
 						</div>
 						<div class="dashboard-inner">
 							<ul data-submenu-title="Main Navigation">
-								<li><a href="candidate-dashboard.html"><i class="fa-solid fa-gauge-high me-2"></i>User Dashboard</a></li>
-								<li class="active"><a href="candidate-profile.html"><i class="fa-regular fa-user me-2"></i>My Profile </a></li>
+								<li><a href="UpdateCandidateProfile"><i class="fa-solid fa-gauge-high me-2"></i>Dashboard</a></li>
+								<li class="active"><a href="UpdateCandidateProfile"><i class="fa-regular fa-user me-2"></i>My Profile </a></li>
 								<li><a href="candidate-resume.html"><i class="fa-solid fa-file-pdf me-2"></i>My CV</a></li>
 								<li><a href="candidate-applied-jobs.html"><i class="fa-regular fa-paper-plane me-2"></i>Applied jobs</a></li>
 								<li><a href="candidate-alert-job.html"><i class="fa-solid fa-bell me-2"></i>Alert Jobs<span class="count-tag bg-warning">4</span></a></li>
 								<li><a href="candidate-saved-jobs.html"><i class="fa-solid fa-bookmark me-2"></i>Shortlist Jobs</a></li>
-								<li><a href="candidate-follow-employers.html"><i class="fa-solid fa-user-clock me-2"></i>Following Employers</a></li>
+								<li><a href="candidate-follow-employers.html"><i class="fa-solid fa-user-clock me-2"></i>Following Company</a></li>
 								<li><a href="candidate-messages.html"><i class="fa-solid fa-comments me-2"></i>Messages<span class="count-tag">4</span></a></li>
 								<li><a href="candidate-change-password.html"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>
-								<li><a href="candidate-delete-account.html"><i class="fa-solid fa-trash-can me-2"></i>Delete Account</a></li>
-								<li><a href="index.html"><i class="fa-solid fa-power-off me-2"></i>Log Out</a></li>
+								<li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteAccountModal"><i class="fa-solid fa-trash-can me-2"></i>Delete Account</a></li>
+								<li><a href="LogoutServlet">
+									<i class="fa-solid fa-power-off"></i> Log Out
+								</a></li>
 							</ul>
 						</div>					
 					</div>
@@ -328,43 +235,51 @@
 								</div>
 							</div>
 							<div class="dash-prf-end">
+                                                            <div class="dash-prfs-caption emplyer">
 								<div class="dash-prfs-caption">
 									<div class="dash-prfs-title">
-										<h4</h4>	
+										<h4>${fullName}</h4>
 									</div>
 									<div class="dash-prfs-subtitle">
 										<div class="jbs-job-mrch-lists">
 											<div class="single-mrch-lists">
-												<span></span>.<span><i class="fa-solid fa-location-dot me-1"></i></span>
+												<span>${jobTitle}</span> · <span><i class="fa-solid fa-location-dot me-1"></i>${address}</span>
 											</div>
 										</div>
 									</div>
-									<div class="jbs-grid-job-edrs-group mt-1">
-										<span></span>
-										
-									</div>
+									
 								</div>
+                                                                <div class="dash-prfs-flexends">
+									<form action="ToggleCandidateProfileVisibility" method="post" style="display:inline;">
+									<input type="hidden" name="toggle" value="1" />
+										<div class="form-check form-switch">
+											<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="isSearchable" value="on" <%= (request.getAttribute("isSearchable") != null && (Boolean)request.getAttribute("isSearchable")) ? "checked" : "" %> onchange="this.form.submit();">
+										<label class="form-check-label" for="flexSwitchCheckChecked">Allow search and view my profile</label>
+										</div>	
+									</form>
+								</div> 
+                                                            </div>
 								<div class="dash-prf-caption-end">
 									<div class="dash-prf-infos">
 										<div class="single-dash-prf-infos">
 											<div class="single-dash-prf-infos-icons"><i class="fa-solid fa-envelope-open-text"></i></div>
 											<div class="single-dash-prf-infos-caption">
 												<p class="text-sm-muted mb-0">Email</p>
-												<h5></h5>
+												<h5>${email}</h5>
 											</div>
 										</div>
 										<div class="single-dash-prf-infos">
 											<div class="single-dash-prf-infos-icons"><i class="fa-solid fa-phone-volume"></i></div>
 											<div class="single-dash-prf-infos-caption">
 												<p class="text-sm-muted mb-0">Call</p>
-												<h5></h5>
+												<h5>${phone}</h5>
 											</div>
 										</div>
 										<div class="single-dash-prf-infos">
 											<div class="single-dash-prf-infos-icons"><i class="fa-solid fa-briefcase"></i></div>
 											<div class="single-dash-prf-infos-caption">
 												<p class="text-sm-muted mb-0">Exp.</p>
-												<h5></h5>
+												<h5>${experienceYears} Years</h5>
 											</div>
 										</div>
 									</div>
@@ -385,54 +300,60 @@
 								<h4>My Profile</h4>
 							</div>
 							<div class="card-body">
-								<form>
+								<% if (request.getAttribute("error") != null) { %>
+									<div class="alert alert-danger" style="margin: 1px;">
+										${error}
+									</div>
+								<% } %>
+								<% if (request.getAttribute("success") != null) { %>
+									<div class="alert alert-success" style="margin: 1px;">
+										${success}
+									</div>
+								<% } %>
+								<script>
+								function validateProfileForm() {
+									// Không chặn submit, chỉ rely vào backend để hiển thị lỗi
+									return true;
+								}
+								</script>
+								<form action="UpdateCandidateProfile" method="post" onsubmit="return validateProfileForm()">
 									<div class="row">
 									
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
 												<label>Your Name</label>
-												<input type="text" class="form-control">
+												<input type="text" class="form-control" name="candidateName" value="${fullName}" required>
+											</div>
+										</div>
+										
+										<div class="col-xl-6 col-lg-6 col-md-12">
+											<div class="form-group">
+												<label>Job Title</label>
+												<input type="text" class="form-control" name="jobTitle" value="${jobTitle}">
+											</div>
+										</div>
+										<div class="col-xl-6 col-lg-6 col-md-12">
+											<div class="form-group">
+												<label>Email</label>
+												<input type="email" class="form-control" name="email" value="${email}" required>
 											</div>
 										</div>
 										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
 												<label>Phone Number</label>
-												<input type="text" class="form-control">
+												<input type="text" class="form-control" name="phone" value="${phoneInput != null ? phoneInput : phone}">
 											</div>
 										</div>
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Email</label>
-												<input type="text" class="form-control">
-											</div>
-										</div>
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Gender</label>
-												<div class="select-ops">
-													<select>
-														<option value="1">Female</option>
-														<option value="2">Male</option>
-														<option value="3">Other</option>
-														
-													</select>
-												</div>
-											</div>
-										</div>
-										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
 												<label>Experience</label>
 												<div class="select-ops">
-													<select>
-														<option value="1">Fresher</option>
-														<option value="2">1+ Year</option>
-														<option value="3">2+ Year</option>
-														<option value="4">4+ Year</option>
-														<option value="5">5+ Year</option>
+													<select name="experienceYears">
+														<option value="0" ${experienceYears == 0 ? 'selected' : ''}>Fresher</option>
+														<option value="1" ${experienceYears == 1 ? 'selected' : ''}>1+ Year</option>
+														<option value="5" ${experienceYears == 5 ? 'selected' : ''}>5+ Years</option>
+														<option value="15" ${experienceYears == 15 ? 'selected' : ''}>10+ Years</option>
 													</select>
 												</div>
 											</div>
@@ -440,92 +361,46 @@
 										
 										<div class="col-xl-6 col-lg-6 col-md-12">
 											<div class="form-group">
-												<label>Language</label>
-												<input type="text" class="form-control">
+												<label>Education</label>
+												<div class="select-ops">
+													<select name="educationLevel">
+														<option value="High School" ${educationLevel == 'High School' ? 'selected' : ''}>High School</option>
+														<option value="Intermediate" ${educationLevel == 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+														<option value="Bachelor Degree" ${educationLevel == 'Bachelor Degree' ? 'selected' : ''}>Bachelor Degree</option>
+														<option value="Master Degree" ${educationLevel == 'Master Degree' ? 'selected' : ''}>Master Degree</option>
+														<option value="Post Graduate" ${educationLevel == 'Post Graduate' ? 'selected' : ''}>Post Graduate</option>
+														<option value="PhD" ${educationLevel == 'PhD' ? 'selected' : ''}>PhD</option>
+													</select>
+												</div>
 											</div>
 										</div>
 										
-									</div> 
-								</form>
-							</div>
-						</div>
-						<!-- Card Row End -->
-						
-						<!-- Card Row -->
-						<div class="card">
-							<div class="card-header">
-								<h4>Contact Detail</h4>
-							</div>
-							<div class="card-body">
-								<form>
-									<div class="row">
-									
-										<div class="col-xl-6 col-lg-6 col-md-12">
+										<div class="col-xl-12 col-lg-12 col-md-12">
 											<div class="form-group">
 												<label>Address</label>
-												<input type="text" class="form-control">
+												<input type="text" class="form-control" name="address" value="${address}" required>
 											</div>
 										</div>
 										
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Country</label>
-												<div class="select-ops">
-													<select>
-														<option value="1">India</option>
-														<option value="2">United State</option>
-														<option value="3">United kingdom</option>
-														<option value="4">Austrailia</option>
-														<option value="5">Russia</option>
-													</select>
-												</div>
-											</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-12 col-lg-6 col-md-12">
+											<button type="submit" class="btn ft--medium btn-primary">Update Profile</button>
 										</div>
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>State/City</label>
-												<div class="select-ops">
-													<select>
-														<option value="1">California</option>
-														<option value="2">Denver</option>
-														<option value="3">New York</option>
-														<option value="4">Canada</option>
-														<option value="5">Poland</option>
-													</select>
-												</div>
-											</div>
-										</div>
-										
-										<div class="col-xl-6 col-lg-6 col-md-12">
-											<div class="form-group">
-												<label>Zip Code</label>
-												<input type="text" class="form-control">
-											</div>
-										</div>
-										
-										
-									</div> 
+									</div>
 								</form>
 							</div>
 						</div>
 						<!-- Card Row End -->
 						
 						
-						<!-- Submit Busston -->
-						<div class="row">
-							<div class="col-lg-12 col-md-12">
-								<button type="submit" class="btn ft--medium btn-primary">Update Profile</button>
-							</div>	
-						</div>
-	
+						
 					</div>
 					
 					<!-- footer -->
 					<div class="row">
 						<div class="col-md-12">
-							<div class="py-3 text-center">© Job Stock® Themezhub.</div>
+							<div class="py-1 text-center" style="font-size:10px; padding-top:2px; padding-bottom:2px;">© Job Stock® Themezhub.</div>
 						</div>
 					</div>
 		
@@ -575,6 +450,27 @@
 		<!-- ============================================================== -->
 		<!-- This page plugins -->
 		<!-- ============================================================== -->
+
+		<!-- Modal xác nhận xóa tài khoản -->
+		<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="deleteAccountModalLabel">Confirm Account Deletion</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			  </div>
+			  <div class="modal-body">
+				Are you sure you want to delete your account? This action cannot be undone!
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<form action="DeleteCandidateAccount" method="post" style="display:inline;">
+				  <button type="submit" class="btn btn-danger">Confirm</button>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
 
 	</body>
 </html> 

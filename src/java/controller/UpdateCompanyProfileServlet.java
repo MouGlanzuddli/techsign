@@ -44,7 +44,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
         String errorMsg = null;
         if (companyName == null || companyName.trim().isEmpty()) errorMsg = "Company name must not be empty!";
         else if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) errorMsg = "Invalid email format!";
-        else if (phone == null || !phone.matches("^0\\d{9}$")) errorMsg = "Phone number must be 10 digits, start with 0, and contain only numbers (no spaces or special characters)!";
+        else if (phone == null || !phone.matches("^0\\d{9}$")) errorMsg = "Phone number must be 10 digits, start with 0, and contain only numbers!";
         else if (website == null || !website.matches("^(http:\\/\\/|https:\\/\\/)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}.*$")) errorMsg = "Invalid website format!";
         else if (industryId == null) errorMsg = "Please select a company category!";
         else if (address == null || address.trim().length() < 5) errorMsg = "Address is not valid!";
@@ -133,7 +133,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
             userDao.updateUser(user);
             session.setAttribute("user", user);
             // 6. Trả về thông báo thành công
-            request.setAttribute("success", "Cập nhật thành công!");
+            request.setAttribute("success", "Profile updated successfully!");
             // Lấy lại thông tin mới nhất
             model.Company updatedCompany = companyDAO.getCompanyByUserId(userId);
             request.setAttribute("companyName", updatedCompany != null ? updatedCompany.getCompanyName() : companyName);
@@ -144,6 +144,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
             request.setAttribute("avatarUrl", (updatedCompany != null && updatedCompany.getLogoUrl() != null) ? updatedCompany.getLogoUrl() : "assets/img/default-avatar.png");
             request.setAttribute("email", user.getEmail());
             request.setAttribute("phone", user.getPhone());
+            request.setAttribute("isSearchable", updatedCompany != null ? updatedCompany.isSearchable() : true);
             request.getRequestDispatcher("company-dashboard.jsp").forward(request, response);
 
             // Sau khi lấy updatedCompany hoặc company, lấy tên ngành
@@ -199,6 +200,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
                 request.setAttribute("industryId", company.getIndustryId());
                 request.setAttribute("description", company.getDescription());
                 request.setAttribute("avatarUrl", company.getLogoUrl() != null ? company.getLogoUrl() : "assets/img/default-avatar.png");
+                request.setAttribute("isSearchable", company.isSearchable());
             } else {
                 request.setAttribute("companyName", "");
                 request.setAttribute("website", "");
@@ -206,6 +208,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
                 request.setAttribute("industryId", "");
                 request.setAttribute("description", "");
                 request.setAttribute("avatarUrl", "assets/img/default-avatar.png");
+                request.setAttribute("isSearchable", true);
             }
             request.setAttribute("email", user.getEmail());
             request.setAttribute("phone", user.getPhone());

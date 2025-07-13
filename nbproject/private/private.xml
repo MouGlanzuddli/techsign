@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/prn212/Techsign/src/java/controller/UpdateCompanyProfileServlet.java</file>
             <file>file:/D:/prn212/Techsign/web/company-profile.html</file>
             <file>file:/D:/prn212/Techsign/web/candidate-dashboard.jsp</file>
             <file>file:/D:/prn212/Techsign/src/java/dal/UserDao.java</file>
@@ -10,6 +11,7 @@
             <file>file:/D:/prn212/Techsign/web/companyHome.jsp</file>
             <file>file:/D:/prn212/Techsign/src/java/dal/EmailOtpDao.java</file>
             <file>file:/D:/prn212/Techsign/src/java/model/User.java</file>
+            <file>file:/D:/prn212/Techsign/src/java/controller/UpdateCandidateProfileServlet.java</file>
             <file>file:/D:/prn212/Techsign/src/java/controller/LoginServlet.java</file>
             <file>file:/D:/prn212/Techsign/web/signup.jsp</file>
             <file>file:/D:/prn212/Techsign/web/email-verification.jsp</file>
@@ -18,6 +20,7 @@
             <file>file:/D:/prn212/Techsign/web/forgot.jsp</file>
             <file>file:/D:/prn212/Techsign/src/java/util/DeviceInfoUtil.java</file>
             <file>file:/D:/prn212/Techsign/src/java/controller/ForgotPasswordServlet.java</file>
+            <file>file:/D:/prn212/Techsign/src/java/dao/CandidateDAO.java</file>
             <file>file:/D:/prn212/Techsign/src/java/controller/LogoutServlet.java</file>
             <file>file:/D:/prn212/Techsign/src/java/controller/LoginGoogleHandler.java</file>
             <file>file:/D:/prn212/Techsign/src/java/util/EmailService.java</file>
@@ -38,7 +41,6 @@
             <file>file:/D:/prn212/Techsign/src/java/util/EmailServiceExtended.java</file>
             <file>file:/D:/prn212/Techsign/web/candidate-profile.html</file>
             <file>file:/D:/prn212/Techsign/web/company-dashboard.jsp</file>
-            <file>file:/D:/prn212/Techsign/web/assets/css/styles.css</file>
             <file>file:/D:/prn212/Techsign/src/java/model/Candidate.java</file>
             <file>file:/D:/prn212/Techsign/web/loginGG.jsp</file>
             <file>file:/D:/prn212/Techsign/src/java/controller/Constants.java</file>

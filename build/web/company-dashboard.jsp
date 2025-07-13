@@ -3,7 +3,19 @@
     String email = request.getAttribute("email") != null ? (String)request.getAttribute("email") : "";
     String phone = request.getAttribute("phone") != null ? (String)request.getAttribute("phone") : "";
     String website = request.getAttribute("website") != null ? (String)request.getAttribute("website") : "";
-    Integer industryId = request.getAttribute("industryId") != null ? (Integer)request.getAttribute("industryId") : null;
+    Object industryObj = request.getAttribute("industryId");
+    Integer industryId = null;
+    if (industryObj != null) {
+        if (industryObj instanceof Integer) {
+            industryId = (Integer) industryObj;
+        } else if (industryObj instanceof String) {
+            try {
+                industryId = Integer.parseInt((String) industryObj);
+            } catch (NumberFormatException e) {
+                industryId = null;
+            }
+        }
+    }
     String address = request.getAttribute("address") != null ? (String)request.getAttribute("address") : "";
     String avatarUrl = request.getAttribute("avatarUrl") != null ? (String)request.getAttribute("avatarUrl") : "assets/img/default-avatar.png";
     String[] industries = {"", "Web & Application", "Banking Services", "UI/UX Design", "IOS/App Application", "Education"};
@@ -105,11 +117,11 @@
 									</ul>
 								</li>
 								
-								<li><a href="JavaScript:Void(0);">Employer<span class="submenu-indicator"></span></a>
+								<li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
 										
 										<li>
-											<a href="employer-dashboard.html">Employer Dashboard<span class="new-update">New</span></a>                                
+											<a href="employer-dashboard.html">Company Dashboard<span class="new-update">New</span></a>                                
 										</li>
 									</ul>
 								</li>
@@ -188,7 +200,7 @@
 						<div class="dash-user-blocks pt-5">
 							<div class="jbs-grid-usrs-thumb">
 								<div class="jbs-grid-yuo">
-									<a href="candidate-detail.html"><figure><img src="<%= avatarUrl %>" class="img-fluid rounded" alt=""></figure></a>
+									<a href="candidate-detail.html"><figure><img src="assets/img/user-1.png" class="img-fluid rounded" alt=""></figure></a>
 								</div>
 							</div>
 							<div class="jbs-grid-usrs-caption mb-3">
@@ -212,8 +224,10 @@
 								<li><a href="employer-package.html"><i class="fa-solid fa-wallet me-2"></i>Package</a></li>
 								<li><a href="employer-messages.html"><i class="fa-solid fa-comments me-2"></i>Messages</a></li>
 								<li><a href="employer-change-password.html"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>
-								<li><a href="employer-delete-account.html"><i class="fa-solid fa-trash-can me-2"></i>Delete Account</a></li>
-								<li><a href="index.html"><i class="fa-solid fa-power-off me-2"></i>Log Out</a></li>
+								<li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteAccountModal"><i class="fa-solid fa-trash-can me-2"></i>Delete Account</a></li>
+								<li><a href="LogoutServlet">
+									<i class="fa-solid fa-power-off"></i> Log Out
+								</a></li>
 							</ul>
 						</div>					
 					</div>
@@ -223,7 +237,7 @@
 					<div class="dashboard-tlbar d-block mb-4">
 						<div class="row">
 							<div class="colxl-12 col-lg-12 col-md-12">
-								<h1 class="mb-1 fs-3 fw-medium">Update Profile</h1>
+								<h1 class="mb-1 fs-3 fw-medium">My Profile</h1>
 							</div>
 						</div>
 					</div>
@@ -234,12 +248,12 @@
 							<div class="dash-prf-start">
 								<div class="dash-prf-start-upper mb-2">
 									<div class="dash-prf-start-thumb jbs-verified">
-										<figure class="mb-0"><img src="<%= avatarUrl %>" class="img-fluid rounded" alt=""></figure>
+										<figure class="mb-0"><img src="assets/img/user-1.png" class="img-fluid rounded" alt=""></figure>
 									</div>
 								</div>
 								<div class="dash-prf-start-bottom">
 									<div class="upload-btn-wrapper small">
-										<button class="btn">Change Profile</button>
+										<button class="btn">Change Avatar</button>
 										<input type="file" name="myfile">
 									</div>
 								</div>
@@ -269,10 +283,13 @@
 										</div>
 									</div>
 									<div class="dash-prfs-flexends">
+										<form action="ToggleCompanyProfileVisibility" method="post" style="display:inline;">
+											<input type="hidden" name="toggle" value="1" />
 										<div class="form-check form-switch">
-											<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-											<label class="form-check-label" for="flexSwitchCheckChecked">Show Profile</label>
+												<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="isSearchable" value="on" <%= (request.getAttribute("isSearchable") != null && (Boolean)request.getAttribute("isSearchable")) ? "checked" : "" %> onchange="this.form.submit();">
+											<label class="form-check-label" for="flexSwitchCheckChecked">Cho phép ứng viên tìm kiếm và xem thông tin công ty</label>
 										</div>	
+										</form>
 									</div>
 								</div>
 								<div class="dash-prf-caption-end">
@@ -320,29 +337,34 @@
 										Please fill out the company profile information completely!
 									</div>
 								<% } %>
-                                                            <script>
-                                                            function validateProfileForm() {
-                                                                var email = document.querySelector('input[name="email"]').value.trim();
-                                                                var phone = document.querySelector('input[name="phone"]').value.trim();
-                                                                var emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-                                                                var phonePattern = /^0\d{9}$/;
-                                                                var valid = true;
-                                                                var msg = "";
-                                                                if (!emailPattern.test(email)) {
-                                                                    msg += "Email must be in @gmail.com format!\n";
-                                                                    valid = false;
-                                                                }
-                                                                if (!phonePattern.test(phone)) {
-                                                                    msg += "Phone number must be 10 digits and start with 0!\n";
-                                                                    valid = false;
-                                                                }
-                                                                if (!valid) {
-                                                                    alert(msg);
-                                                                }
-                                                                return valid;
-                                                            }
-                                                            </script>
-                                                            <form action="UpdateCompanyProfile" method="post">
+								<% if (request.getAttribute("success") != null) { %>
+									<div class="alert alert-success" style="margin: 1px;">
+										<%= request.getAttribute("success") %>
+									</div>
+								<% } %>
+								<script>
+								function validateProfileForm() {
+									var email = document.querySelector('input[name="email"]').value.trim();
+									var phone = document.querySelector('input[name="phone"]').value.trim();
+									var emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+									var phonePattern = /^0\d{9}$/;
+									var valid = true;
+									var msg = "";
+									if (!emailPattern.test(email)) {
+										msg += "Email must be in @gmail.com format!\n";
+										valid = false;
+									}
+									if (!phonePattern.test(phone)) {
+										msg += "Phone number must be 10 digits and start with 0!\n";
+										valid = false;
+									}
+									if (!valid) {
+										alert(msg);
+									}
+									return valid;
+								}
+								</script>
+								<form action="UpdateCompanyProfile" method="post">
 
 									<div class="row">
 										<div class="col-xl-6 col-lg-6 col-md-12">
@@ -457,6 +479,27 @@
 		<!-- ============================================================== -->
 		<!-- This page plugins -->
 		<!-- ============================================================== -->
+
+		<!-- Modal xác nhận xóa tài khoản -->
+		<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="deleteAccountModalLabel">Confirm Account Deletion</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			  </div>
+			  <div class="modal-body">
+				Are you sure you want to delete your account? This action cannot be undone!
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<form action="DeleteCompanyAccount" method="post" style="display:inline;">
+				  <button type="submit" class="btn btn-danger">Confirm</button>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
 
 	</body>
 </html> 

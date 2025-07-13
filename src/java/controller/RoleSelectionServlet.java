@@ -86,7 +86,7 @@ public class RoleSelectionServlet extends HttpServlet {
                 // Redirect based on selected role
                 switch (roleId) {
                     case 2:
-                        response.sendRedirect("candidateHome.jsp");
+                        response.sendRedirect("CandidateHome");
                         break;
                     case 3: {
                         CompanyDAO companyDAO = new CompanyDAO(conn);

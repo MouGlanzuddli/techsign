@@ -6,32 +6,27 @@ public class Candidate {
     private int id;
     private int userId;
     private String fullName;
-    private String title; // Current job title
+    private String jobTitle; // Current job title
     private int experienceYears;
-    private String skills;
-    private String education;
-    private String location;
-    private String bio;
-    private String resumeUrl;
+    private String educationLevel;
+    private String address;
     private boolean isSearchable; // Profile visibility
     private Date createdAt;
     private Date updatedAt;
+    private String email;
 
     public Candidate() {}
 
-    public Candidate(int id, int userId, String fullName, String title, int experienceYears,
-                    String skills, String education, String location, String bio, 
-                    String resumeUrl, boolean isSearchable, Date createdAt, Date updatedAt) {
+    public Candidate(int id, int userId, String fullName, String jobTitle, int experienceYears,
+                    String educationLevel, String address, 
+                    boolean isSearchable, Date createdAt, Date updatedAt) {
         this.id = id;
         this.userId = userId;
         this.fullName = fullName;
-        this.title = title;
+        this.jobTitle = jobTitle;
         this.experienceYears = experienceYears;
-        this.skills = skills;
-        this.education = education;
-        this.location = location;
-        this.bio = bio;
-        this.resumeUrl = resumeUrl;
+        this.educationLevel = educationLevel;
+        this.address = address;
         this.isSearchable = isSearchable;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -47,26 +42,18 @@ public class Candidate {
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getJobTitle() { return jobTitle; }
+    public void setJobTitle(String jobTitle) { this.jobTitle = jobTitle; }
 
     public int getExperienceYears() { return experienceYears; }
     public void setExperienceYears(int experienceYears) { this.experienceYears = experienceYears; }
 
-    public String getSkills() { return skills; }
-    public void setSkills(String skills) { this.skills = skills; }
+    public String getEducationLevel() { return educationLevel; }
+    public void setEducationLevel(String educationLevel) { this.educationLevel = educationLevel; }
 
-    public String getEducation() { return education; }
-    public void setEducation(String education) { this.education = education; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public String getBio() { return bio; }
-    public void setBio(String bio) { this.bio = bio; }
-
-    public String getResumeUrl() { return resumeUrl; }
-    public void setResumeUrl(String resumeUrl) { this.resumeUrl = resumeUrl; }
 
     public boolean isSearchable() { return isSearchable; }
     public void setSearchable(boolean isSearchable) { this.isSearchable = isSearchable; }
@@ -76,4 +63,7 @@ public class Candidate {
 
     public Date getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 } 

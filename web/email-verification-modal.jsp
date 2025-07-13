@@ -1,28 +1,27 @@
-<!-- Modal x?c th?c email ?? th?m v?o index.jsp -->
+<!-- Modal xác thực email -->
 <div class="modal fade" id="emailVerificationModal" tabindex="-1" role="dialog" aria-labelledby="emailVerificationLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="emailVerificationLabel">X?c th?c Email</h5>
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-success" id="emailVerificationLabel">
+                    <i class="fa-solid fa-envelope-circle-check me-2"></i> Email Authentication
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-0">
                 <div class="text-center mb-3">
-                    <i class="fas fa-envelope-circle-check text-primary" style="font-size: 48px;"></i>
-                    <h6 class="mt-3">X?c th?c ??a ch? email c?a b?n</h6>
-                    <p class="text-muted">Nh?p email ?? nh?n m? OTP x?c th?c</p>
+                    <i class="fa-solid fa-envelope-circle-check text-success" style="font-size: 48px;"></i>
+                    <h6 class="mt-3 fw-semibold"></h6>
+                    <p class="text-muted mb-2">Enter email to receive OTP verification code</p>
                 </div>
-                
                 <div id="emailVerificationAlert"></div>
-                
-                <form id="emailVerificationForm">
+                <form id="emailVerificationForm" autocomplete="off">
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="verificationEmail" placeholder="name@example.com" required>
-                        <label for="verificationEmail">??a ch? Email</label>
+                        <label for="verificationEmail">Email Address</label>
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100" id="sendOtpBtn">
-                        <span id="sendOtpText">G?i m? OTP</span>
+                    <button type="submit" class="btn btn-success w-100 shadow-sm" id="sendOtpBtn">
+                        <span id="sendOtpText">Send OTP code</span>
                         <span id="sendOtpSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                     </button>
                 </form>
@@ -35,15 +34,12 @@
 $(document).ready(function() {
     $('#emailVerificationForm').on('submit', function(e) {
         e.preventDefault();
-        
         const email = $('#verificationEmail').val();
         if (!email) {
-            showVerificationAlert('Vui l?ng nh?p ??a ch? email', 'danger');
+            showVerificationAlert('Please enter email address', 'danger');
             return;
         }
-        
         setVerificationLoading(true);
-        
         $.ajax({
             url: '${pageContext.request.contextPath}/SendOtpServlet',
             method: 'POST',
@@ -57,24 +53,21 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                showVerificationAlert('C? l?i x?y ra. Vui l?ng th? l?i.', 'danger');
+                showVerificationAlert('An error occurred please try again.', 'danger');
             },
             complete: function() {
                 setVerificationLoading(false);
             }
         });
     });
-    
     function showVerificationAlert(message, type) {
         const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-        const alertHtml = `<div class="alert ${alertClass}">${message}</div>`;
+        const alertHtml = `<div class="alert ${alertClass} mt-2 mb-0 py-2 px-3">${message}</div>`;
         $('#emailVerificationAlert').html(alertHtml);
-        
         setTimeout(function() {
             $('#emailVerificationAlert').empty();
         }, 5000);
     }
-    
     function setVerificationLoading(loading) {
         if (loading) {
             $('#sendOtpText').addClass('d-none');

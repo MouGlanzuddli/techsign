@@ -338,7 +338,7 @@ p {
 	list-style:none;
 }
 .progress {
-    margin-bottom: 1.5em;
+    margin-bottom: 0.5em;
 }
 .full-width{
 	width:100%;
@@ -3532,9 +3532,11 @@ span.noti-status {
 }
 .nice-select ul.list {
     width: 100%;
-    z-index: 99;
+    z-index: 80;
     box-shadow: none;
     border: 1px solid #f1f3f7;
+    max-height: 100px;        /* Chiều cao tối đa, có thể điều chỉnh */
+    overflow-y: auto;
 }
 .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
     background-color:#1ca774;
@@ -8867,7 +8869,7 @@ span.remove-from-compare {
     flex: 1;
 }
 .dashboard-content {
-    padding: 40px 25px;
+    padding: 10px 5px;
     position: relative;
     z-index: 1;
     height: 100%;
@@ -8972,7 +8974,7 @@ span.remove-from-compare {
 /*---------- Notification -----------*/
 .card {
     border:none;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     border-radius: 0.5rem;
     overflow: hidden;
     background: #ffffff;

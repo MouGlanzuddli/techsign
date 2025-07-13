@@ -14,34 +14,30 @@ public class CandidateDAO {
 
     // Tạo profile candidate mới
     public boolean createCandidate(Candidate candidate) throws SQLException {
-        String sql = "INSERT INTO candidate_profiles (user_id, full_name, title, experience_years, skills, " +
-                     "education, location, bio, resume_url, is_searchable, created_at, updated_at) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO candidate_profiles (user_id, experience_years, address, education_level, job_title, is_searchable, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidate.getUserId());
-            stmt.setString(2, candidate.getFullName());
-            stmt.setString(3, candidate.getTitle());
-            stmt.setInt(4, candidate.getExperienceYears());
-            stmt.setString(5, candidate.getSkills());
-            stmt.setString(6, candidate.getEducation());
-            stmt.setString(7, candidate.getLocation());
-            stmt.setString(8, candidate.getBio());
-            stmt.setString(9, candidate.getResumeUrl());
-            stmt.setBoolean(10, candidate.isSearchable());
-            stmt.setTimestamp(11, new Timestamp(candidate.getCreatedAt().getTime()));
-            stmt.setTimestamp(12, new Timestamp(candidate.getUpdatedAt().getTime()));
+            stmt.setInt(2, candidate.getExperienceYears());
+            stmt.setString(3, candidate.getAddress());
+            stmt.setString(4, candidate.getEducationLevel());
+            stmt.setString(5, candidate.getJobTitle());
+            stmt.setBoolean(6, candidate.isSearchable());
+            stmt.setTimestamp(7, new Timestamp(candidate.getCreatedAt().getTime()));
+            stmt.setTimestamp(8, new Timestamp(candidate.getUpdatedAt().getTime()));
             return stmt.executeUpdate() > 0;
         }
     }
 
     // Lấy candidate theo user_id
     public Candidate getCandidateByUserId(int userId) throws SQLException {
-        String sql = "SELECT * FROM candidate_profiles WHERE user_id = ?";
+        String sql = "SELECT c.*, u.email, u.phone as user_phone FROM candidate_profiles c JOIN users u ON c.user_id = u.id WHERE c.user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToCandidate(rs);
+                    Candidate candidate = mapResultSetToCandidate(rs);
+                    candidate.setEmail(rs.getString("email"));
+                    return candidate;
                 }
             }
         }
@@ -64,43 +60,34 @@ public class CandidateDAO {
 
     // Cập nhật profile candidate
     public boolean updateCandidate(Candidate candidate) throws SQLException {
-        String sql = "UPDATE candidate_profiles SET full_name = ?, title = ?, experience_years = ?, " +
-                     "skills = ?, education = ?, location = ?, bio = ?, resume_url = ?, " +
-                     "is_searchable = ?, updated_at = ? WHERE user_id = ?";
+        String sql = "UPDATE candidate_profiles SET experience_years = ?, education_level = ?, address = ?, is_searchable = ?, updated_at = ? WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, candidate.getFullName());
-            stmt.setString(2, candidate.getTitle());
-            stmt.setInt(3, candidate.getExperienceYears());
-            stmt.setString(4, candidate.getSkills());
-            stmt.setString(5, candidate.getEducation());
-            stmt.setString(6, candidate.getLocation());
-            stmt.setString(7, candidate.getBio());
-            stmt.setString(8, candidate.getResumeUrl());
-            stmt.setBoolean(9, candidate.isSearchable());
-            stmt.setTimestamp(10, new Timestamp(candidate.getUpdatedAt().getTime()));
-            stmt.setInt(11, candidate.getUserId());
+            stmt.setInt(1, candidate.getExperienceYears());
+            stmt.setString(2, candidate.getEducationLevel());
+            stmt.setString(3, candidate.getAddress());
+            stmt.setBoolean(4, candidate.isSearchable());
+            stmt.setTimestamp(5, new Timestamp(candidate.getUpdatedAt().getTime()));
+            stmt.setInt(6, candidate.getUserId());
             return stmt.executeUpdate() > 0;
         }
     }
 
     // Cập nhật profile candidate (phiên bản đơn giản)
-    public boolean updateCandidateProfile(int userId, String fullName, String title, 
-                                        int experienceYears, String skills, String education, 
-                                        String location, String bio, String resumeUrl) throws SQLException {
-        String sql = "UPDATE candidate_profiles SET full_name = ?, title = ?, experience_years = ?, " +
-                     "skills = ?, education = ?, location = ?, bio = ?, resume_url = ?, updated_at = ? " +
+    public boolean updateCandidateProfile(int userId, String fullName, String jobTitle, 
+                                        int experienceYears, String educationLevel, 
+                                        String address, String resumeUrl) throws SQLException {
+        String sql = "UPDATE candidate_profiles SET full_name = ?, job_title = ?, experience_years = ?, " +
+                     "education_level = ?, address = ?, resume_url = ?, updated_at = ? " +
                      "WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, fullName);
-            stmt.setString(2, title);
+            stmt.setString(2, jobTitle);
             stmt.setInt(3, experienceYears);
-            stmt.setString(4, skills);
-            stmt.setString(5, education);
-            stmt.setString(6, location);
-            stmt.setString(7, bio);
-            stmt.setString(8, resumeUrl);
-            stmt.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
-            stmt.setInt(10, userId);
+            stmt.setString(4, educationLevel);
+            stmt.setString(5, address);
+            stmt.setString(6, resumeUrl);
+            stmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+            stmt.setInt(8, userId);
             return stmt.executeUpdate() > 0;
         }
     }
@@ -188,14 +175,10 @@ public class CandidateDAO {
         Candidate candidate = new Candidate();
         candidate.setId(rs.getInt("id"));
         candidate.setUserId(rs.getInt("user_id"));
-        candidate.setFullName(rs.getString("full_name"));
-        candidate.setTitle(rs.getString("title"));
+        candidate.setJobTitle(rs.getString("job_title"));
         candidate.setExperienceYears(rs.getInt("experience_years"));
-        candidate.setSkills(rs.getString("skills"));
-        candidate.setEducation(rs.getString("education"));
-        candidate.setLocation(rs.getString("location"));
-        candidate.setBio(rs.getString("bio"));
-        candidate.setResumeUrl(rs.getString("resume_url"));
+        candidate.setEducationLevel(rs.getString("education_level"));
+        candidate.setAddress(rs.getString("address"));
         candidate.setSearchable(rs.getBoolean("is_searchable"));
         candidate.setCreatedAt(rs.getTimestamp("created_at"));
         candidate.setUpdatedAt(rs.getTimestamp("updated_at"));

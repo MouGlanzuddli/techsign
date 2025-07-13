@@ -110,7 +110,7 @@ public class LoginGoogleHandler extends HttpServlet {
                         response.sendRedirect("adminHome.jsp");
                         break;
                     case 2:
-                        response.sendRedirect("candidateHome.jsp");
+                        response.sendRedirect("CandidateHome");
                         break;
                     case 3: {
                         CompanyDAO companyDAO = new CompanyDAO(conn);

@@ -87,8 +87,8 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="candidate-dashboard.jsp">Dashboard</a></li>
-                            <li><a class="dropdown-item" href= "LogoutServlet""JavaScript:Void(0);">Logout</a></li>
+                            <li><a class="dropdown-item" href="UpdateCandidateProfile">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
                         </ul>
                     </li>
                 </ul>

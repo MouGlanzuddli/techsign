@@ -166,29 +166,48 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 /****** Object:  Table [dbo].[candidate_profiles]    Script Date: 6/13/2025 9:04:16 PM ******/
+DECLARE @sql NVARCHAR(MAX) = '';
+SELECT @sql += 'ALTER TABLE [' + OBJECT_SCHEMA_NAME(parent_object_id) + '].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + '];'
+FROM sys.foreign_keys
+WHERE referenced_object_id = OBJECT_ID('dbo.candidate_profiles');
+
+EXEC sp_executesql @sql;
+GO
+IF OBJECT_ID('dbo.candidate_profiles', 'U') IS NOT NULL
+    DROP TABLE dbo.candidate_profiles;
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[candidate_profiles](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[user_id] [int] NOT NULL,
-	[headline] [varchar](255) NULL,
-	[summary] [text] NULL,
-	[experience_years] [int] NULL,
-	[education_level] [varchar](100) NULL,
-	[profile_picture_url] [varchar](500) NULL,
+
+CREATE TABLE [dbo].[candidate_profiles] (
+	[id] INT IDENTITY(1,1) NOT NULL,
+	[user_id] INT NOT NULL,
+	[experience_years] INT NULL,
+	[address] VARCHAR(500) NULL,
+	[education_level] VARCHAR(100) NULL,
+	[profile_picture_url] VARCHAR(500) NULL,
+	[job_title] VARCHAR(255) NULL,
 	[ai_score] [float] NULL,
 	[ai_feedback] [text] NULL,
 	[is_searchable] [bit] NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+	[created_at] DATETIME NULL,
+	[updated_at] DATETIME NULL,
+	
+	PRIMARY KEY CLUSTERED (
+		[id] ASC
+	) WITH (
+		PAD_INDEX = OFF, 
+		STATISTICS_NORECOMPUTE = OFF, 
+		IGNORE_DUP_KEY = OFF, 
+		ALLOW_ROW_LOCKS = ON, 
+		ALLOW_PAGE_LOCKS = ON, 
+		OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
+	) ON [PRIMARY]
+) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[candidate_skills]    Script Date: 6/13/2025 9:04:16 PM ******/
 SET ANSI_NULLS ON
 GO

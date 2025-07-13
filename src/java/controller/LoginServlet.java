@@ -16,7 +16,6 @@ import model.User;
 import dao.CompanyDAO;
 import model.Company;
 
-import org.mindrot.jbcrypt.BCrypt;
 
 
 @WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet"})
@@ -92,10 +91,10 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/adminHome.jsp");
                     break;
                 case 2:
-                    response.sendRedirect(request.getContextPath() + "/candidateHome.jsp");
+                    response.sendRedirect(request.getContextPath() + "/CandidateHome");
                     break;
                 case 3:
-                    response.sendRedirect(request.getContextPath() + "/companyHome.jsp");
+                    response.sendRedirect(request.getContextPath() + "/CompanyHome");
                     break;
                 default:
                     response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_role");
