@@ -154,14 +154,87 @@ public boolean updateJobStatus(int id, int companyId, String status) throws SQLE
     }
 }
 
-// Lấy tất cả jobs active (cho trang chủ)
+// Lấy tất cả jobs active (cho trang chủ và job list)
 public List<Job> getAllActiveJobs() throws SQLException {
-    String sql = "SELECT * FROM jobs WHERE status = 'active' ORDER BY created_at DESC";
+    String sql = "SELECT * FROM jobs WHERE status = 'active' ORDER BY is_featured DESC, is_urgent DESC, created_at DESC";
     List<Job> jobs = new ArrayList<>();
     
     try (Statement stmt = connection.createStatement();
          ResultSet rs = stmt.executeQuery(sql)) {
         
+        while (rs.next()) {
+            jobs.add(mapResultSetToJob(rs));
+        }
+    }
+    return jobs;
+}
+
+// Lấy danh sách categories
+public List<String> getAllCategories() throws SQLException {
+    String sql = "SELECT DISTINCT category FROM jobs WHERE status = 'active' AND category IS NOT NULL ORDER BY category";
+    List<String> categories = new ArrayList<>();
+    
+    try (Statement stmt = connection.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        
+        while (rs.next()) {
+            String category = rs.getString("category");
+            if (category != null && !category.trim().isEmpty()) {
+                categories.add(category);
+            }
+        }
+    }
+    return categories;
+}
+
+// Lấy danh sách locations
+public List<String> getAllLocations() throws SQLException {
+    String sql = "SELECT DISTINCT location FROM jobs WHERE status = 'active' AND location IS NOT NULL ORDER BY location";
+    List<String> locations = new ArrayList<>();
+    
+    try (Statement stmt = connection.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        
+        while (rs.next()) {
+            String location = rs.getString("location");
+            if (location != null && !location.trim().isEmpty()) {
+                locations.add(location);
+            }
+        }
+    }
+    return locations;
+}
+
+// Tăng view count
+public boolean incrementViewCount(int jobId) throws SQLException {
+    String sql = "UPDATE jobs SET views_count = views_count + 1 WHERE id = ?";
+    
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, jobId);
+        return stmt.executeUpdate() > 0;
+    }
+}
+
+// Lấy jobs liên quan
+public List<Job> getRelatedJobs(int currentJobId, String category, int companyId, int limit) throws SQLException {
+    String sql = "SELECT * FROM jobs WHERE status = 'active' AND id != ? AND " +
+                "(category = ? OR company_id = ?) ORDER BY created_at DESC";
+    
+    if (limit > 0) {
+        sql += " OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
+    }
+    
+    List<Job> jobs = new ArrayList<>();
+    
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, currentJobId);
+        stmt.setString(2, category);
+        stmt.setInt(3, companyId);
+        if (limit > 0) {
+            stmt.setInt(4, limit);
+        }
+        
+        ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             jobs.add(mapResultSetToJob(rs));
         }

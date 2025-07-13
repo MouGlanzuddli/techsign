@@ -54,7 +54,7 @@
                     <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
                     <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="MyJobsServlet">Job List</a></li>
+                            <li><a href="JobListServlet">Job List</a></li>
                             
                         </ul>
                     </li>
