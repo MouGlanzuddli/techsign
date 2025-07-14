@@ -424,6 +424,45 @@ public class JobPostingDAO {
         return jobPosting;
     }
 
+    public List<JobPosting> getJobsByCompany(int companyId) {
+        List<JobPosting> jobPostings = new ArrayList<>();
+        String sql =
+            "SELECT " +
+            "jp.id, " +
+            "jp.company_profile_id, " +
+            "jp.title, " +
+            "CAST(jp.description AS NVARCHAR(MAX)) AS description, " +
+            "jp.location, " +
+            "jp.salary_min, " +
+            "jp.salary_max, " +
+            "jp.job_type, " +
+            "CAST(jp.benefits AS NVARCHAR(MAX)) AS benefits, " +
+            "jp.status, " +
+            "jp.posted_at, " +
+            "jp.expires_at, " +
+            "cp.company_name " +
+            "FROM job_postings jp " +
+            "LEFT JOIN company_profiles cp ON jp.company_profile_id = cp.id " +
+            "WHERE jp.company_profile_id = ? " +
+            "ORDER BY jp.posted_at DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, companyId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                JobPosting jobPosting = mapResultSetToJobPosting(rs);
+                jobPostings.add(jobPosting);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return jobPostings;
+    }
+
     public static class JobPostingStats {
         private int total, pending, approved, rejected, open, closed;
 

@@ -247,13 +247,6 @@
                     <input type="text" id="business-search" placeholder="Nhập tên doanh nghiệp..." />
                 </div>
                 <div class="filter-item">
-                    <label for="industry-filter">Ngành nghề</label>
-                    <select id="industry-filter">
-                        <option value="">Tất cả</option>
-                        <option value="IT">Công nghệ thông tin</option>
-                    </select>
-                </div>
-                <div class="filter-item">
                     <label for="report-time-filter">Thời gian</label>
                     <select id="report-time-filter">
                         <option value="week">Tuần này</option>

@@ -128,4 +128,28 @@ public class CategoryDAO {
             return false;
         }
     }
+    
+    public boolean reorderCategories(int[] ids) {
+        String sql = "UPDATE categories SET order_index = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                for (int i = 0; i < ids.length; i++) {
+                    stmt.setInt(1, i);
+                    stmt.setInt(2, ids[i]);
+                    stmt.addBatch();
+                }
+                stmt.executeBatch();
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 } 

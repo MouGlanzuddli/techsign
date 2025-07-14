@@ -2,10 +2,8 @@ package com.mycompany.adminscreen.servlet;
 
 import com.mycompany.adminscreen.dao.JobPostingDAO;
 import com.mycompany.adminscreen.dao.CompanyProfileDAO;
-import com.mycompany.adminscreen.dao.IndustryDAO;
 import com.mycompany.adminscreen.model.JobPosting;
 import com.mycompany.adminscreen.model.CompanyProfile;
-import com.mycompany.adminscreen.model.Industry;
 import com.mycompany.adminscreen.util.DBConnection;
 import com.mycompany.adminscreen.util.LocalDateTimeAdapter;
 import com.google.gson.Gson;
@@ -30,7 +28,6 @@ import java.util.List;
 public class JobPostingServlet extends HttpServlet {
     private JobPostingDAO jobPostingDAO;
     private CompanyProfileDAO companyProfileDAO;
-    private IndustryDAO industryDAO;
     
     // Static Gson instance with proper LocalDateTime handling
     private static final Gson gson = new GsonBuilder()
@@ -43,7 +40,6 @@ public class JobPostingServlet extends HttpServlet {
         try {
             jobPostingDAO = new JobPostingDAO();
             companyProfileDAO = new CompanyProfileDAO();
-            industryDAO = new IndustryDAO();
         } catch (Exception e) {
             throw new ServletException("Error initializing JobPostingServlet", e);
         }

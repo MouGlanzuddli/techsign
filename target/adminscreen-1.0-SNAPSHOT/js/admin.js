@@ -740,38 +740,6 @@ function populateRoleAssignmentsTable(assignments) {
     tableBody.innerHTML = html;
 }
 
-function populateIndustryDataTable(industries) {
-    const tableBody = document.getElementById('industryDataTableBody');
-    if (!tableBody) return;
-
-    if (!industries || industries.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Không có dữ liệu ngành nào.</td></tr>';
-        return;
-    }
-
-    let html = '';
-    industries.forEach(industry => {
-        html += `
-            <tr>
-                <td>${industry.id}</td>
-                <td>${industry.name}</td>
-                <td>${industry.description || '-'}</td>
-                <td class="actions">
-                    <a href="IndustryServlet?action=edit&id=${industry.id}" class="btn-edit" title="Chỉnh sửa">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <a href="IndustryServlet?action=delete&id=${industry.id}" class="btn-delete" title="Xóa"
-                       onclick="return confirm('Bạn có chắc chắn muốn xóa ngành này?')">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                </td>
-            </tr>
-        `;
-    });
-
-    tableBody.innerHTML = html;
-}
-
 function populateCategoriesTable(categories) {
     const tableBody = document.getElementById('categoriesTableBody');
     if (!tableBody) return;
@@ -1315,17 +1283,6 @@ function populateCompanySelect(companies) {
         html += `<option value="${company.id}">${company.companyName}</option>`;
     });
     companySelect.innerHTML = html;
-}
-
-function populateIndustrySelect(industries) {
-    const industrySelect = document.getElementById('industrySelect');
-    if (!industrySelect) return;
-
-    let html = '<option value="">Tất cả ngành</option>';
-    industries.forEach(industry => {
-        html += `<option value="${industry.id}">${industry.name}</option>`;
-    });
-    industrySelect.innerHTML = html;
 }
 
 function loadJobsByCompany() {

@@ -15,27 +15,25 @@
         <li>
             <a href="#" class="menu-link" data-file="content-management.jsp" data-section="content-section"><i class="fas fa-file-alt"></i> Phê duyệt bài đăng</a>
         </li>
-<!--        <li>
-            <a href="#" class="menu-link" data-file="support-notifications.jsp" data-section="support-users"><i class="fas fa-headset"></i> Hỗ trợ người dùng</a>
-        </li>-->
+
         <li>
-            <a href="#" class="menu-link" data-file="support-notifications.jsp" data-section="notifications"><i class="fas fa-bullhorn"></i> Tạo thông báo</a>
+             <a href="notifications" class="menu-link" data-file="system-notifications.jsp" data-section="system-notifications"><i class="fas fa-bell"></i> System Notifications</a>
         </li>
         <li>
             <a href="#" class="menu-link" data-file="job-postings.jsp" data-section="company-jobs"><i class="fas fa-briefcase"></i> Quản lý tuyển dụng</a>
         </li>
         <li>
-            <a href="#" class="menu-link" data-file="content-management.jsp" data-section="industry-data"><i class="fas fa-industry"></i> Dữ liệu ngành</a>
+            <a href="#" class="menu-link" data-file="category.jsp" data-section="categories"><i class="fas fa-list"></i> Quản lý danh mục</a>
         </li>
-        <li>
-            <a href="#" class="menu-link" data-file="content-management.jsp" data-section="categories"><i class="fas fa-list"></i> Quản lý danh mục</a>
-        </li>
-        <li>
+<!--        <li>
             <a href="#" class="menu-link" data-file="content-management.jsp" data-section="search-verify"><i class="fas fa-search-plus"></i> Tìm & xác minh</a>
-        </li>
+        </li>-->
         <li>
-            <a href="#" class="menu-link" data-file="support-notifications.jsp" data-section="alerts"><i class="fas fa-exclamation-triangle"></i> Cảnh báo</a>
+            <a href="#" class="menu-link" data-file="alert.jsp" data-section="alerts"><i class="fas fa-exclamation-triangle"></i> Cảnh báo</a>
         </li>
+<!--        <li>
+            <a href="#user-activity" class="menu-link" data-file="user-activity.jsp" data-section="user-activity"><i class="fas fa-user-shield"></i> Nhật ký hoạt động</a>
+        </li>-->
     </ul>
     <h3>Reporting</h3>
     <ul>

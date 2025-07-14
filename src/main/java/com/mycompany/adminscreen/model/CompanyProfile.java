@@ -5,7 +5,6 @@ import java.util.Date;
 public class CompanyProfile {
     private int id;
     private int userId;
-    private Integer industryId;
     private String companyName;
     private String website;
     private String description;
@@ -24,9 +23,6 @@ public class CompanyProfile {
 
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
-
-    public Integer getIndustryId() { return industryId; }
-    public void setIndustryId(Integer industryId) { this.industryId = industryId; }
 
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }

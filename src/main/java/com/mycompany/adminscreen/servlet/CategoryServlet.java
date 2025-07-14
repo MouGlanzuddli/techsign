@@ -146,6 +146,25 @@ public class CategoryServlet extends HttpServlet {
                     }
                     break;
 
+                case "reorder":
+                    String orderParam = request.getParameter("order");
+                    if (orderParam != null && !orderParam.trim().isEmpty()) {
+                        String[] idStrings = orderParam.split(",");
+                        int[] ids = new int[idStrings.length];
+                        for (int i = 0; i < idStrings.length; i++) {
+                            ids[i] = Integer.parseInt(idStrings[i]);
+                        }
+                        boolean success = categoryDAO.reorderCategories(ids);
+                        if (success) {
+                            jsonResponse.append("{\"success\":true,\"message\":\"Order updated\"}");
+                        } else {
+                            jsonResponse.append("{\"success\":false,\"message\":\"Failed to update order\"}");
+                        }
+                    } else {
+                        jsonResponse.append("{\"success\":false,\"message\":\"Order parameter is required\"}");
+                    }
+                    break;
+
                 default:
                     jsonResponse.append("{\"success\":false,\"message\":\"Invalid action\"}");
                     break;

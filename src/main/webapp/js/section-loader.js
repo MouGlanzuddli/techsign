@@ -196,10 +196,6 @@ class SectionLoader {
                 this.loadCompanyJobsData();
                 break;
                 
-            case 'industry-data':
-                this.loadIndustryData();
-                break;
-                
             case 'categories':
                 this.loadCategoriesData();
                 break;
@@ -208,7 +204,7 @@ class SectionLoader {
                 this.loadSearchVerifyData();
                 break;
                 
-            case 'alerts':
+            case 'alert':
                 this.loadAlertsData();
                 break;
                 
@@ -423,8 +419,8 @@ class SectionLoader {
      */
     loadCompanyJobsData() {
         console.log('Loading company jobs data...');
-        // Load companies first, then jobs
-        fetch(this.basePath + 'JobPostingServlet?action=getCompanies')
+        // Load companies only
+        fetch(this.basePath + 'CompanyPostingServlet?action=getCompanies')
             .then(response => {
                 if (!response.ok) throw new Error('HTTP error ' + response.status);
                 return response.json();
@@ -433,44 +429,10 @@ class SectionLoader {
                 if (typeof populateCompanySelect === 'function') {
                     populateCompanySelect(data.companies);
                 }
-                // Load industries for filtering
-                return fetch(this.basePath + 'JobPostingServlet?action=getIndustries');
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('HTTP error ' + response.status);
-                return response.json();
-            })
-            .then(data => {
-                if (typeof populateIndustrySelect === 'function') {
-                    populateIndustrySelect(data.industries);
-                }
             })
             .catch(error => {
                 console.error('Error loading company jobs data:', error);
                 this.showErrorMessage('Lỗi khi tải dữ liệu công việc theo công ty');
-            });
-    }
-
-    /**
-     * Load industry data
-     */
-    loadIndustryData() {
-        console.log('Loading industry data...');
-        fetch(this.basePath + 'industry?action=getAll')
-            .then(response => {
-                if (!response.ok) throw new Error('HTTP error ' + response.status);
-                return response.json();
-            })
-            .then(data => {
-                if (data.success && typeof populateIndustryDataTable === 'function') {
-                    populateIndustryDataTable(data.data);
-                } else {
-                    this.showErrorMessage(data.message || 'Lỗi khi tải dữ liệu ngành');
-                }
-            })
-            .catch(error => {
-                console.error('Error loading industry data:', error);
-                this.showErrorMessage('Lỗi khi tải dữ liệu ngành');
             });
     }
 
@@ -523,7 +485,7 @@ class SectionLoader {
      */
     loadAlertsData() {
         console.log('Loading alerts data...');
-        fetch(this.basePath + 'AlertServlet?action=getData')
+        fetch(this.basePath + 'AuditLogServlet?action=getData')
             .then(response => {
                 if (!response.ok) throw new Error('HTTP error ' + response.status);
                 return response.json();

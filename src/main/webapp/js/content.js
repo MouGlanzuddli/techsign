@@ -106,8 +106,9 @@ function renderPosts() {
                 </div>
             </div>
             <div class="job-card-actions-row">
-                <button class="btn btn-outline" onclick="event.stopPropagation();viewPostDetails(${post.id})">See Details</button>
+                
                 <button class="btn btn-filled" onclick="event.stopPropagation();approvePost(${post.id})">Approve</button>
+                <button class="btn btn-filled" onclick="event.stopPropagation();rejectPost(${post.id})">Deny</button>
             </div>
         </div>
         `;
