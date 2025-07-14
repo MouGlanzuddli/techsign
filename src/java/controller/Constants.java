@@ -11,7 +11,9 @@ import model.*;
  * @author Admin
  */
 public class Constants {
-   
+   public static String GOOGLE_CLIENT_ID = "662818990560-8t0tkh07kp0kktc2mk7177k5gj8dvkdn.apps.googleusercontent.com";
+
+	public static String GOOGLE_CLIENT_SECRET = "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";
 
 	public static String GOOGLE_REDIRECT_URI = "http://localhost:8080/JobSearchManagement/LoginGoogleHandler";
 
