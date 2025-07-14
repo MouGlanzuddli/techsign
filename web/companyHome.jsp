@@ -65,7 +65,7 @@
                     </li>
                     <li><a href="JavaScript:Void(0);">Candidates<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a>Candidate List</a></li>
+                            <li><a href="${pageContext.request.contextPath}/company-candidate-list.jsp">Candidate List</a></li>
                             
                             
                         </ul>
@@ -90,8 +90,8 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="company-dashboard.jsp">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="LogoutServlet""JavaScript:Void(0);">Logout</a></li>
+                            <li><a class="dropdown-item" href="companyHome.jsp">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -1278,7 +1278,10 @@
 		<!-- This page plugins -->
 		<!-- ============================================================== -->		
 
-	</body>
+	
 
-<!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:58:22 GMT -->
+</body>
+
+
+    <!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:58:22 GMT -->
 </html>

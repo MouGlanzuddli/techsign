@@ -3,8 +3,10 @@ package controller;
 import dal.DBContext;
 import dal.JobDao;
 import dal.UserDao;
+import dal.JobViewDao;
 import model.Job;
 import model.User;
+import model.JobView;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,6 +40,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         Connection conn = dbContext.getConnection();
         JobDao jobDao = new JobDao(conn);
         UserDao userDao = new UserDao(conn);
+        JobViewDao jobViewDao = new JobViewDao(conn);
         
         // Lấy thông tin job
         Job job = jobDao.getJobById(jobId);
@@ -64,6 +67,24 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         // Tăng view count
         jobDao.incrementViewCount(jobId);
         
+        // Track candidate view nếu user đã đăng nhập và là candidate
+        User currentUser = (User) request.getSession().getAttribute("user");
+        if (currentUser != null && currentUser.getRoleId() == 2) { // role_id = 2 là candidate
+            // Kiểm tra xem đã xem gần đây chưa (tránh spam)
+            if (!jobViewDao.hasViewedRecently(jobId, currentUser.getId())) {
+                // Lấy thông tin client
+                String ipAddress = getClientIpAddress(request);
+                String userAgent = request.getHeader("User-Agent");
+                String sessionId = request.getSession().getId();
+                
+                // Tạo JobView object
+                JobView jobView = new JobView(jobId, currentUser.getId(), ipAddress, userAgent, sessionId);
+                
+                // Lưu vào database
+                jobViewDao.saveJobView(jobView);
+            }
+        }
+        
         // Lấy các job liên quan (cùng category hoặc cùng company)
         java.util.List<Job> relatedJobs = jobDao.getRelatedJobs(jobId, job.getCategory(), job.getCompanyId(), 5);
         
@@ -86,5 +107,22 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
         request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
+}
+
+/**
+ * Lấy IP address của client
+ */
+private String getClientIpAddress(HttpServletRequest request) {
+    String xForwardedFor = request.getHeader("X-Forwarded-For");
+    if (xForwardedFor != null && !xForwardedFor.isEmpty() && !"unknown".equalsIgnoreCase(xForwardedFor)) {
+        return xForwardedFor.split(",")[0];
+    }
+    
+    String xRealIp = request.getHeader("X-Real-IP");
+    if (xRealIp != null && !xRealIp.isEmpty() && !"unknown".equalsIgnoreCase(xRealIp)) {
+        return xRealIp;
+    }
+    
+    return request.getRemoteAddr();
 }
 }

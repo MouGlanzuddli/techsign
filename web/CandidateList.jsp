@@ -184,7 +184,7 @@
                                             <li><a href="employer-detail-2.jsp">Employer Detail 02</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="employer-dashboard.jsp">Employer Dashboard<span class="new-update">New</span></a></li>
+                                    <li><a href="companyHome.jsp">Employer Dashboard<span class="new-update">New</span></a></li>
                                 </ul>
                             </li>
                             <li><a href="#">Pages<span class="submenu-indicator"></span></a>
@@ -296,12 +296,12 @@
                     </div>
                     <div class="dashboard-inner">
                         <ul data-submenu-title="Main Navigation">
-                            <li><a href="employer-dashboard.jsp"><i class="fa-solid fa-gauge-high me-2"></i>User Dashboard</a></li>
+                            <li><a href="companyHome.jsp"><i class="fa-solid fa-gauge-high me-2"></i>User Dashboard</a></li>
                             <li><a href="employer-profile.jsp"><i class="fa-regular fa-user me-2"></i>User Profile </a></li>
                             <li><a href="employer-jobs.jsp"><i class="fa-solid fa-business-time me-2"></i>My Jobs</a></li>
                             <li><a href="employer-submit-job.jsp"><i class="fa-solid fa-pen-ruler me-2"></i>Submit Jobs</a></li>
                             <li><a href="employer-applicants-jobs.jsp"><i class="fa-solid fa-user-group me-2"></i>Applicants Jobs</a></li>
-                            <li class="active"><a href="CandidateList.jsp"><i class="fa-solid fa-user-clock me-2"></i>Candidate List</a></li>
+                            <li class="active"><a href="CandidateViewListServlet"><i class="fa-solid fa-user-clock me-2"></i>Candidate List</a></li>
                             <li><a href="employer-package.jsp"><i class="fa-solid fa-wallet me-2"></i>Package</a></li>
                             <li><a href="employer-messages.jsp"><i class="fa-solid fa-comments me-2"></i>Messages</a></li>
                             <li><a href="employer-change-password.jsp"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>

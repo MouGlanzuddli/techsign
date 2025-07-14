@@ -11,7 +11,7 @@ import model.*;
  * @author Admin
  */
 public class Constants {
-   
+    
 
 	public static String GOOGLE_REDIRECT_URI = "http://localhost:8080/JobSearchManagement/LoginGoogleHandler";
 

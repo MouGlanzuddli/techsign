@@ -14,5 +14,16 @@
         <url-pattern>/MyJobsServlet</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>CandidateViewListServlet</servlet-name>
+        <servlet-class>controller.CandidateViewListServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>CandidateViewListServlet</servlet-name>
+        <url-pattern>/CandidateViewListServlet</url-pattern>
+        <url-pattern>/candidate-view-list</url-pattern>
+    </servlet-mapping>
+    
     <!-- Các servlet khác nếu có -->
 </web-app>

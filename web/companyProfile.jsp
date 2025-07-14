@@ -83,7 +83,7 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <li><a href="employer-dashboard.jsp"><i class="fa fa-tachometer-alt"></i>User Dashboard</a></li>                                  
+                                            <li><a href="companyHome.jsp"><i class="fa fa-tachometer-alt"></i>User Dashboard</a></li>                                  
                                             <li><a href="employer-profile.jsp"><i class="fa fa-user-tie"></i>User Profile</a></li>                                 
                                             <li><a href="employer-jobs.jsp"><i class="fa fa-file"></i>My Jobs</a></li>
                                             <li><a href="employer-messages.jsp"><i class="fa fa-envelope"></i>Messages</a></li>
@@ -114,7 +114,7 @@
                             
                             <li><a href="JavaScript:Void(0);">For Employers<span class="submenu-indicator"></span></a>
                                 <ul class="nav-dropdown nav-submenu">
-                                    <li><a href="employer-dashboard.jsp">Employer Dashboard</a></li>
+                                    <li><a href="companyHome.jsp">Employer Dashboard</a></li>
                                 </ul>
                             </li>
                             
@@ -167,7 +167,7 @@
                     </div>
                     <div class="dashboard-inner">
                         <ul data-submenu-title="Main Navigation">
-                            <li><a href="employer-dashboard.jsp"><i class="fa-solid fa-gauge-high me-2"></i>Dashboard</a></li>
+                            <li><a href="companyHome.jsp"><i class="fa-solid fa-gauge-high me-2"></i>Dashboard</a></li>
                             <li class="active"><a href="employer-profile.jsp"><i class="fa-regular fa-user me-2"></i>User Profile</a></li>
                             <li><a href="employer-jobs.jsp"><i class="fa-solid fa-business-time me-2"></i>My Jobs</a></li>
                             <li><a href="employer-submit-job.jsp"><i class="fa-solid fa-pen-ruler me-2"></i>Post a Job</a></li>

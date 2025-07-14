@@ -78,6 +78,44 @@ BEGIN
     ALTER TABLE [dbo].[job_postings] ADD [skills] [text] NULL
 END
 
+-- Thêm bảng job_views để track candidate views
+USE [TechSignDB]
+GO
+
+-- Tạo bảng job_views
+CREATE TABLE [dbo].[job_views](
+    [id] [int] IDENTITY(1,1) NOT NULL,
+    [job_posting_id] [int] NOT NULL,
+    [candidate_user_id] [int] NOT NULL,
+    [viewed_at] [datetime] NOT NULL,
+    [ip_address] [varchar](45) NULL,
+    [user_agent] [varchar](500) NULL,
+    [session_id] [varchar](255) NULL,
+    PRIMARY KEY CLUSTERED ([id] ASC)
+) ON [PRIMARY]
+GO
+
+-- Thêm foreign key constraints
+ALTER TABLE [dbo].[job_views] WITH CHECK ADD CONSTRAINT [FK_job_views_job_postings] 
+    FOREIGN KEY([job_posting_id]) REFERENCES [dbo].[job_postings] ([id])
+GO
+
+ALTER TABLE [dbo].[job_views] WITH CHECK ADD CONSTRAINT [FK_job_views_users] 
+    FOREIGN KEY([candidate_user_id]) REFERENCES [dbo].[users] ([id])
+GO
+
+-- Thêm index để tối ưu performance
+CREATE INDEX [IX_job_views_job_posting_id] ON [dbo].[job_views] ([job_posting_id])
+GO
+CREATE INDEX [IX_job_views_candidate_user_id] ON [dbo].[job_views] ([candidate_user_id])
+GO
+CREATE INDEX [IX_job_views_viewed_at] ON [dbo].[job_views] ([viewed_at])
+GO
+
+-- Thêm default value cho viewed_at
+ALTER TABLE [dbo].[job_views] ADD CONSTRAINT [DF_job_views_viewed_at] DEFAULT (getdate()) FOR [viewed_at]
+GO
+
 -- Cập nhật JobPostingDao để sử dụng tất cả các trường
 PRINT 'Bảng job_postings đã được cập nhật thành công!'
 GO 

@@ -112,6 +112,7 @@
                         <li><a href="MyJobsServlet"><i class="fa-solid fa-briefcase me-2"></i>My Jobs</a></li>
                         <li class="active"><a href="PostJobServlet"><i class="fa-solid fa-pen-ruler me-2"></i>Submit Jobs</a></li>
                         <li><a href="#"><i class="fa-solid fa-user-group me-2"></i>Applicants Jobs</a></li>
+                        <li><a href="CandidateViewListServlet"><i class="fa-solid fa-chart-line me-2"></i>Candidate Analytics</a></li>
                         <li><a href="#"><i class="fa-solid fa-user-clock me-2"></i>Shortlisted Candidates</a></li>
                         <li><a href="#"><i class="fa-solid fa-wallet me-2"></i>Package</a></li>
                         <li><a href="#"><i class="fa-solid fa-comments me-2"></i>Messages</a></li>
