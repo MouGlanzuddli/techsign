@@ -402,81 +402,6 @@
             </div>
         </div>
 
-        <!-- Job Posting Reports Section -->
-        <div id="job-posting-reports" class="report-section">
-            <div class="section-header">
-                <h2><i class="fas fa-file-invoice"></i> Báo cáo Tuyển dụng</h2>
-                <p>Phân tích hiệu quả các tin tuyển dụng và ứng viên</p>
-            </div>
-            
-            <div class="dashboard-wrapper">
-                <div class="job-stats-grid">
-                    <div class="stat-card blue fade-in">
-                        <div class="stat-content">
-                            <div class="stat-info">
-                                <h3>Tổng tin tuyển dụng</h3>
-                                <div class="stat-number blue" id="totalJobPosts"></div>
-                                <span class="stat-change" id="totalJobPostsChange"></span>
-                            </div>
-                            <div class="stat-icon blue">
-                                <i class="fas fa-briefcase"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card green fade-in">
-                        <div class="stat-content">
-                            <div class="stat-info">
-                                <h3>Tin đang hoạt động</h3>
-                                <div class="stat-number green" id="activeJobPosts"></div>
-                                <span class="stat-change" id="activeJobPostsChange"></span>
-                            </div>
-                            <div class="stat-icon green">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card orange fade-in">
-                        <div class="stat-content">
-                            <div class="stat-info">
-                                <h3>Lượt xem trung bình</h3>
-                                <div class="stat-number orange" id="avgJobViews"></div>
-                                <span class="stat-change" id="avgJobViewsChange"></span>
-                            </div>
-                            <div class="stat-icon orange">
-                                <i class="fas fa-eye"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card purple fade-in">
-                        <div class="stat-content">
-                            <div class="stat-info">
-                                <h3>Ứng viên trung bình</h3>
-                                <div class="stat-number purple" id="avgApplications"></div>
-                                <span class="stat-change" id="avgApplicationsChange"></span>
-                            </div>
-                            <div class="stat-icon purple">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="job-chart-section">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Hiệu quả tin tuyển dụng</h3>
-                        <p class="chart-subtitle">So sánh lượt xem và ứng viên theo ngành nghề</p>
-                    </div>
-                    
-                    <div class="chart-container">
-                        <canvas id="jobEffectivenessChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Application Analysis Section -->
         <div id="application-analysis" class="report-section">
             <div class="section-header">
@@ -560,6 +485,105 @@
                         <div class="chart-container">
                             <canvas id="applicationSectorChart"></canvas>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Posting Reports Section (NEW) -->
+        <div id="job-posting-reports" class="report-section">
+            <div class="section-header">
+                <h2><i class="fas fa-file-invoice"></i> Báo cáo Tuyển dụng</h2>
+                <p>Thống kê tổng quan về các tin tuyển dụng và hiệu quả ứng tuyển</p>
+            </div>
+            <div class="dashboard-wrapper" id="jobDashboardWrapper">
+                <div class="update-info-bar">
+                    <div class="update-left">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Cập nhật: <span id="jobLastUpdate">--:--</span></span>
+                    </div>
+                    <div class="update-right">
+                        <button class="btn btn-sm btn-primary" onclick="refreshJobReport()">
+                            <i class="fas fa-sync-alt"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card blue fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Tổng tin tuyển dụng</h3>
+                                <div class="stat-number blue" id="jobTotalPosts">--</div>
+                                <span class="stat-change" id="jobTotalPostsChange"></span>
+                            </div>
+                            <div class="stat-icon blue">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card green fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Tin đang hoạt động</h3>
+                                <div class="stat-number green" id="jobActivePosts">--</div>
+                                <span class="stat-change" id="jobActivePostsChange"></span>
+                            </div>
+                            <div class="stat-icon green">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card orange fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Tin hết hạn</h3>
+                                <div class="stat-number orange" id="jobExpiredPosts">--</div>
+                                <span class="stat-change" id="jobExpiredPostsChange"></span>
+                            </div>
+                            <div class="stat-icon orange">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card purple fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Lượt xem TB</h3>
+                                <div class="stat-number purple" id="jobAvgViews">--</div>
+                                <span class="stat-change" id="jobAvgViewsChange"></span>
+                            </div>
+                            <div class="stat-icon purple">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card teal fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Ứng viên TB/tin</h3>
+                                <div class="stat-number teal" id="jobAvgApplications">--</div>
+                                <span class="stat-change" id="jobAvgApplicationsChange"></span>
+                            </div>
+                            <div class="stat-icon teal">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Biểu đồ tuyển dụng theo thời gian -->
+                <div class="job-chart-section" id="jobChartSection" style="display:none;">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Biểu đồ tin tuyển dụng mới theo ngày</h3>
+                        <div class="job-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <label for="jobChartFrom">Từ ngày:</label>
+                            <input type="date" id="jobChartFrom" class="form-control" style="width: 160px;">
+                            <label for="jobChartTo">Đến ngày:</label>
+                            <input type="date" id="jobChartTo" class="form-control" style="width: 160px;">
+                            <button class="btn btn-primary" id="jobChartBtn" style="margin-left: 8px;" onclick="handleJobChartClick()">Xem báo cáo</button>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="jobPostsChartContainer" style="height:320px;">
+                        <canvas id="jobPostsChart"></canvas>
                     </div>
                 </div>
             </div>

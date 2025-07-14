@@ -36,35 +36,28 @@ public class StatisticsDAO {
             allStats.put("activeParticipants", getActiveParticipants());
             allStats.put("activeParticipantsPrev7Days", getActiveParticipantsPrev7Days());
             
-            // ✅ 4. JOB POSTING REPORTS
-            allStats.put("totalJobPosts", getTotalJobPosts());
-            allStats.put("activeJobPosts", getActiveJobPosts());
-            allStats.put("expiredJobPosts", getExpiredJobPosts());
-            allStats.put("avgJobViews", 0); // Cần thêm view tracking
-            allStats.put("avgApplications", getAverageApplicationsPerJob());
-            
-            // ✅ 5. APPLICATION ANALYSIS
+            // ✅ 4. APPLICATION ANALYSIS
             allStats.put("totalApplications", getTotalApplications());
             allStats.put("approvedApplications", getApplicationsByStatus("approved"));
             allStats.put("pendingApplications", getApplicationsByStatus("pending"));
             allStats.put("rejectedApplications", getApplicationsByStatus("rejected"));
             
-            // ✅ 6. SECURITY & SYSTEM
+            // ✅ 5. SECURITY & SYSTEM
             allStats.put("securityAlerts", getSecurityAlerts());
             allStats.put("systemWarnings", getSystemWarnings());
             allStats.put("criticalIssues", getCriticalIssues());
             
-            // ✅ 7. DỮ LIỆU THẬT CHO THỐNG KÊ MỚI
+            // ✅ 6. DỮ LIỆU THẬT CHO THỐNG KÊ MỚI
             allStats.put("newUsersLast30Days", getNewUsersLast30Days());
             allStats.put("monthlyUserGrowth", getMonthlyUserGrowth());
             
-            // ✅ 8. THỐNG KÊ TRUY CẬP
+            // ✅ 7. THỐNG KÊ TRUY CẬP
             allStats.put("totalVisitsPrevMonth", getTotalVisitsPrevMonth());
             allStats.put("todayVisitsPrevDay", getTodayVisitsPrevDay());
             allStats.put("avgSessionMinutesPrev7Days", getAvgSessionMinutesPrev7Days());
             allStats.put("activeUsersWeekPrev7Days", getActiveUsersWeekPrev7Days());
             
-            // ✅ 9. NEW ACTIVITIES
+            // ✅ 8. NEW ACTIVITIES
             allStats.put("totalActivitiesPrev30Days", getTotalActivitiesPrev30Days());
             allStats.put("newActivitiesPrevDay", getNewActivitiesPrevDay());
             allStats.put("avgDailyActivitiesPrev30Days", getAvgDailyActivitiesPrev30Days());
@@ -189,51 +182,6 @@ public class StatisticsDAO {
         } catch (SQLException e) {
             System.err.println("❌ Error getting active participants: " + e.getMessage());
             return 0;
-        }
-    }
-    
-    // ✅ JOB POSTING REPORTS
-    private int getTotalJobPosts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings";
-        try (Statement stmt = connection.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
-            return rs.next() ? rs.getInt(1) : 0;
-        } catch (SQLException e) {
-            System.err.println("❌ Error getting total job posts: " + e.getMessage());
-            return 0;
-        }
-    }
-    
-    private int getActiveJobPosts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'open' AND (expires_at IS NULL OR expires_at > GETDATE())";
-        try (Statement stmt = connection.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
-            return rs.next() ? rs.getInt(1) : 0;
-        } catch (SQLException e) {
-            System.err.println("❌ Error getting active job posts: " + e.getMessage());
-            return 0;
-        }
-    }
-    
-    private int getExpiredJobPosts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'closed' OR expires_at < GETDATE()";
-        try (Statement stmt = connection.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
-            return rs.next() ? rs.getInt(1) : 0;
-        } catch (SQLException e) {
-            System.err.println("❌ Error getting expired job posts: " + e.getMessage());
-            return 0;
-        }
-    }
-    
-    private double getAverageApplicationsPerJob() throws SQLException {
-        String sql = "SELECT AVG(CAST(app_count AS FLOAT)) FROM (SELECT COUNT(*) as app_count FROM applications GROUP BY job_posting_id) as avg_apps";
-        try (Statement stmt = connection.createStatement(); 
-             ResultSet rs = stmt.executeQuery(sql)) {
-            return rs.next() ? rs.getDouble(1) : 0.0;
-        } catch (SQLException e) {
-            System.err.println("❌ Error getting average applications per job: " + e.getMessage());
-            return 0.0;
         }
     }
     
@@ -368,11 +316,6 @@ public class StatisticsDAO {
         stats.put("totalActivities", 0);
         stats.put("newActivities", 0);
         stats.put("activeParticipants", 0);
-        stats.put("totalJobPosts", 0);
-        stats.put("activeJobPosts", 0);
-        stats.put("expiredJobPosts", 0);
-        stats.put("avgJobViews", 0);
-        stats.put("avgApplications", 0);
         stats.put("totalApplications", 0);
         stats.put("approvedApplications", 0);
         stats.put("pendingApplications", 0);

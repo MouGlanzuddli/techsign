@@ -38,14 +38,6 @@ const realData = {
     newActivitiesPrevDay: 0,
     avgDailyActivitiesPrev30Days: 0,
   },
-  // Job Posting Reports
-  jobReports: {
-    totalJobPosts: 0,
-    activeJobPosts: 0,
-    expiredJobPosts: 0,
-    avgJobViews: 0,
-    avgApplications: 0,
-  },
   // Application Analysis
   applicationAnalysis: {
     totalApplications: 0,
@@ -122,14 +114,6 @@ function loadAllRealData() {
         totalActivitiesPrev30Days: data.totalActivitiesPrev30Days || 0,
         newActivitiesPrevDay: data.newActivitiesPrevDay || 0,
         avgDailyActivitiesPrev30Days: data.avgDailyActivitiesPrev30Days || 0,
-      }
-
-      realData.jobReports = {
-        totalJobPosts: data.totalJobPosts || 0,
-        activeJobPosts: data.activeJobPosts || 0,
-        expiredJobPosts: data.expiredJobPosts || 0,
-        avgJobViews: data.avgJobViews || 0,
-        avgApplications: Math.round(data.avgApplications || 0),
       }
 
       realData.applicationAnalysis = {
@@ -232,9 +216,6 @@ function showSection(sectionId) {
       break
     case "activity-reports":
       initializeActivityReportsWithRealData()
-      break
-    case "job-posting-reports":
-      initializeJobReportsWithRealData()
       break
     case "application-analysis":
       initializeApplicationAnalysisWithRealData()
@@ -469,24 +450,7 @@ function updateActivityReportsWithRealData() {
   }
 }
 
-// ✅ 4. JOB POSTING REPORTS with Real Data
-function initializeJobReportsWithRealData() {
-  console.log("💼 Initializing job reports with REAL DATA...")
-
-  updateJobStatsWithRealData()
-  createJobEffectivenessChart()
-  updateLastUpdateTime()
-  addFadeInAnimations()
-}
-
-function updateJobStatsWithRealData() {
-  document.getElementById("totalJobPosts").textContent = formatNumber(realData.jobReports.totalJobPosts)
-  document.getElementById("activeJobPosts").textContent = formatNumber(realData.jobReports.activeJobPosts)
-  document.getElementById("expiredJobPosts").textContent = formatNumber(realData.jobReports.expiredJobPosts)
-  document.getElementById("avgApplications").textContent = formatNumber(realData.jobReports.avgApplications)
-}
-
-// ✅ 5. APPLICATION ANALYSIS with Real Data
+// ✅ 4. APPLICATION ANALYSIS with Real Data
 function initializeApplicationAnalysisWithRealData() {
   console.log("📊 Initializing application analysis with REAL DATA...")
 
@@ -527,7 +491,7 @@ function updateLastUpdateTime() {
   const timeString = now.toLocaleTimeString("vi-VN")
 
   const lastUpdateElements = document.querySelectorAll(
-    "#lastUpdate, #accessLastUpdate, #activityLastUpdate, #jobLastUpdate, #applicationLastUpdate",
+    "#lastUpdate, #accessLastUpdate, #activityLastUpdate, #applicationLastUpdate",
   )
   lastUpdateElements.forEach((element) => {
     if (element) {
@@ -819,67 +783,6 @@ function createAccessChart() {
   })
 }
 
-function createJobEffectivenessChart() {
-  const ctx = document.getElementById("jobEffectivenessChart")
-  if (!ctx) return
-
-  if (charts.jobEffectivenessChart) {
-    charts.jobEffectivenessChart.destroy()
-  }
-
-  const sectors = ["IT", "Marketing", "Sales", "HR", "Finance"]
-  const totalJobs = realData.jobReports.totalJobPosts
-  const totalApps = realData.jobReports.avgApplications
-
-  // Distribute jobs and applications across sectors
-  const jobs = sectors.map(() => Math.max(0, Math.floor(totalJobs / 5) + Math.floor(Math.random() * 2)))
-  const applications = sectors.map(() => Math.max(0, Math.floor(totalApps / 5) + Math.floor(Math.random() * 3)))
-
-  charts.jobEffectivenessChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: sectors,
-      datasets: [
-        {
-          label: "Tin tuyển dụng",
-          data: jobs,
-          backgroundColor: "rgba(59, 130, 246, 0.8)",
-          yAxisID: "y",
-        },
-        {
-          label: "Ứng tuyển",
-          data: applications,
-          backgroundColor: "rgba(16, 185, 129, 0.8)",
-          yAxisID: "y1",
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-      scales: {
-        y: {
-          type: "linear",
-          display: true,
-          position: "left",
-        },
-        y1: {
-          type: "linear",
-          display: true,
-          position: "right",
-          grid: {
-            drawOnChartArea: false,
-          },
-        },
-      },
-    },
-  })
-}
-
 function createApplicationCharts() {
   createApplicationTrendChart()
   createApplicationSectorChart()
@@ -993,13 +896,6 @@ function refreshActivityReports() {
     updateActivityTable()
     updateLastUpdateTime()
     addFadeInAnimations()
-  })
-}
-
-function refreshJobReports() {
-  console.log("🔄 Refreshing job reports...")
-  loadAllRealData().then(() => {
-    initializeJobReportsWithRealData()
   })
 }
 
@@ -1302,4 +1198,110 @@ function handleActivityRangeClick() {
   fetchActivityChartData(start, end);
 }
 
+// === JOB REPORTS (TUYỂN DỤNG) ===
+function loadJobReportData() {
+  return fetch(window.contextPath + "/jobReport", {
+    method: "GET",
+    headers: { "X-Requested-With": "XMLHttpRequest", "Cache-Control": "no-cache" },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("HTTP error! status: " + response.status);
+      return response.json();
+    });
+}
+
+function renderJobReport(data) {
+  document.getElementById("jobTotalPosts").textContent = data.totalJobPosts ?? "--";
+  document.getElementById("jobActivePosts").textContent = data.activeJobPosts ?? "--";
+  document.getElementById("jobExpiredPosts").textContent = data.expiredJobPosts ?? "--";
+  document.getElementById("jobAvgViews").textContent = data.avgJobViews !== undefined ? Number(data.avgJobViews).toFixed(1) : "--";
+  document.getElementById("jobAvgApplications").textContent = data.avgApplications !== undefined ? Number(data.avgApplications).toFixed(1) : "--";
+  document.getElementById("jobLastUpdate").textContent = new Date().toLocaleTimeString();
+  addFadeInAnimations();
+}
+
+function refreshJobReport() {
+  document.getElementById('jobLastUpdate').textContent = 'Đang tải...';
+  document.getElementById('jobChartSection').style.display = 'block';
+  loadJobReportData()
+    .then(renderJobReport)
+    .catch(() => {
+      document.getElementById('jobTotalPosts').textContent = '--';
+      document.getElementById('jobActivePosts').textContent = '--';
+      document.getElementById('jobExpiredPosts').textContent = '--';
+      document.getElementById('jobAvgViews').textContent = '--';
+      document.getElementById('jobAvgApplications').textContent = '--';
+      document.getElementById('jobLastUpdate').textContent = 'Lỗi tải dữ liệu';
+    });
+}
+
+function setupJobReportSection() {
+  const tab = document.querySelector('[data-section="job-posting-reports"]');
+  if (tab) {
+    tab.addEventListener("click", () => {
+      document.getElementById('jobChartSection').style.display = 'none';
+      setupJobChartDatePicker();
+      // KHÔNG gọi refreshJobReport() ở đây!
+    });
+  }
+}
+
+// Gọi khi khởi tạo hệ thống báo cáo
+(function() {
+  setupJobReportSection();
+})();
+
 console.log("✅ Complete Statistics Reports JavaScript loaded successfully with REAL DATA!")
+
+function handleJobChartClick() {
+  const from = document.getElementById('jobChartFrom').value;
+  const to = document.getElementById('jobChartTo').value;
+  if (!from || !to) {
+    alert('Vui lòng chọn đủ ngày bắt đầu và kết thúc!');
+    return;
+  }
+  loadJobChart();
+}
+
+var jobPostsChartInstance = null;
+function loadJobChart() {
+  const from = document.getElementById('jobChartFrom').value;
+  const to = document.getElementById('jobChartTo').value;
+  if (!from || !to) return;
+  fetch(window.contextPath + `/jobReport?from=${from}&to=${to}`)
+    .then(res => res.json())
+    .then(data => {
+      // Fill đủ ngày trong khoảng
+      const start = new Date(from);
+      const end = new Date(to);
+      const labels = [];
+      const counts = [];
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().slice(0, 10);
+        labels.push(dateStr);
+        const found = data.find(row => row.date === dateStr);
+        counts.push(found ? found.count : 0);
+      }
+      const ctx = document.getElementById('jobPostsChart').getContext('2d');
+      if (jobPostsChartInstance) jobPostsChartInstance.destroy();
+      jobPostsChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Tin tuyển dụng mới',
+            data: counts,
+            backgroundColor: 'rgba(59,130,246,0.7)',
+            borderColor: '#3b82f6',
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { grid: { display: false } }, y: { beginAtZero: true } }
+        }
+      });
+    });
+}
