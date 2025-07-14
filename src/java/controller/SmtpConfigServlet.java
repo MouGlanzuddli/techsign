@@ -81,7 +81,7 @@ public class SmtpConfigServlet extends HttpServlet {
         config.setSmtpHost("smtp.gmail.com");
         config.setSmtpPort("587");
         config.setSmtpUsername("Quanhhde180071@fpt.edu.vn");
-        config.setSmtpPassword("zwwjlheisoikwoxp");
+        config.setSmtpPassword("jvbeczxcooouqqbe");
         config.setFromEmail(fromEmail);
         config.setFromName(fromName);
         config.setSmtpAuth(true);

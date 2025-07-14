@@ -86,7 +86,7 @@ public class EmailService {
         
         // THAY ĐỔI THÔNG TIN NÀY BẰNG EMAIL GMAIL CỦA BẠN
         final String GMAIL_USERNAME = "Quanhhde180071@fpt.edu.vn"; // ⚠️ THAY ĐỔI
-        final String GMAIL_APP_PASSWORD = "zwwjlheisoikwoxp"; // ⚠️ THAY ĐỔI
+        final String GMAIL_APP_PASSWORD = "jvbeczxcooouqqbe"; // ⚠️ THAY ĐỔI
         
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

@@ -76,7 +76,7 @@ public class EmailServiceExtended extends EmailService {
         System.out.println("🔄 SỬ DỤNG CẤU HÌNH MẶC ĐỊNH CHO RESET PASSWORD");
         
         final String GMAIL_USERNAME = "Quanhhde180071@fpt.edu.vn";
-        final String GMAIL_APP_PASSWORD = "zwwjlheisoikwoxp";
+        final String GMAIL_APP_PASSWORD = "jvbeczxcooouqqbe";
         
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

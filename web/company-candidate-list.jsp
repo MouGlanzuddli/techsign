@@ -129,11 +129,11 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1><i class="fas fa-chart-line me-3"></i>Candidate View Analytics</h1>
-                    <p class="mb-0">Theo dõi ứng viên đã xem bài đăng tuyển dụng của bạn</p>
+                    
                 </div>
                 <div class="col-md-4 text-end">
                     <a href="companyHome.jsp" class="back-btn">
-                        <i class="fas fa-arrow-left me-2"></i>Quay lại Dashboard
+                        <i class="fas fa-arrow-left me-2"></i>Come back Dashboard
                     </a>
                 </div>
             </div>
@@ -147,7 +147,7 @@
                 <div class="stats-card text-center">
                     <i class="fas fa-users fa-2x text-primary mb-3"></i>
                     <div class="stats-number">${totalCandidates}</div>
-                    <p class="mb-0">Tổng ứng viên đã xem</p>
+                    <p class="mb-0">Total candidates viewed</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -160,14 +160,14 @@
                         </c:forEach>
                         ${totalViews}
                     </div>
-                    <p class="mb-0">Lượt xem (7 ngày qua)</p>
+                    <p class="mb-0">Views (last 7 days)</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stats-card text-center">
                     <i class="fas fa-calendar-day fa-2x text-info mb-3"></i>
                     <div class="stats-number">${viewsStatistics.size()}</div>
-                    <p class="mb-0">Ngày có hoạt động</p>
+                    <p class="mb-0">Day of activity</p>
                 </div>
             </div>
         </div>
@@ -175,7 +175,7 @@
         <!-- Chart Container -->
         <c:if test="${not empty viewsStatistics}">
             <div class="chart-container">
-                <h5><i class="fas fa-chart-bar me-2"></i>Thống kê lượt xem theo ngày</h5>
+                <h5><i class="fas fa-chart-bar me-2"></i>Views statistics by day</h5>
                 <div class="row">
                     <c:forEach var="stat" items="${viewsStatistics}">
                         <div class="col-md-2 col-4 mb-3">
@@ -193,13 +193,13 @@
 
         <!-- Candidates List -->
         <div class="stats-card">
-            <h5><i class="fas fa-list me-2"></i>Danh sách ứng viên đã xem</h5>
+            <h5><i class="fas fa-list me-2"></i>List of viewed candidates</h5>
             
             <c:if test="${empty viewedCandidates}">
                 <div class="no-candidates">
                     <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                    <h4>Chưa có ứng viên nào xem bài đăng</h4>
-                    <p>Khi có ứng viên xem bài đăng tuyển dụng của bạn, họ sẽ xuất hiện ở đây.</p>
+                    <h4>No candidates have viewed this post yet.</h4>
+                    <p>When candidates view your job posting, they'll appear here..</p>
                 </div>
             </c:if>
             
@@ -228,7 +228,7 @@
                                 </c:if>
                                 <p class="view-time">
                                     <i class="fas fa-eye me-1"></i>
-                                    Đã xem lúc: <fmt:formatDate value="${candidate.viewedAt}" pattern="dd/MM/yyyy HH:mm"/>
+                                    Viewed at: <fmt:formatDate value="${candidate.viewedAt}" pattern="dd/MM/yyyy HH:mm"/>
                                 </p>
                             </div>
                             <div class="text-end">
@@ -246,7 +246,7 @@
     <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container text-center">
-            <p>&copy; 2024 TechSign. All rights reserved.</p>
+            <p>&copy; 2025 TechSign. All rights reserved.</p>
         </div>
     </footer>
 </body>
