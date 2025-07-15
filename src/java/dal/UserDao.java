@@ -178,4 +178,18 @@ public class UserDao {
     return null;
 }
 
+<<<<<<< HEAD
+=======
+    public int getTotalUsers() throws SQLException {
+    String sql = "SELECT COUNT(*) FROM users";
+    try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    }
+    return 0;
+}
+
+    
+>>>>>>> origin/nhiem
 }

@@ -30,7 +30,11 @@ public class DBContext {
      *
      * @return Connection nếu thành công, null nếu thất bại
      */
+<<<<<<< HEAD
     public Connection getConnection() throws SQLException {
+=======
+    public static  Connection getConnection() throws SQLException {
+>>>>>>> origin/nhiem
         Connection conn = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
