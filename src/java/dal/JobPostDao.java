@@ -27,7 +27,7 @@ public class JobPostDao {
     }
 
     public int getActiveJobPosts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'open' AND (expires_at IS NULL OR expires_at > GETDATE())";
+    String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE())";
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
