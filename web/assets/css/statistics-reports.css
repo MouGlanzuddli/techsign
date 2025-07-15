@@ -168,6 +168,7 @@
 .stat-card.yellow::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
 .stat-card.purple::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
 .stat-card.orange::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+.stat-card.teal::before { background: linear-gradient(90deg, #14b8a6, #0d9488); }
 
 .stat-card:hover {
   transform: translateY(-8px);
@@ -200,6 +201,7 @@
 .stat-number.yellow { color: #f59e0b; }
 .stat-number.purple { color: #8b5cf6; }
 .stat-number.orange { color: #f97316; }
+.stat-number.teal { color: #14b8a6; }
 
 .stat-change {
   font-size: 12px;
@@ -232,6 +234,7 @@
 .stat-icon.yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 .stat-icon.orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+.stat-icon.teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
 
 /* Chart Sections */
 .chart-section {

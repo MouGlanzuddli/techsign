@@ -548,7 +548,7 @@
                     <div class="stat-card purple fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Lượt xem TB</h3>
+                                <h3>Lượt xem trung bình/tin tuyển dụng</h3>
                                 <div class="stat-number purple" id="jobAvgViews">--</div>
                                 <span class="stat-change" id="jobAvgViewsChange"></span>
                             </div>
@@ -560,7 +560,7 @@
                     <div class="stat-card teal fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Ứng viên TB/tin</h3>
+                                <h3>Ứng viên trung bình/tin tuyển dụng</h3>
                                 <div class="stat-number teal" id="jobAvgApplications">--</div>
                                 <span class="stat-change" id="jobAvgApplicationsChange"></span>
                             </div>

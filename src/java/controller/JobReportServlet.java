@@ -30,12 +30,44 @@ public class JobReportServlet extends HttpServlet {
                 response.getWriter().write(new Gson().toJson(chartData));
                 return;
             }
-            // Tổng quan như cũ
-            report.put("totalJobPosts", jobDao.getTotalJobPosts());
-            report.put("activeJobPosts", jobDao.getActiveJobPosts());
-            report.put("expiredJobPosts", jobDao.getExpiredJobPosts());
-            report.put("avgApplications", jobDao.getAverageApplicationsPerJob());
-            report.put("avgJobViews", jobDao.getAverageJobViews());
+            // --- Lấy số liệu tháng này và tháng trước ---
+            int totalNow = jobDao.getTotalJobPosts(0);
+            int totalPrev = jobDao.getTotalJobPosts(-1);
+            int activeNow = jobDao.getActiveJobPostsTotal(); // Tổng số tin còn hoạt động (không lọc tháng)
+            int activePrev = jobDao.getActiveJobPosts(-1);   // Số tin hoạt động đăng trong tháng trước (để so sánh %)
+            int expiredNow = jobDao.getExpiredJobPosts(0);
+            int expiredPrev = jobDao.getExpiredJobPosts(-1);
+            int avgAppNow = jobDao.getAverageApplicationsPerJob(0);
+            int avgAppPrev = jobDao.getAverageApplicationsPerJob(-1);
+            int avgViewsNow = jobDao.getAverageJobViews(0);
+            int avgViewsPrev = jobDao.getAverageJobViews(-1);
+
+            // --- Tính phần trăm tăng/giảm trực tiếp ---
+            double totalJobPostsPct = (totalPrev == 0) ? (totalNow > 0 ? 100.0 : 0.0) : ((totalNow - totalPrev) * 100.0) / totalPrev;
+            double activeJobPostsPct = (activePrev == 0) ? (activeNow > 0 ? 100.0 : 0.0) : ((activeNow - activePrev) * 100.0) / activePrev;
+            double expiredJobPostsPct = (expiredPrev == 0) ? (expiredNow > 0 ? 100.0 : 0.0) : ((expiredNow - expiredPrev) * 100.0) / expiredPrev;
+            double avgApplicationsPct = (avgAppPrev == 0) ? (avgAppNow > 0 ? 100.0 : 0.0) : ((avgAppNow - avgAppPrev) * 100.0) / avgAppPrev;
+            double avgJobViewsPct = (avgViewsPrev == 0) ? (avgViewsNow > 0 ? 100.0 : 0.0) : ((avgViewsNow - avgViewsPrev) * 100.0) / avgViewsPrev;
+
+            report.put("totalJobPosts", totalNow);
+            report.put("totalJobPostsPrev", totalPrev);
+            report.put("totalJobPostsPct", totalJobPostsPct);
+
+            report.put("activeJobPosts", activeNow);
+            report.put("activeJobPostsPrev", activePrev);
+            report.put("activeJobPostsPct", activeJobPostsPct);
+
+            report.put("expiredJobPosts", expiredNow);
+            report.put("expiredJobPostsPrev", expiredPrev);
+            report.put("expiredJobPostsPct", expiredJobPostsPct);
+
+            report.put("avgApplications", avgAppNow);
+            report.put("avgApplicationsPrev", avgAppPrev);
+            report.put("avgApplicationsPct", avgApplicationsPct);
+
+            report.put("avgJobViews", avgViewsNow);
+            report.put("avgJobViewsPrev", avgViewsPrev);
+            report.put("avgJobViewsPct", avgJobViewsPct);
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(500);

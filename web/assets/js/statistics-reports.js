@@ -1211,12 +1211,29 @@ function loadJobReportData() {
 }
 
 function renderJobReport(data) {
+  // Hiển thị số liệu đã làm tròn
   document.getElementById("jobTotalPosts").textContent = data.totalJobPosts ?? "--";
   document.getElementById("jobActivePosts").textContent = data.activeJobPosts ?? "--";
   document.getElementById("jobExpiredPosts").textContent = data.expiredJobPosts ?? "--";
-  document.getElementById("jobAvgViews").textContent = data.avgJobViews !== undefined ? Number(data.avgJobViews).toFixed(1) : "--";
-  document.getElementById("jobAvgApplications").textContent = data.avgApplications !== undefined ? Number(data.avgApplications).toFixed(1) : "--";
+  document.getElementById("jobAvgViews").textContent = data.avgJobViews !== undefined ? Math.round(data.avgJobViews) : "--";
+  document.getElementById("jobAvgApplications").textContent = data.avgApplications !== undefined ? Math.round(data.avgApplications) : "--";
   document.getElementById("jobLastUpdate").textContent = new Date().toLocaleTimeString();
+
+  // Helper: format phần trăm và màu sắc
+  function formatChange(pct) {
+    if (pct === undefined || pct === null) return "";
+    const val = Math.round(pct);
+    if (val > 0) return `<span class='stat-change positive'>↑ ${val}% so với tháng trước</span>`;
+    if (val < 0) return `<span class='stat-change negative'>↓ ${Math.abs(val)}% so với tháng trước</span>`;
+    return `<span class='stat-change neutral'>Không đổi so với tháng trước</span>`;
+  }
+
+  // Gán label so sánh cho từng số liệu
+  document.getElementById("jobTotalPostsChange").innerHTML = formatChange(data.totalJobPostsPct);
+  document.getElementById("jobActivePostsChange").innerHTML = formatChange(data.activeJobPostsPct);
+  document.getElementById("jobExpiredPostsChange").innerHTML = formatChange(data.expiredJobPostsPct);
+  document.getElementById("jobAvgViewsChange").innerHTML = formatChange(data.avgJobViewsPct);
+  document.getElementById("jobAvgApplicationsChange").innerHTML = formatChange(data.avgApplicationsPct);
   addFadeInAnimations();
 }
 

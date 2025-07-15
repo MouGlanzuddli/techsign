@@ -29,7 +29,7 @@ public class AdminDashboardServlet extends HttpServlet {
             StatisticsDAO statisticsDAO = new StatisticsDAO();
 
             int totalUsers = userDao.getTotalUsers();
-            int totalJobPosts = jobPostDao.getTotalJobPosts();
+            int totalJobPosts = jobPostDao.getTotalJobPosts(0);
             int securityAlerts = alert.getAlert();
             int totalVisits = statisticsDAO.getTodayVisits();
 

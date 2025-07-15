@@ -16,8 +16,16 @@ public class JobPostDao {
         this.connection = connection;
     }
 
-    public int getTotalJobPosts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings"; // table của bạn
+    // Helper: Lọc theo tháng/năm
+    private String getMonthFilter(String dateCol, int monthOffset) {
+        // monthOffset = 0: tháng này, -1: tháng trước
+        return "MONTH(" + dateCol + ") = MONTH(DATEADD(month, " + monthOffset + ", GETDATE())) " +
+               "AND YEAR(" + dateCol + ") = YEAR(DATEADD(month, " + monthOffset + ", GETDATE()))";
+    }
+
+    // Tổng số tin trong tháng (monthOffset=0: tháng này, -1: tháng trước)
+    public int getTotalJobPosts(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE " + getMonthFilter("posted_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -26,8 +34,9 @@ public class JobPostDao {
         return 0;
     }
 
-    public int getActiveJobPosts() throws SQLException {
-    String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE())";
+    // Số tin hoạt động trong tháng
+    public int getActiveJobPosts(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE()) AND " + getMonthFilter("posted_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -36,8 +45,9 @@ public class JobPostDao {
         return 0;
     }
 
-    public int getExpiredJobPosts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'closed' OR expires_at < GETDATE()";
+    // Số tin hết hạn trong tháng
+    public int getExpiredJobPosts(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE (status = 'closed' OR expires_at < GETDATE()) AND " + getMonthFilter("posted_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -46,24 +56,41 @@ public class JobPostDao {
         return 0;
     }
 
-    public double getAverageApplicationsPerJob() throws SQLException {
-        String sql = "SELECT AVG(CAST(app_count AS FLOAT)) FROM (SELECT COUNT(*) as app_count FROM applications GROUP BY job_posting_id) as avg_apps";
+    // Lượt xem TB trong tháng (làm tròn)
+    public int getAverageJobViews(int monthOffset) throws SQLException {
+        String sql = "SELECT ROUND(AVG(CAST(views AS FLOAT)), 0) FROM job_postings WHERE views IS NOT NULL AND " + getMonthFilter("posted_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
-                return rs.getDouble(1);
+                return rs.getInt(1);
             }
         }
-        return 0.0;
+        return 0;
     }
 
-    public double getAverageJobViews() throws SQLException {
-        String sql = "SELECT AVG(CAST(views AS FLOAT)) FROM job_postings WHERE views IS NOT NULL";
+    // Ứng viên TB/tin trong tháng (làm tròn)
+    public int getAverageApplicationsPerJob(int monthOffset) throws SQLException {
+        // Chỉ tính các job_postings trong tháng đó
+        String sql = "SELECT ROUND(AVG(app_count), 0) FROM ( " +
+                "SELECT COUNT(a.id) as app_count FROM job_postings jp " +
+                "LEFT JOIN applications a ON a.job_posting_id = jp.id " +
+                "WHERE " + getMonthFilter("jp.posted_at", monthOffset) + " GROUP BY jp.id ) t";
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
-                return rs.getDouble(1);
+                return rs.getInt(1);
             }
         }
-        return 0.0;
+        return 0;
+    }
+
+    // Số tin hoạt động tổng (không lọc theo tháng)
+    public int getActiveJobPostsTotal() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE())";
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
     }
 
     public java.util.List<java.util.Map<String, Object>> getNewJobPostsByDate(String from, String to) throws SQLException {
