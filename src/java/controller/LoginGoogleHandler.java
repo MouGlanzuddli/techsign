@@ -14,8 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dal.DBContext;
-import dal.UserDao;
+import connectDB.DBContext;
+import DAO.UserDao;
 import java.util.Date;
 import model.User;
 
@@ -103,7 +103,8 @@ public class LoginGoogleHandler extends HttpServlet {
     }
 
     private String getToken(String code) throws IOException {
-        String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
+        String response;
+        response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
                 .bodyForm(Form.form()
                         .add("code", code)
                         .add("client_id", Constants.GOOGLE_CLIENT_ID)

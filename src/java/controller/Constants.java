@@ -5,6 +5,8 @@
 package controller;
 
 import model.*;
+import controller.*;
+import model.*;
 
 /**
  *
@@ -20,4 +22,6 @@ public class Constants {
 	public static String GOOGLE_LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
 	public static String GOOGLE_GRANT_TYPE = "authorization_code";
+    static String GOOGLE_CLIENT_ID;
+    static String GOOGLE_CLIENT_SECRET;
 }

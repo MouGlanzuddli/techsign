@@ -3,10 +3,10 @@
 <html>
 <head><title>Login</title></head>
 <body>
-    <h2>??ng nh?p</h2>
+    <h2>Login In</h2>
     <p style="color:red;">
         <% if (request.getParameter("error") != null) { %>
-            ??ng nh?p th?t b?i. Vui lòng th? l?i.
+            Enter Access again
         <% } %>
     </p>
     <a href="https://accounts.google.com/o/oauth2/auth?...">Login with Google</a>
