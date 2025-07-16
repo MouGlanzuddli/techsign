@@ -8,6 +8,9 @@ import java.sql.Connection;     // ✅ JDBC Connection
 import java.sql.Statement;      // ✅ JDBC Statement
 import java.sql.ResultSet;      // ✅ Để xử lý kết quả truy vấn
 import java.sql.SQLException;   // ✅ Bắt lỗi khi thao tác DB
+import model.JobPost;
+import java.util.List;
+import java.util.ArrayList;
 
 public class JobPostDao {
     private final Connection connection;
@@ -109,6 +112,49 @@ public class JobPostDao {
             }
         }
         return result;
+    }
+
+    // Top 10 tin hoạt động trong tháng có lượt xem nhiều nhất
+    public List<JobPost> getTop10MostViewedActivePostsThisMonth() throws SQLException {
+        String sql = "SELECT TOP 10 id, title, views FROM job_postings " +
+                "WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE()) " +
+                "AND MONTH(posted_at) = MONTH(GETDATE()) AND YEAR(posted_at) = YEAR(GETDATE()) " +
+                "ORDER BY views DESC, id ASC";
+        List<JobPost> list = new ArrayList<>();
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                JobPost jp = new JobPost();
+                jp.setId(rs.getInt("id"));
+                jp.setTitle(rs.getString("title"));
+                jp.setViews(rs.getInt("views"));
+                jp.setApplyCount(0); // chưa cần
+                list.add(jp);
+            }
+        }
+        return list;
+    }
+
+    // Top 10 tin hoạt động trong tháng có nhiều lượt ứng tuyển nhất
+    public List<JobPost> getTop10MostAppliedActivePostsThisMonth() throws SQLException {
+        String sql = "SELECT TOP 10 jp.id, jp.title, jp.views, COUNT(a.id) AS apply_count " +
+                "FROM job_postings jp " +
+                "LEFT JOIN applications a ON a.job_posting_id = jp.id " +
+                "WHERE jp.status = 'active' AND (jp.expires_at IS NULL OR jp.expires_at > GETDATE()) " +
+                "AND MONTH(jp.posted_at) = MONTH(GETDATE()) AND YEAR(jp.posted_at) = YEAR(GETDATE()) " +
+                "GROUP BY jp.id, jp.title, jp.views " +
+                "ORDER BY apply_count DESC, jp.id ASC";
+        List<JobPost> list = new ArrayList<>();
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                JobPost jp = new JobPost();
+                jp.setId(rs.getInt("id"));
+                jp.setTitle(rs.getString("title"));
+                jp.setViews(rs.getInt("views"));
+                jp.setApplyCount(rs.getInt("apply_count"));
+                list.add(jp);
+            }
+        }
+        return list;
     }
 }
 

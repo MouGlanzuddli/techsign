@@ -68,6 +68,10 @@ public class JobReportServlet extends HttpServlet {
             report.put("avgJobViews", avgViewsNow);
             report.put("avgJobViewsPrev", avgViewsPrev);
             report.put("avgJobViewsPct", avgJobViewsPct);
+
+            // --- Thêm top 10 bài đăng ---
+            report.put("topViewedPosts", jobDao.getTop10MostViewedActivePostsThisMonth());
+            report.put("topAppliedPosts", jobDao.getTop10MostAppliedActivePostsThisMonth());
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(500);

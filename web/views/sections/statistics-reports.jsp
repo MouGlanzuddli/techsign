@@ -586,6 +586,41 @@
                         <canvas id="jobPostsChart"></canvas>
                     </div>
                 </div>
+                <!-- Top 10 bài đăng nổi bật trong tháng -->
+                <div class="top-job-section" style="margin-top:32px;">
+                  <div class="row" style="display:flex; gap:32px; flex-wrap:wrap;">
+                    <div class="col" style="flex:1; min-width:320px;">
+                      <div class="top10-section">
+                        <div class="section-header top10-header">
+                          <div class="section-icon top10-icon eye"><i class="fas fa-eye"></i></div>
+                          <div>
+                            <h4>Top 10 tin tuyển dụng được xem nhiều nhất trong tháng</h4>
+                            <div class="section-subtitle">Chỉ tính các tin còn hoạt động trong tháng này</div>
+                          </div>
+                        </div>
+                        <table id="topViewedPostsTable">
+                          <thead><tr><th>STT</th><th><i class="fas fa-file-alt"></i> TIÊU ĐỀ</th><th>LƯỢT XEM</th></tr></thead>
+                          <tbody></tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col" style="flex:1; min-width:320px;">
+                      <div class="top10-section">
+                        <div class="section-header top10-header">
+                          <div class="section-icon top10-icon users"><i class="fas fa-users"></i></div>
+                          <div>
+                            <h4>Top 10 tin tuyển dụng có nhiều lượt ứng tuyển nhất trong tháng</h4>
+                            <div class="section-subtitle">Chỉ tính các tin còn hoạt động trong tháng này</div>
+                          </div>
+                        </div>
+                        <table id="topAppliedPostsTable">
+                          <thead><tr><th>STT</th><th><i class="fas fa-file-alt"></i> TIÊU ĐỀ</th><th>LƯỢT ỨNG TUYỂN</th></tr></thead>
+                          <tbody></tbody>
+                        </table>
+                      </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

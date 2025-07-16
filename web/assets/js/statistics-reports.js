@@ -1114,8 +1114,30 @@ function fetchActivityChartData(startDate, endDate) {
 }
 
 function drawActivityChartWithData(labels, values) {
+  // Lấy ngày bắt đầu và kết thúc từ labels
+  if (!labels || labels.length === 0) return;
+  // labels là dạng yyyy-MM-dd hoặc tương tự
+  const parseDate = (str) => {
+    const [year, month, day] = str.split('-');
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  };
+  const start = parseDate(labels[0]);
+  const end = parseDate(labels[labels.length - 1]);
+  // Sinh mảng ngày liên tục
+  const dateList = [];
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    dateList.push(`${yyyy}-${mm}-${dd}`);
+  }
+  // Map dữ liệu backend vào các ngày này
+  const dataMap = {};
+  labels.forEach((date, idx) => { dataMap[date] = values[idx]; });
+  const fullLabels = dateList;
+  const fullValues = dateList.map(date => dataMap[date] || 0);
   // Format labels to dd/MM
-  const formattedLabels = labels.map(dateStr => {
+  const formattedLabels = fullLabels.map(dateStr => {
     const d = new Date(dateStr);
     if (!isNaN(d)) {
       const day = d.getDate().toString().padStart(2, '0');
@@ -1128,23 +1150,18 @@ function drawActivityChartWithData(labels, values) {
   if (!ctx) return
   if (charts.activityChart) charts.activityChart.destroy()
   charts.activityChart = new Chart(ctx, {
-    type: "line",
+    type: "bar",
     data: {
       labels: formattedLabels,
       datasets: [
         {
           label: "Hoạt động",
-          data: values,
+          data: fullValues,
+          backgroundColor: "rgba(139, 92, 246, 0.7)",
           borderColor: "#8b5cf6",
-          backgroundColor: "rgba(139, 92, 246, 0.1)",
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointBackgroundColor: "#8b5cf6",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
+          borderWidth: 2,
+          borderRadius: 5,
+          barThickness: 15,
         },
       ],
     },
@@ -1235,6 +1252,18 @@ function renderJobReport(data) {
   document.getElementById("jobAvgViewsChange").innerHTML = formatChange(data.avgJobViewsPct);
   document.getElementById("jobAvgApplicationsChange").innerHTML = formatChange(data.avgApplicationsPct);
   addFadeInAnimations();
+
+  // --- Render top 10 bài đăng ---
+  // Top lượt xem
+  const topViewed = data.topViewedPosts || [];
+  const viewedTbody = document.querySelector('#topViewedPostsTable tbody');
+  viewedTbody.innerHTML = topViewed.length === 0 ? '<tr><td colspan="3" class="text-center">Không có dữ liệu</td></tr>' :
+    topViewed.map((post, idx) => `<tr><td>${idx+1}</td><td>${post.title}</td><td>${post.views}</td></tr>`).join('');
+  // Top ứng tuyển
+  const topApplied = data.topAppliedPosts || [];
+  const appliedTbody = document.querySelector('#topAppliedPostsTable tbody');
+  appliedTbody.innerHTML = topApplied.length === 0 ? '<tr><td colspan="3" class="text-center">Không có dữ liệu</td></tr>' :
+    topApplied.map((post, idx) => `<tr><td>${idx+1}</td><td>${post.title}</td><td>${post.applyCount}</td></tr>`).join('');
 }
 
 function refreshJobReport() {
@@ -1288,17 +1317,21 @@ function loadJobChart() {
   fetch(window.contextPath + `/jobReport?from=${from}&to=${to}`)
     .then(res => res.json())
     .then(data => {
-      // Fill đủ ngày trong khoảng
+      // Sinh mảng ngày liên tục từ from đến to
       const start = new Date(from);
       const end = new Date(to);
-      const labels = [];
-      const counts = [];
+      const dateList = [];
       for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        const dateStr = d.toISOString().slice(0, 10);
-        labels.push(dateStr);
-        const found = data.find(row => row.date === dateStr);
-        counts.push(found ? found.count : 0);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        dateList.push(`${yyyy}-${mm}-${dd}`);
       }
+      // Map dữ liệu backend vào các ngày này
+      const dataMap = {};
+      data.forEach(row => { dataMap[row.date] = row.count; });
+      const labels = dateList;
+      const counts = dateList.map(date => dataMap[date] || 0);
       const ctx = document.getElementById('jobPostsChart').getContext('2d');
       if (jobPostsChartInstance) jobPostsChartInstance.destroy();
       jobPostsChartInstance = new Chart(ctx, {
@@ -1308,9 +1341,13 @@ function loadJobChart() {
           datasets: [{
             label: 'Tin tuyển dụng mới',
             data: counts,
-            backgroundColor: 'rgba(59,130,246,0.7)',
-            borderColor: '#3b82f6',
-            fill: true
+            backgroundColor: 'rgba(20,184,166,0.7)', // teal
+            borderColor: '#14b8a6',
+            borderWidth: 2,
+            borderRadius: 5,
+            barThickness: 15,
+            hoverBackgroundColor: '#06b6d4',
+            hoverBorderColor: '#06b6d4',
           }]
         },
         options: {
