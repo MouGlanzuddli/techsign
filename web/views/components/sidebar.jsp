@@ -39,7 +39,7 @@
         <li><a href="#" class="menu-link" data-file="statistics-reports.jsp" data-section="access-stats"><i class="fas fa-chart-line"></i> Thống kê truy cập</a></li>
         <li><a href="#" class="menu-link" data-file="statistics-reports.jsp" data-section="activity-reports"><i class="fas fa-file-alt"></i> Báo cáo hoạt động</a></li>
         <li><a href="#" class="menu-link" data-file="statistics-reports.jsp" data-section="job-posting-reports"><i class="fas fa-file-invoice"></i> Báo cáo tuyển dụng</a></li>
-        <li><a href="#" class="menu-link" data-file="statistics-reports.jsp" data-section="application-analysis"><i class="fas fa-chart-pie"></i> Phân tích ứng dụng</a></li>
+        <li><a href="#" class="menu-link" data-file="statistics-reports.jsp" data-section="application-analysis"><i class="fas fa-chart-pie"></i> Phân tích dữ liệu ứng dụng</a></li>
     </ul>
     <h3>Other</h3>
     <ul>

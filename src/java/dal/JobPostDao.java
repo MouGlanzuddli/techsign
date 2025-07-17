@@ -26,6 +26,12 @@ public class JobPostDao {
                "AND YEAR(" + dateCol + ") = YEAR(DATEADD(month, " + monthOffset + ", GETDATE()))";
     }
 
+    // Helper: Lọc theo tháng/năm cho bảng applications
+    private String getMonthFilterApplications(String dateCol, int monthOffset) {
+        return "MONTH(" + dateCol + ") = MONTH(DATEADD(month, " + monthOffset + ", GETDATE())) " +
+               "AND YEAR(" + dateCol + ") = YEAR(DATEADD(month, " + monthOffset + ", GETDATE()))";
+    }
+
     // Tổng số tin trong tháng (monthOffset=0: tháng này, -1: tháng trước)
     public int getTotalJobPosts(int monthOffset) throws SQLException {
         String sql = "SELECT COUNT(*) FROM job_postings WHERE " + getMonthFilter("posted_at", monthOffset);
@@ -88,6 +94,50 @@ public class JobPostDao {
     // Số tin hoạt động tổng (không lọc theo tháng)
     public int getActiveJobPostsTotal() throws SQLException {
         String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE())";
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    // Tổng số đơn ứng tuyển trong tháng
+    public int getTotalApplications(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM applications WHERE " + getMonthFilterApplications("applied_at", monthOffset);
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    // Số đơn approved trong tháng
+    public int getApprovedApplications(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM applications WHERE status = 'approved' AND " + getMonthFilterApplications("applied_at", monthOffset);
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    // Số đơn rejected trong tháng
+    public int getRejectedApplications(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM applications WHERE status = 'rejected' AND " + getMonthFilterApplications("applied_at", monthOffset);
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    // Số đơn ứng tuyển đang chờ xử lý trong tháng
+    public int getPendingApplications(int monthOffset) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM applications WHERE status = 'pending' AND " + getMonthFilterApplications("applied_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);

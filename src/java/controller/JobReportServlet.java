@@ -42,6 +42,23 @@ public class JobReportServlet extends HttpServlet {
             int avgViewsNow = jobDao.getAverageJobViews(0);
             int avgViewsPrev = jobDao.getAverageJobViews(-1);
 
+            // --- ĐƠN ỨNG TUYỂN ---
+            int totalApplicationsNow = jobDao.getTotalApplications(0);
+            int totalApplicationsPrev = jobDao.getTotalApplications(-1);
+            int approvedNow = jobDao.getApprovedApplications(0);
+            int approvedPrev = jobDao.getApprovedApplications(-1);
+            int rejectedNow = jobDao.getRejectedApplications(0);
+            int rejectedPrev = jobDao.getRejectedApplications(-1);
+
+            // Đơn đang chờ
+            int pendingNow = jobDao.getPendingApplications(0);
+            int pendingPrev = jobDao.getPendingApplications(-1);
+            double pendingPct = (pendingPrev == 0) ? (pendingNow > 0 ? 100.0 : 0.0) : ((pendingNow - pendingPrev) * 100.0) / pendingPrev;
+
+            double totalApplicationsPct = (totalApplicationsPrev == 0) ? (totalApplicationsNow > 0 ? 100.0 : 0.0) : ((totalApplicationsNow - totalApplicationsPrev) * 100.0) / totalApplicationsPrev;
+            double approvedPct = (approvedPrev == 0) ? (approvedNow > 0 ? 100.0 : 0.0) : ((approvedNow - approvedPrev) * 100.0) / approvedPrev;
+            double rejectedPct = (rejectedPrev == 0) ? (rejectedNow > 0 ? 100.0 : 0.0) : ((rejectedNow - rejectedPrev) * 100.0) / rejectedPrev;
+
             // --- Tính phần trăm tăng/giảm trực tiếp ---
             double totalJobPostsPct = (totalPrev == 0) ? (totalNow > 0 ? 100.0 : 0.0) : ((totalNow - totalPrev) * 100.0) / totalPrev;
             double activeJobPostsPct = (activePrev == 0) ? (activeNow > 0 ? 100.0 : 0.0) : ((activeNow - activePrev) * 100.0) / activePrev;
@@ -68,6 +85,22 @@ public class JobReportServlet extends HttpServlet {
             report.put("avgJobViews", avgViewsNow);
             report.put("avgJobViewsPrev", avgViewsPrev);
             report.put("avgJobViewsPct", avgJobViewsPct);
+
+            // --- ĐƠN ỨNG TUYỂN ---
+            report.put("totalApplications", totalApplicationsNow);
+            report.put("totalApplicationsPrev", totalApplicationsPrev);
+            report.put("totalApplicationsPct", totalApplicationsPct);
+            report.put("approvedApplications", approvedNow);
+            report.put("approvedApplicationsPrev", approvedPrev);
+            report.put("approvedApplicationsPct", approvedPct);
+            report.put("rejectedApplications", rejectedNow);
+            report.put("rejectedApplicationsPrev", rejectedPrev);
+            report.put("rejectedApplicationsPct", rejectedPct);
+
+            // Đơn đang chờ
+            report.put("pendingApplications", pendingNow);
+            report.put("pendingApplicationsPrev", pendingPrev);
+            report.put("pendingApplicationsPct", pendingPct);
 
             // --- Thêm top 10 bài đăng ---
             report.put("topViewedPosts", jobDao.getTop10MostViewedActivePostsThisMonth());

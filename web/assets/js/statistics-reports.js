@@ -1236,6 +1236,13 @@ function renderJobReport(data) {
   document.getElementById("jobAvgApplications").textContent = data.avgApplications !== undefined ? Math.round(data.avgApplications) : "--";
   document.getElementById("jobLastUpdate").textContent = new Date().toLocaleTimeString();
 
+  // Bổ sung cập nhật số liệu cho các card mới (đúng id)
+  document.getElementById("jobTotalApplications").textContent = data.totalApplications ?? "--";
+  document.getElementById("jobApprovedApplications").textContent = data.approvedApplications ?? "--";
+  document.getElementById("jobRejectedApplications").textContent = data.rejectedApplications ?? "--";
+  document.getElementById("jobPendingApplications").textContent = data.pendingApplications ?? "--";
+  document.getElementById("jobPendingApplicationsChange").innerHTML = formatChange(data.pendingApplicationsPct);
+
   // Helper: format phần trăm và màu sắc
   function formatChange(pct) {
     if (pct === undefined || pct === null) return "";
@@ -1251,6 +1258,12 @@ function renderJobReport(data) {
   document.getElementById("jobExpiredPostsChange").innerHTML = formatChange(data.expiredJobPostsPct);
   document.getElementById("jobAvgViewsChange").innerHTML = formatChange(data.avgJobViewsPct);
   document.getElementById("jobAvgApplicationsChange").innerHTML = formatChange(data.avgApplicationsPct);
+
+  // Bổ sung label phần trăm cho các card mới (đúng id)
+  document.getElementById("jobTotalApplicationsChange").innerHTML = formatChange(data.totalApplicationsPct);
+  document.getElementById("jobApprovedApplicationsChange").innerHTML = formatChange(data.approvedApplicationsPct);
+  document.getElementById("jobRejectedApplicationsChange").innerHTML = formatChange(data.rejectedApplicationsPct);
+
   addFadeInAnimations();
 
   // --- Render top 10 bài đăng ---
