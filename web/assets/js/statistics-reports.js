@@ -229,7 +229,6 @@ function initializeAccountStatsWithRealData() {
 
   updateAccountStats(realData.accountStats)
   createMainChart()
-  createTrendChart()
   updateLastUpdateTime()
   addFadeInAnimations()
 }
@@ -571,7 +570,6 @@ function updateAccountStats(data) {
   updateStatusStats()
 
   createMainChart()
-  createTrendChart()
 }
 
 function createMainChart() {
@@ -616,90 +614,7 @@ function createMainChart() {
   createCustomLegend("mainChartLegend", data)
 }
 
-function createTrendChart() {
-  const ctx = document.getElementById("trendChart");
-  const canvasContainer = ctx.parentElement;
-  if (!ctx || !canvasContainer) return;
-
-  if (charts.trendChart) {
-    charts.trendChart.destroy();
-  }
-  
-  // ✅ NÂNG CẤP: Lấy dữ liệu tăng trưởng của cả 3 nhóm
-  const totalGrowth = realData.monthlyUserGrowth || {};
-  const candidateGrowth = realData.monthlyCandidateGrowth || {};
-  const employerGrowth = realData.monthlyEmployerGrowth || {};
-
-  // Tạo một danh sách đầy đủ tất cả các tháng từ cả ba tập dữ liệu
-  const allMonths = [...new Set([...Object.keys(totalGrowth), ...Object.keys(candidateGrowth), ...Object.keys(employerGrowth)])].sort();
-
-  const totalDataPoints = [];
-  const candidateDataPoints = [];
-  const employerDataPoints = [];
-  
-  let cumulativeTotal = 0;
-  let cumulativeCandidates = 0;
-  let cumulativeEmployers = 0;
-
-  allMonths.forEach(month => {
-    cumulativeTotal += totalGrowth[month] || 0;
-    cumulativeCandidates += candidateGrowth[month] || 0;
-    cumulativeEmployers += employerGrowth[month] || 0;
-    totalDataPoints.push(cumulativeTotal);
-    candidateDataPoints.push(cumulativeCandidates);
-    employerDataPoints.push(cumulativeEmployers);
-  });
-  
-  charts.trendChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: allMonths,
-      datasets: [
-        {
-          label: "Tổng tài khoản",
-          data: totalDataPoints,
-          borderColor: "#3b82f6", // Blue
-          backgroundColor: "rgba(59, 130, 246, 0.1)",
-          tension: 0.4,
-          fill: true,
-          borderWidth: 3,
-        },
-        {
-          label: "Ứng viên",
-          data: candidateDataPoints,
-          borderColor: "#28a745", // Green
-          backgroundColor: "rgba(40, 167, 69, 0.1)",
-          tension: 0.4,
-          fill: false,
-          borderDash: [5, 5],
-        },
-        {
-          label: "Nhà tuyển dụng",
-          data: employerDataPoints,
-          borderColor: "#ffc107", // Yellow
-          backgroundColor: "rgba(255, 193, 7, 0.1)",
-          tension: 0.4,
-          fill: false,
-          borderDash: [5, 5],
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "top",
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-}
+// ĐÃ XÓA TOÀN BỘ HÀM createTrendChart VÀ MỌI DÒNG GỌI createTrendChart, cũng như mọi biến liên quan đến trendChart
 
 // ✅ Additional chart functions for other sections
 function createAccessChart() {
@@ -1372,3 +1287,198 @@ function loadJobChart() {
       });
     });
 }
+
+// === ACCOUNT TREND CHART WITH DATE RANGE ===
+function fetchAccountTrendChartData(startDate, endDate) {
+  fetch(window.contextPath + `/StatisticsServlet?accountTrendStartDate=${encodeURIComponent(startDate)}&accountTrendEndDate=${encodeURIComponent(endDate)}`,
+    {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Cache-Control": "no-cache",
+      },
+    })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      return response.json()
+    })
+    .then((data) => {
+      if (!data || !data.labels || data.labels.length === 0) {
+        showNoAccountTrendDataMessage();
+        return;
+      }
+      drawAccountTrendChartWithData(data.labels, data.total, data.candidates, data.employers);
+    })
+    .catch((error) => {
+      console.error("❌ Error loading account trend chart data:", error)
+      showNoAccountTrendDataMessage();
+    })
+}
+
+function drawAccountTrendChartWithData(labels, totalData, candidateData, employerData) {
+  const ctx = document.getElementById("trendChart");
+  if (!ctx) return;
+  if (window.charts && window.charts.trendChart) window.charts.trendChart.destroy();
+  if (!window.charts) window.charts = {};
+  window.charts.trendChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Tổng tài khoản",
+          data: totalData,
+          borderColor: "#3b82f6",
+          backgroundColor: "rgba(59, 130, 246, 0.1)",
+          tension: 0.4,
+          fill: true,
+          borderWidth: 3,
+        },
+        {
+          label: "Ứng viên",
+          data: candidateData,
+          borderColor: "#28a745",
+          backgroundColor: "rgba(40, 167, 69, 0.1)",
+          tension: 0.4,
+          fill: false,
+          borderDash: [5, 5],
+        },
+        {
+          label: "Nhà tuyển dụng",
+          data: employerData,
+          borderColor: "#ffc107",
+          backgroundColor: "rgba(255, 193, 7, 0.1)",
+          tension: 0.4,
+          fill: false,
+          borderDash: [5, 5],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function showNoAccountTrendDataMessage() {
+  const ctx = document.getElementById("trendChart");
+  if (!ctx) return;
+  if (window.charts && window.charts.trendChart) window.charts.trendChart.destroy();
+  const parent = ctx.parentElement;
+  let msg = parent.querySelector('.no-trend-data-msg');
+  if (!msg) {
+    msg = document.createElement('div');
+    msg.className = 'no-trend-data-msg';
+    msg.style.textAlign = 'center';
+    msg.style.color = '#888';
+    msg.style.margin = '32px 0';
+    msg.style.fontSize = '1.1rem';
+    parent.appendChild(msg);
+  }
+  msg.textContent = 'Không có dữ liệu trong khoảng thời gian này.';
+}
+
+function handleAccountTrendRangeClick() {
+  const start = document.getElementById("trendStartDate").value;
+  const end = document.getElementById("trendEndDate").value;
+  if (!start || !end) {
+    alert("Vui lòng chọn đủ ngày bắt đầu và kết thúc!");
+    return;
+  }
+  fetchAccountTrendChartData(start, end);
+}
+window.handleAccountTrendRangeClick = handleAccountTrendRangeClick;
+
+// === ACCOUNT BAR CHART: Tài khoản mới theo ngày ===
+function fetchAccountBarChartData(startDate, endDate) {
+  fetch(window.contextPath + `/StatisticsServlet?accountBarStartDate=${encodeURIComponent(startDate)}&accountBarEndDate=${encodeURIComponent(endDate)}`,
+    {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Cache-Control": "no-cache",
+      },
+    })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      return response.json()
+    })
+    .then((data) => {
+      if (!data || !data.labels || data.labels.length === 0) {
+        showNoAccountBarDataMessage();
+        return;
+      }
+      drawAccountBarChartWithData(data.labels, data.values);
+    })
+    .catch((error) => {
+      console.error("❌ Error loading account bar chart data:", error)
+      showNoAccountBarDataMessage();
+    })
+}
+
+function drawAccountBarChartWithData(labels, values) {
+  const ctx = document.getElementById("accountBarChart");
+  if (!ctx) return;
+  if (window.charts && window.charts.accountBarChart) window.charts.accountBarChart.destroy();
+  if (!window.charts) window.charts = {};
+  document.getElementById("accountBarNoDataMsg").style.display = "none";
+  window.charts.accountBarChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Tài khoản mới",
+          data: values,
+          backgroundColor: "rgba(20,184,166,0.7)", // teal trong suốt
+          borderColor: "#14b8a6",
+          borderWidth: 2,
+          borderRadius: 5,
+          barThickness: 14,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: "#e5e7eb" } },
+        x: {
+          grid: { display: false },
+          ticks: { color: "#6b7280", font: { size: 12 }, maxRotation: 45, minRotation: 45 }
+        },
+      },
+    },
+  });
+}
+
+function showNoAccountBarDataMessage() {
+  const ctx = document.getElementById("accountBarChart");
+  if (window.charts && window.charts.accountBarChart) window.charts.accountBarChart.destroy();
+  document.getElementById("accountBarNoDataMsg").style.display = "block";
+}
+
+function handleAccountBarRangeClick() {
+  const start = document.getElementById("accountBarStartDate").value;
+  const end = document.getElementById("accountBarEndDate").value;
+  if (!start || !end) {
+    alert("Vui lòng chọn đủ ngày bắt đầu và kết thúc!");
+    return;
+  }
+  fetchAccountBarChartData(start, end);
+}
+window.handleAccountBarRangeClick = handleAccountBarRangeClick;

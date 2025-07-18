@@ -77,6 +77,19 @@ public class StatisticsServlet extends HttpServlet {
                 return;
             }
 
+            // Xử lý cho biểu đồ tài khoản mới theo ngày
+            String accountBarStartDate = request.getParameter("accountBarStartDate");
+            String accountBarEndDate = request.getParameter("accountBarEndDate");
+            if (accountBarStartDate != null && accountBarEndDate != null) {
+                Map<String, Integer> accountData = statisticsDAO.getNewAccountsByDay(accountBarStartDate, accountBarEndDate);
+                List<String> labels = new java.util.ArrayList<>(accountData.keySet());
+                List<Integer> values = new java.util.ArrayList<>(accountData.values());
+                String json = new Gson().toJson(Map.of("labels", labels, "values", values));
+                response.getWriter().write(json);
+                statisticsDAO.close();
+                return;
+            }
+
             String jsonResponse = new Gson().toJson(statistics);
             
             response.getWriter().write(jsonResponse);

@@ -127,6 +127,25 @@
                     </div>
                 </div>
 
+                <!-- Account Bar Chart: Tài khoản mới theo ngày -->
+                <div class="chart-section fade-in">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Biểu đồ tài khoản mới theo ngày</h3>
+                        <p class="chart-subtitle">Số lượng tài khoản mới được tạo trong khoảng thời gian tuỳ chọn</p>
+                        <div class="account-bar-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <label for="accountBarStartDate">Từ ngày:</label>
+                            <input type="date" id="accountBarStartDate" class="form-control" style="width: 160px;">
+                            <label for="accountBarEndDate">Đến ngày:</label>
+                            <input type="date" id="accountBarEndDate" class="form-control" style="width: 160px;">
+                            <button class="btn btn-primary" id="accountBarRangeBtn" style="margin-left: 8px;" onclick="handleAccountBarRangeClick()">Xem biểu đồ</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="accountBarChart"></canvas>
+                        <div id="accountBarNoDataMsg" style="display:none; text-align:center; color:#888; margin:32px 0; font-size:1.1rem;">Không có dữ liệu trong khoảng thời gian này.</div>
+                    </div>
+                </div>
+
                 <!-- Detail Statistics -->
                 <div class="detail-grid">
                     <!-- Account Types -->
@@ -164,17 +183,7 @@
                     </div>
                 </div>
 
-                <!-- Trend Chart -->
-                <div class="chart-section fade-in">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Xu hướng 6 tháng gần đây</h3>
-                        <p class="chart-subtitle">Biến động số lượng tài khoản theo thời gian</p>
-                    </div>
-                    
-                    <div class="chart-container">
-                        <canvas id="trendChart"></canvas>
-                    </div>
-                </div>
+                <!-- ĐÃ XÓA TOÀN BỘ PHẦN BIỂU ĐỒ XU HƯỚNG TÀI KHOẢN (trendChart) TRONG SECTION THỐNG KÊ TÀI KHOẢN -->
             </div>
         </div>
 

@@ -524,4 +524,29 @@ public class StatisticsDAO {
         }
         return result;
     }
+
+    // Lấy số tài khoản mới theo từng ngày trong khoảng
+    public Map<String, Integer> getNewAccountsByDay(String startDate, String endDate) throws SQLException {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        java.time.LocalDate start = java.time.LocalDate.parse(startDate);
+        java.time.LocalDate end = java.time.LocalDate.parse(endDate);
+        for (java.time.LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
+            result.put(d.toString(), 0);
+        }
+        String sql = "SELECT CONVERT(varchar, created_at, 23) as day, COUNT(*) as cnt " +
+                     "FROM users WHERE created_at >= ? AND created_at <= ? GROUP BY CONVERT(varchar, created_at, 23)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String day = rs.getString("day");
+                int cnt = rs.getInt("cnt");
+                if (result.containsKey(day)) {
+                    result.put(day, cnt);
+                }
+            }
+        }
+        return result;
+    }
 }
