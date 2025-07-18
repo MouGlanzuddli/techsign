@@ -1482,3 +1482,86 @@ function handleAccountBarRangeClick() {
   fetchAccountBarChartData(start, end);
 }
 window.handleAccountBarRangeClick = handleAccountBarRangeClick;
+
+// === ACCESS BAR CHART: Lượt truy cập theo ngày ===
+function fetchAccessBarChartData(startDate, endDate) {
+  fetch(window.contextPath + `/StatisticsServlet?accessBarStartDate=${encodeURIComponent(startDate)}&accessBarEndDate=${encodeURIComponent(endDate)}`,
+    {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Cache-Control": "no-cache",
+      },
+    })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      return response.json()
+    })
+    .then((data) => {
+      if (!data || !data.labels || data.labels.length === 0) {
+        showNoAccessBarDataMessage();
+        return;
+      }
+      drawAccessBarChartWithData(data.labels, data.values);
+    })
+    .catch((error) => {
+      console.error("❌ Error loading access bar chart data:", error)
+      showNoAccessBarDataMessage();
+    })
+}
+
+function drawAccessBarChartWithData(labels, values) {
+  const ctx = document.getElementById("accessBarChart");
+  if (!ctx) return;
+  if (window.charts && window.charts.accessBarChart) window.charts.accessBarChart.destroy();
+  if (!window.charts) window.charts = {};
+  document.getElementById("accessBarNoDataMsg").style.display = "none";
+  window.charts.accessBarChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Lượt truy cập",
+          data: values,
+          backgroundColor: "rgba(20,184,166,0.7)",
+          borderColor: "#14b8a6",
+          borderWidth: 2,
+          borderRadius: 5,
+          barThickness: 14,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: "#e5e7eb" } },
+        x: {
+          grid: { display: false },
+          ticks: { color: "#6b7280", font: { size: 12 }, maxRotation: 45, minRotation: 45 }
+        },
+      },
+    },
+  });
+}
+
+function showNoAccessBarDataMessage() {
+  const ctx = document.getElementById("accessBarChart");
+  if (window.charts && window.charts.accessBarChart) window.charts.accessBarChart.destroy();
+  document.getElementById("accessBarNoDataMsg").style.display = "block";
+}
+
+function handleAccessBarRangeClick() {
+  const start = document.getElementById("accessBarStartDate").value;
+  const end = document.getElementById("accessBarEndDate").value;
+  if (!start || !end) {
+    alert("Vui lòng chọn đủ ngày bắt đầu và kết thúc!");
+    return;
+  }
+  fetchAccessBarChartData(start, end);
+}
+window.handleAccessBarRangeClick = handleAccessBarRangeClick;

@@ -90,6 +90,19 @@ public class StatisticsServlet extends HttpServlet {
                 return;
             }
 
+            // Xử lý cho biểu đồ truy cập theo ngày
+            String accessBarStartDate = request.getParameter("accessBarStartDate");
+            String accessBarEndDate = request.getParameter("accessBarEndDate");
+            if (accessBarStartDate != null && accessBarEndDate != null) {
+                Map<String, Integer> accessData = statisticsDAO.getDailyVisitsByDate(accessBarStartDate, accessBarEndDate);
+                List<String> labels = new java.util.ArrayList<>(accessData.keySet());
+                List<Integer> values = new java.util.ArrayList<>(accessData.values());
+                String json = new Gson().toJson(Map.of("labels", labels, "values", values));
+                response.getWriter().write(json);
+                statisticsDAO.close();
+                return;
+            }
+
             String jsonResponse = new Gson().toJson(statistics);
             
             response.getWriter().write(jsonResponse);

@@ -127,25 +127,6 @@
                     </div>
                 </div>
 
-                <!-- Account Bar Chart: Tài khoản mới theo ngày -->
-                <div class="chart-section fade-in">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Biểu đồ tài khoản mới theo ngày</h3>
-                        <p class="chart-subtitle">Số lượng tài khoản mới được tạo trong khoảng thời gian tuỳ chọn</p>
-                        <div class="account-bar-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
-                            <label for="accountBarStartDate">Từ ngày:</label>
-                            <input type="date" id="accountBarStartDate" class="form-control" style="width: 160px;">
-                            <label for="accountBarEndDate">Đến ngày:</label>
-                            <input type="date" id="accountBarEndDate" class="form-control" style="width: 160px;">
-                            <button class="btn btn-primary" id="accountBarRangeBtn" style="margin-left: 8px;" onclick="handleAccountBarRangeClick()">Xem biểu đồ</button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="accountBarChart"></canvas>
-                        <div id="accountBarNoDataMsg" style="display:none; text-align:center; color:#888; margin:32px 0; font-size:1.1rem;">Không có dữ liệu trong khoảng thời gian này.</div>
-                    </div>
-                </div>
-
                 <!-- Detail Statistics -->
                 <div class="detail-grid">
                     <!-- Account Types -->
@@ -182,6 +163,24 @@
                         </div>
                     </div>
                 </div>
+                <!-- Account Bar Chart: Tài khoản mới theo ngày -->
+                <div class="chart-section fade-in">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Biểu đồ tài khoản mới theo ngày</h3>
+                        <p class="chart-subtitle">Số lượng tài khoản mới được tạo trong khoảng thời gian tuỳ chọn</p>
+                        <div class="account-bar-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <label for="accountBarStartDate">Từ ngày:</label>
+                            <input type="date" id="accountBarStartDate" class="form-control" style="width: 160px;">
+                            <label for="accountBarEndDate">Đến ngày:</label>
+                            <input type="date" id="accountBarEndDate" class="form-control" style="width: 160px;">
+                            <button class="btn btn-primary" id="accountBarRangeBtn" style="margin-left: 8px;" onclick="handleAccountBarRangeClick()">Xem biểu đồ</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="accountBarChart"></canvas>
+                        <div id="accountBarNoDataMsg" style="display:none; text-align:center; color:#888; margin:32px 0; font-size:1.1rem;">Không có dữ liệu trong khoảng thời gian này.</div>
+                    </div>
+                </div>
 
                 <!-- ĐÃ XÓA TOÀN BỘ PHẦN BIỂU ĐỒ XU HƯỚNG TÀI KHOẢN (trendChart) TRONG SECTION THỐNG KÊ TÀI KHOẢN -->
             </div>
@@ -190,10 +189,9 @@
         <!-- Access Statistics Section -->
         <div id="access-stats" class="report-section">
             <div class="section-header">
-                <h2><i class="fas fa-chart-line"></i> Thống kê Truy cập</h2>
-                <p>Phân tích lưu lượng truy cập và hành vi người dùng</p>
+                <h2><i class="fas fa-chart-line"></i> Lưu lượng truy cập</h2>
+                <p>Chọn khoảng thời gian để xem biểu đồ truy cập</p>
             </div>
-            
             <!-- Access Statistics Content -->
             <div class="dashboard-wrapper">
                 <div class="update-info-bar">
@@ -266,19 +264,19 @@
                 <!-- Access Chart -->
                 <div class="chart-section fade-in">
                     <div class="chart-header">
-                        <h3 class="chart-title">Lưu lượng truy cập</h3>
-                        <p class="chart-subtitle">Chọn khoảng thời gian để xem biểu đồ truy cập</p>
-                        <div class="chart-range-selector">
-                            <label for="accessRangeSelect" style="margin-right: 8px;">Khoảng thời gian:</label>
-                            <select id="accessRangeSelect" class="form-control" style="width: 160px; display: inline-block;">
-                                <option value="today">Theo giờ hôm nay</option>
-                                <option value="7days">7 ngày gần nhất</option>
-                                <option value="30days">30 ngày gần nhất</option>
-                            </select>
+                        <h3 class="chart-title">Biểu đồ truy cập theo ngày</h3>
+                        <p class="chart-subtitle">Số lượt truy cập hệ thống trong khoảng thời gian tuỳ chọn</p>
+                        <div class="access-bar-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <label for="accessBarStartDate">Từ ngày:</label>
+                            <input type="date" id="accessBarStartDate" class="form-control" style="width: 160px;">
+                            <label for="accessBarEndDate">Đến ngày:</label>
+                            <input type="date" id="accessBarEndDate" class="form-control" style="width: 160px;">
+                            <button class="btn btn-primary" id="accessBarRangeBtn" style="margin-left: 8px;" onclick="handleAccessBarRangeClick()">Xem biểu đồ</button>
                         </div>
                     </div>
                     <div class="chart-container">
-                        <canvas id="accessChart"></canvas>
+                        <canvas id="accessBarChart"></canvas>
+                        <div id="accessBarNoDataMsg" style="display:none; text-align:center; color:#888; margin:32px 0; font-size:1.1rem;">Không có dữ liệu trong khoảng thời gian này.</div>
                     </div>
                 </div>
             </div>
@@ -359,24 +357,6 @@
                     </div>
                 </div>
 
-                <!-- Activity Chart -->
-                <div class="chart-section fade-in">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Hoạt động theo thời gian</h3>
-                        <p class="chart-subtitle">Biểu đồ hoạt động trong khoảng thời gian tuỳ chọn</p>
-                        <div class="activity-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
-                            <label for="activityStartDate">Từ ngày:</label>
-                            <input type="date" id="activityStartDate" class="form-control" style="width: 160px;">
-                            <label for="activityEndDate">Đến ngày:</label>
-                            <input type="date" id="activityEndDate" class="form-control" style="width: 160px;">
-                            <button class="btn btn-primary" id="activityRangeBtn" style="margin-left: 8px;" onclick="handleActivityRangeClick()">Xem báo cáo</button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="activityChart"></canvas>
-                    </div>
-                </div>
-
                 <!-- Activity Table -->
                 <div class="detail-card fade-in">
                     <div class="detail-header">
@@ -406,6 +386,23 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <!-- Activity Chart: chuyển xuống cuối section -->
+                <div class="chart-section fade-in">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Hoạt động theo thời gian</h3>
+                        <p class="chart-subtitle">Biểu đồ hoạt động trong khoảng thời gian tuỳ chọn</p>
+                        <div class="activity-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <label for="activityStartDate">Từ ngày:</label>
+                            <input type="date" id="activityStartDate" class="form-control" style="width: 160px;">
+                            <label for="activityEndDate">Đến ngày:</label>
+                            <input type="date" id="activityEndDate" class="form-control" style="width: 160px;">
+                            <button class="btn btn-primary" id="activityRangeBtn" style="margin-left: 8px;" onclick="handleActivityRangeClick()">Xem báo cáo</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -628,22 +625,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Biểu đồ tuyển dụng theo thời gian -->
-                <div class="job-chart-section" id="jobChartSection" style="display:none;">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Biểu đồ tin tuyển dụng mới theo ngày</h3>
-                        <div class="job-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
-                            <label for="jobChartFrom">Từ ngày:</label>
-                            <input type="date" id="jobChartFrom" class="form-control" style="width: 160px;">
-                            <label for="jobChartTo">Đến ngày:</label>
-                            <input type="date" id="jobChartTo" class="form-control" style="width: 160px;">
-                            <button class="btn btn-primary" id="jobChartBtn" style="margin-left: 8px;" onclick="handleJobChartClick()">Xem báo cáo</button>
-                        </div>
-                    </div>
-                    <div class="chart-container" id="jobPostsChartContainer" style="height:320px;">
-                        <canvas id="jobPostsChart"></canvas>
-                    </div>
-                </div>
                 <!-- Top 10 bài đăng nổi bật trong tháng -->
                 <div class="top-job-section" style="margin-top:32px;">
                   <div class="row" style="display:flex; gap:32px; flex-wrap:wrap;">
@@ -677,6 +658,22 @@
                         </table>
                       </div>
                         </div>
+                    </div>
+                </div>
+                <!-- Biểu đồ tuyển dụng theo thời gian -->
+                <div class="job-chart-section" id="jobChartSection" style="display:none;">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Biểu đồ tin tuyển dụng mới theo ngày</h3>
+                        <div class="job-date-range" style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+                            <label for="jobChartFrom">Từ ngày:</label>
+                            <input type="date" id="jobChartFrom" class="form-control" style="width: 160px;">
+                            <label for="jobChartTo">Đến ngày:</label>
+                            <input type="date" id="jobChartTo" class="form-control" style="width: 160px;">
+                            <button class="btn btn-primary" id="jobChartBtn" style="margin-left: 8px;" onclick="handleJobChartClick()">Xem báo cáo</button>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="jobPostsChartContainer" style="height:320px;">
+                        <canvas id="jobPostsChart"></canvas>
                     </div>
                 </div>
             </div>
