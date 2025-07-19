@@ -119,6 +119,7 @@ public class UpdateCandidateProfileServlet extends HttpServlet {
             request.setAttribute("phone", user.getPhone());
             request.setAttribute("phoneInput", user.getPhone());
             request.setAttribute("fullName", user.getFullName());
+            request.setAttribute("avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "assets/img/default-avatar.png");
             request.getRequestDispatcher("candidate-dashboard.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,6 +166,7 @@ public class UpdateCandidateProfileServlet extends HttpServlet {
             }
             request.setAttribute("fullName", user.getFullName());
             request.setAttribute("jobTitle", candidate != null ? candidate.getJobTitle() : "");
+            request.setAttribute("avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "assets/img/default-avatar.png");
             request.getRequestDispatcher("candidate-dashboard.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

@@ -68,13 +68,14 @@ public class UserDao {
     }
 
     // Lấy user theo ID
-    public User getUserById(int id) throws SQLException {
+    public User getUserById(int userId) throws SQLException {
         String sql = "SELECT * FROM users WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return mapResultSetToUser(rs);
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToUser(rs);
+                }
             }
         }
         return null;

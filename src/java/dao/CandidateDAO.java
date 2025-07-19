@@ -60,14 +60,15 @@ public class CandidateDAO {
 
     // Cập nhật profile candidate
     public boolean updateCandidate(Candidate candidate) throws SQLException {
-        String sql = "UPDATE candidate_profiles SET experience_years = ?, education_level = ?, address = ?, is_searchable = ?, updated_at = ? WHERE user_id = ?";
+        String sql = "UPDATE candidate_profiles SET job_title = ?, experience_years = ?, education_level = ?, address = ?, is_searchable = ?, updated_at = ? WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, candidate.getExperienceYears());
-            stmt.setString(2, candidate.getEducationLevel());
-            stmt.setString(3, candidate.getAddress());
-            stmt.setBoolean(4, candidate.isSearchable());
-            stmt.setTimestamp(5, new Timestamp(candidate.getUpdatedAt().getTime()));
-            stmt.setInt(6, candidate.getUserId());
+            stmt.setString(1, candidate.getJobTitle());
+            stmt.setInt(2, candidate.getExperienceYears());
+            stmt.setString(3, candidate.getEducationLevel());
+            stmt.setString(4, candidate.getAddress());
+            stmt.setBoolean(5, candidate.isSearchable());
+            stmt.setTimestamp(6, new Timestamp(candidate.getUpdatedAt().getTime()));
+            stmt.setInt(7, candidate.getUserId());
             return stmt.executeUpdate() > 0;
         }
     }

@@ -212,6 +212,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
             }
             request.setAttribute("email", user.getEmail());
             request.setAttribute("phone", user.getPhone());
+            request.setAttribute("avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "assets/img/default-avatar.png");
             request.getRequestDispatcher("company-dashboard.jsp").forward(request, response);
 
             // Sau khi lấy updatedCompany hoặc company, lấy tên ngành

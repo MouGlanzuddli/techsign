@@ -177,7 +177,7 @@
 						<div class="dash-user-blocks pt-5">
 							<div class="jbs-grid-usrs-thumb">
 								<div class="jbs-grid-yuo">
-									<a href="candidate-detail.html"><figure><img src="assets/img/team-2.jpg" class="img-fluid circle" alt=""></figure></a>
+									<img src="${avatarUrl}" class="img-fluid circle" alt="">
 								</div>
 							</div>
 							<div class="jbs-grid-usrs-caption mb-3">
@@ -191,14 +191,14 @@
 						<div class="dashboard-inner">
 							<ul data-submenu-title="Main Navigation">
 								<li><a href="UpdateCandidateProfile"><i class="fa-solid fa-gauge-high me-2"></i>Dashboard</a></li>
-								<li class="active"><a href="UpdateCandidateProfile"><i class="fa-regular fa-user me-2"></i>My Profile </a></li>
+								<li><a href="ChangepasswordServlet"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>
+								<li><a href="UpdateCandidateProfile"><i class="fa-regular fa-user me-2"></i>My Profile </a></li>
 								<li><a href="candidate-resume.html"><i class="fa-solid fa-file-pdf me-2"></i>My CV</a></li>
 								<li><a href="candidate-applied-jobs.html"><i class="fa-regular fa-paper-plane me-2"></i>Applied jobs</a></li>
-								<li><a href="candidate-alert-job.html"><i class="fa-solid fa-bell me-2"></i>Alert Jobs<span class="count-tag bg-warning">4</span></a></li>
+								<li><a href="candidate-alert-job.html"><i class="fa-solid fa-bell me-2"></i>Alert Jobs</a></li>
 								<li><a href="candidate-saved-jobs.html"><i class="fa-solid fa-bookmark me-2"></i>Shortlist Jobs</a></li>
 								<li><a href="candidate-follow-employers.html"><i class="fa-solid fa-user-clock me-2"></i>Following Company</a></li>
-								<li><a href="candidate-messages.html"><i class="fa-solid fa-comments me-2"></i>Messages<span class="count-tag">4</span></a></li>
-								<li><a href="candidate-change-password.html"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>
+								<li><a href="candidate-messages.html"><i class="fa-solid fa-comments me-2"></i>Messages</a></li>
 								<li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteAccountModal"><i class="fa-solid fa-trash-can me-2"></i>Delete Account</a></li>
 								<li><a href="LogoutServlet">
 									<i class="fa-solid fa-power-off"></i> Log Out
@@ -224,7 +224,7 @@
 							<div class="dash-prf-start">
 								<div class="dash-prf-start-upper">
 									<div class="dash-prf-start-thumb">
-										<figure><img src="assets/img/team-1.jpg" class="img-fluid circle" alt=""></figure>
+										<img src="${avatarUrl}" class="img-fluid circle" alt="">
 									</div>
 								</div>
 								<div class="dash-prf-start-bottom">
@@ -283,12 +283,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="dash-prf-completion">
-										<p class="text-sm-muted">Profile Completed</p>
-										<div class="progress" role="progressbar" aria-label="Example Success with label" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-											<div class="progress-bar bg-success" style="width: 75%">75%</div>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 						
@@ -471,6 +466,30 @@
 			</div>
 		  </div>
 		</div>
+
+		<script>
+document.querySelectorAll('.upload-btn-wrapper input[type="file"]').forEach(function(input) {
+    input.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Cập nhật avatar ở phần profile
+                const imgProfile = input.closest('.dash-prf-start').querySelector('img');
+                if (imgProfile) {
+                    imgProfile.src = e.target.result;
+                }
+                // Cập nhật avatar ở navigation (jbs-grid-usrs-thumb)
+                const navImg = document.querySelector('.jbs-grid-usrs-thumb img');
+                if (navImg) {
+                    navImg.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
 
 	</body>
 </html> 

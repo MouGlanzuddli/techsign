@@ -200,7 +200,7 @@
 						<div class="dash-user-blocks pt-5">
 							<div class="jbs-grid-usrs-thumb">
 								<div class="jbs-grid-yuo">
-									<a href="candidate-detail.html"><figure><img src="assets/img/user-1.png" class="img-fluid rounded" alt=""></figure></a>
+									<a href="candidate-detail.html"><figure><img src="${avatarUrl}" class="img-fluid rounded" alt=""></figure></a>
 								</div>
 							</div>
 							<div class="jbs-grid-usrs-caption mb-3">
@@ -223,7 +223,7 @@
 								<li><a href="employer-shortlist-candidates.html"><i class="fa-solid fa-user-clock me-2"></i>Shortlisted Candidates</a></li>
 								<li><a href="employer-package.html"><i class="fa-solid fa-wallet me-2"></i>Package</a></li>
 								<li><a href="employer-messages.html"><i class="fa-solid fa-comments me-2"></i>Messages</a></li>
-								<li><a href="employer-change-password.html"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>
+								<li><a href="ChangepasswordServlet"><i class="fa-solid fa-unlock-keyhole me-2"></i>Change Password</a></li>
 								<li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteAccountModal"><i class="fa-solid fa-trash-can me-2"></i>Delete Account</a></li>
 								<li><a href="LogoutServlet">
 									<i class="fa-solid fa-power-off"></i> Log Out
@@ -248,7 +248,7 @@
 							<div class="dash-prf-start">
 								<div class="dash-prf-start-upper mb-2">
 									<div class="dash-prf-start-thumb jbs-verified">
-										<figure class="mb-0"><img src="assets/img/user-1.png" class="img-fluid rounded" alt=""></figure>
+										<figure class="mb-0"><img src="${avatarUrl}" class="img-fluid rounded" alt=""></figure>
 									</div>
 								</div>
 								<div class="dash-prf-start-bottom">
@@ -287,7 +287,7 @@
 											<input type="hidden" name="toggle" value="1" />
 										<div class="form-check form-switch">
 												<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="isSearchable" value="on" <%= (request.getAttribute("isSearchable") != null && (Boolean)request.getAttribute("isSearchable")) ? "checked" : "" %> onchange="this.form.submit();">
-											<label class="form-check-label" for="flexSwitchCheckChecked">Cho phép ứng viên tìm kiếm và xem thông tin công ty</label>
+											<label class="form-check-label" for="flexSwitchCheckChecked">Allows candidates to search and view company information</label>
 										</div>	
 										</form>
 									</div>
@@ -310,12 +310,7 @@
 										</div>
 										
 									</div>
-									<div class="dash-prf-completion">
-										<p class="text-sm-muted">Profile Completed</p>
-										<div class="progress" role="progressbar" aria-label="Example Success with label" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-											<div class="progress-bar bg-success" style="width: 75%">75%</div>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 						</div>
@@ -500,6 +495,24 @@
 			</div>
 		  </div>
 		</div>
+		<script>
+document.querySelectorAll('.upload-btn-wrapper input[type="file"]').forEach(function(input) {
+    input.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Tìm thẻ img gần nhất trong cùng khối upload
+                const img = input.closest('.dash-prf-start').querySelector('img');
+                if (img) {
+                    img.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
 
 	</body>
 </html> 

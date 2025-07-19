@@ -810,7 +810,7 @@ INSERT [dbo].[candidate_cvs]
 ([candidate_profile_id], [cv_name], [cv_url], [thumbnail_url], [is_default], [uploaded_at]) 
 VALUES (1, N'John_Doe_CV.pdf', N'https://example.com/cv/johndoe.pdf', NULL, 1, CAST(N'2025-06-10T14:22:34.583' AS DateTime))
 
-INSERT [dbo].[candidate_profiles] ([user_id], [headline], [summary], [experience_years], [education_level], [profile_picture_url], [ai_score], [ai_feedback], [is_searchable], [created_at], [updated_at]) 
+INSERT [dbo].[candidate_profiles] ([user_id],[experience_years],[address], [education_level], [profile_picture_url],[job_title], [ai_score], [ai_feedback], [is_searchable], [created_at], [updated_at]) 
 VALUES (3, N'Software Developer', N'Experienced in web development', 3, N'Bachelor', NULL, 85.5, NULL, 1, CAST(N'2025-06-10T14:22:30.290' AS DateTime), CAST(N'2025-06-10T14:22:30.290' AS DateTime));
 INSERT [dbo].[candidate_skills] ([candidate_cv_id], [skill_id], [proficiency_level]) VALUES (1, 1, N'Advanced')
 INSERT [dbo].[candidate_skills] ([candidate_cv_id], [skill_id], [proficiency_level]) VALUES (1, 2, N'Intermediate')
