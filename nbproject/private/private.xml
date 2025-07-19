@@ -3,11 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/PRJ301/TechSign/src/java/dal/LoginDao.java</file>
-            <file>file:/D:/PRJ301/TechSign/src/java/dal/AuditDao.java</file>
-            <file>file:/D:/PRJ301/TechSign/web/assets/css/plugins/admin.css</file>
+            <file>file:/D:/PRJ301/TechSign/web/views/components/sidebar.jsp</file>
+            <file>file:/D:/PRJ301/TechSign/web/companyHome.jsp</file>
+            <file>file:/D:/PRJ301/TechSign/web/assets/js/bootstrap.min.js</file>
+            <file>file:/D:/PRJ301/TechSign/web/assets/js/chatbox.js</file>
             <file>file:/D:/PRJ301/TechSign/web/views/sections/statistics-reports.jsp</file>
-            <file>file:/D:/PRJ301/TechSign/src/java/dal/JobPostDao.java</file>
+            <file>file:/D:/PRJ301/TechSign/web/assets/css/chatbox.css</file>
+            <file>file:/D:/PRJ301/TechSign/web/adminHome.jsp</file>
+            <file>file:/D:/PRJ301/TechSign/web/candidateHome.jsp</file>
         </group>
     </open-files>
 </project-private>

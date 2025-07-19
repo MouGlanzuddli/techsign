@@ -80,7 +80,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
+                        <a href="#"><i class="fas fa-comment me-2"></i></a>
                     </li>
                     <li>
                         <a href="JavaScript:Void(0);"><i class="fas fa-bell me-2"></i></a>
@@ -1277,7 +1277,24 @@
 		<!-- ============================================================== -->
 		<!-- This page plugins -->
 		<!-- ============================================================== -->		
-
+		<jsp:include page="views/components/chatbox.jsp" />
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/chatbox.css">
+		<script>
+		  window.contextPath = '<%= request.getContextPath() %>';
+		</script>
+		<script src="${pageContext.request.contextPath}/assets/js/chatbox.js"></script>
+		<script>window.contextPath = '${pageContext.request.contextPath}';</script>
+		<script>
+		  document.addEventListener('DOMContentLoaded', function() {
+		    var chatIcons = document.querySelectorAll('.fa-comment');
+		    chatIcons.forEach(function(chatIcon) {
+		      chatIcon.addEventListener('click', function() {
+		        var chatbox = document.getElementById('chatbox-container');
+		        if(chatbox) chatbox.style.display = (chatbox.style.display === 'none' ? 'flex' : 'none');
+		      });
+		    });
+		  });
+		</script>
 	</body>
 
 <!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:58:22 GMT -->
