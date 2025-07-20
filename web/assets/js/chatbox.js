@@ -58,10 +58,10 @@ function renderSelfMessage(messageText) {
     content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' target='_blank' download><img src='${messageText}' /></a></div>`;
   } else if(messageText.match(/\.pdf$/i)) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>${fileName}</a></div>`;
+    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
   } else if(messageText.startsWith(window.contextPath + '/uploads/')) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>${fileName}</a></div>`;
+    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
   } else {
     content = `<div class=\"chatbox-msg-bubble\">${messageText}</div>`;
   }
@@ -193,10 +193,10 @@ function handleWsMessage(event) {
     content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' target='_blank' download><img src='${messageText}' /></a></div>`;
   } else if(messageText.match(/\.pdf$/i)) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>${fileName}</a></div>`;
+    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
   } else if(messageText.startsWith(window.contextPath + '/uploads/')) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>${fileName}</a></div>`;
+    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
   } else {
     content = `<div class=\"chatbox-msg-bubble\">${messageText}</div>`;
   }
