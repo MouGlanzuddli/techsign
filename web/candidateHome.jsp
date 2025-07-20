@@ -948,10 +948,12 @@
 
 <!-- JavaScript để giữ modal mở khi có lỗi -->
 <script>
-    $(document).ready(function() {
-        <% if (request.getAttribute("error") != null) { %>
-            $('#login').modal('show');
-        <% } %>
+    document.addEventListener('DOMContentLoaded', function() {
+        var errorMsg = '<%= request.getAttribute("error") %>';
+        if (errorMsg && errorMsg !== 'null') {
+            var loginModal = new bootstrap.Modal(document.getElementById('login'));
+            loginModal.show();
+        }
     });
 </script>
 

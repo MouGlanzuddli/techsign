@@ -150,8 +150,8 @@ if(chatboxSearchInput) {
       return;
     }
     const filtered = allUsers.filter(u =>
-      (u.fullName && u.fullName.toLowerCase().includes(q)) ||
-      (u.email && u.email.toLowerCase().includes(q))
+      u && ((u.fullName && u.fullName.toLowerCase().includes(q)) ||
+      (u.email && u.email.toLowerCase().includes(q)))
     );
     renderUserList(filtered);
   });
