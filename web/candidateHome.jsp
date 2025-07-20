@@ -1,6 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.User" %>
+<%
+  User currentUser = (User) session.getAttribute("user");
+%>
 <!doctype html>
-<html lang="en">
+<html lang="en" <%= currentUser != null ? "data-current-user-id='" + currentUser.getId() + "'" : "" %>>
 	
 <!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:57:49 GMT -->
 <head>

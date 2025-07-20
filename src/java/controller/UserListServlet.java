@@ -49,6 +49,9 @@ public class UserListServlet extends HttpServlet {
                 .collect(Collectors.toList());
                 
             System.out.println("[UserListServlet] Số users sau filter: " + filtered.size());
+            for (User u : filtered) {
+                System.out.println("[UserListServlet] User: id=" + u.getId() + ", email=" + u.getEmail() + ", role=" + u.getRoleId());
+            }
             
             // Chỉ trả về id, fullName, email, avatarUrl
             // Test trực tiếp với User object

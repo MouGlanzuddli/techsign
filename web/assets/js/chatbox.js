@@ -2,15 +2,12 @@
 let ws;
 function connectWebSocket() {
   if (ws && ws.readyState === WebSocket.OPEN) {
-    console.log('[Chatbox] WebSocket đã kết nối');
     return;
   }
   ws = new WebSocket("ws://localhost:8080/TechSign/chatbox");
   ws.onopen = function() {
-    console.log('[Chatbox] WebSocket connected');
   };
   ws.onmessage = function(event) {
-    console.log('[Chatbox] Nhận tin nhắn:', event.data);
     const messageText = event.data;
     const messageElement = document.createElement('div');
     messageElement.className = 'chatbox-msg-row';
@@ -22,7 +19,6 @@ function connectWebSocket() {
     }
   };
   ws.onclose = function() {
-    console.log('[Chatbox] WebSocket closed, reconnecting in 2s...');
     setTimeout(connectWebSocket, 2000);
   };
   ws.onerror = function(e) {
@@ -34,7 +30,6 @@ function connectWebSocket() {
 const chatIcon = document.querySelector('.fa-comment');
 if(chatIcon) {
   chatIcon.addEventListener('click', function() {
-    console.log('[Chatbox] Bấm icon chat, mở chatbox và kết nối WebSocket');
     connectWebSocket();
   });
 }
@@ -79,7 +74,6 @@ function loadChatHistory(receiverId) {
   fetch(window.contextPath + '/ChatHistoryServlet?receiver_id=' + receiverId)
     .then(response => response.json())
     .then(messages => {
-      console.log('[Chatbox] Loaded chat history:', messages);
       renderChatHistory(messages);
     })
     .catch(e => {
@@ -96,14 +90,12 @@ function renderChatHistory(messages) {
   
   // Kiểm tra messages có hợp lệ không
   if (!messages || !Array.isArray(messages)) {
-    console.warn('[Chatbox] Messages không hợp lệ:', messages);
     return;
   }
   
   messages.forEach(message => {
     // Kiểm tra message có hợp lệ không
     if (!message || typeof message !== 'object') {
-      console.warn('[Chatbox] Message không hợp lệ:', message);
       return;
     }
     
@@ -131,11 +123,9 @@ function renderChatHistory(messages) {
 // Gửi tin nhắn riêng
 function sendPrivateMessage() {
   if (!currentChatUserId) {
-    console.warn('[Chatbox] Chưa chọn user để chat!');
     return;
   }
   if(chatboxInput.value.trim() === '') {
-    console.warn('[Chatbox] Không có nội dung để gửi!');
     return;
   }
   
@@ -154,14 +144,12 @@ function sendPrivateMessage() {
     body: new URLSearchParams(messageData)
   })
   .then(response => {
-    console.log('[Chatbox] Response status:', response.status);
     if (!response.ok) {
       throw new Error('HTTP ' + response.status);
     }
     return response.json();
   })
   .then(data => {
-    console.log('[Chatbox] Response data:', data);
     if (data && data.success) {
       // Render tin nhắn mới
       const messageElement = document.createElement('div');
@@ -195,8 +183,18 @@ const chatboxSearchInput = document.querySelector('#chatbox-search input');
 let allUsers = [];
 let currentChatUserId = null;
 
+// Gán currentUserId từ backend nếu chưa có hoặc là NaN
+if (typeof window.currentUserId === 'undefined' || window.currentUserId == null || isNaN(window.currentUserId)) {
+  try {
+    window.currentUserId = parseInt(document.documentElement.getAttribute('data-current-user-id'));
+  } catch (e) {}
+}
+
 function renderUserList(users) {
   if (!chatboxUserList) return;
+  if (window.currentUserId) {
+    users = users.filter(u => u && u.id !== window.currentUserId);
+  }
   chatboxUserList.innerHTML = '';
   if (users.length === 0) {
     chatboxUserList.innerHTML = '<div style="padding:12px;color:#888;">Không tìm thấy user nào</div>';
@@ -214,11 +212,10 @@ function renderUserList(users) {
       </div>
     `;
     div.addEventListener('click', function() {
+      if (user.id === window.currentUserId) return;
       currentChatUserId = user.id;
       renderUserList(allUsers);
-      // Load lịch sử chat với user này
       loadChatHistory(user.id);
-      console.log('[Chatbox] Chọn user để chat:', user.fullName || user.email, user.id);
     });
     chatboxUserList.appendChild(div);
   });
@@ -251,20 +248,13 @@ if(chatboxSearchInput) {
   });
 }
 
-// Gọi fetchUserList khi mở chatbox
-const origShowChatbox = function() {
-  var chatbox = document.getElementById('chatbox-container');
-  if(chatbox) chatbox.style.display = (chatbox.style.display === 'none' ? 'flex' : 'none');
-};
+// Luôn fetch lại user list mỗi lần mở chatbox
 function showChatboxAndFetchUsers() {
   var chatbox = document.getElementById('chatbox-container');
   if(chatbox) {
     chatbox.style.display = 'flex';
   }
-  fetchUserList().catch(e => {
-    var chatbox = document.getElementById('chatbox-container');
-    if(chatbox) chatbox.style.display = 'flex';
-  });
+  fetchUserList();
 }
 // Gắn lại sự kiện cho tất cả <a> chứa icon chat
 const chatLinks = Array.from(document.querySelectorAll('a')).filter(a => a.querySelector('.fa-comment'));
@@ -322,7 +312,6 @@ if(chatboxUpload && chatboxFile) {
   chatboxFile.addEventListener('change', function(e) {
     if(e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      console.log('[Chatbox] Chọn file:', file.name, file.type, file.size + ' bytes');
       // Upload file lên server
       const formData = new FormData();
       formData.append('file', file);
@@ -351,7 +340,6 @@ if(chatboxUpload && chatboxFile) {
           .then(response => response.json())
           .then(result => {
             if (result.success) {
-              console.log('[Chatbox] File đã gửi:', result);
               // Render file message
               const messageElement = document.createElement('div');
               messageElement.className = 'chatbox-msg-row self';
