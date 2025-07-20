@@ -11,7 +11,20 @@ function connectWebSocket() {
     const messageText = event.data;
     const messageElement = document.createElement('div');
     messageElement.className = 'chatbox-msg-row';
-    messageElement.innerHTML = `<div class="chatbox-msg-bubble">${messageText}</div><div class="chatbox-msg-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>`;
+    let content = '';
+    if(messageText.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
+      content = `<a href='${messageText}' target='_blank' download><img src='${messageText}' /></a>`;
+    } else if(messageText.match(/\.pdf$/i)) {
+      const fileName = getDisplayFileName(messageText.split('/').pop());
+      content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
+    } else if(messageText.startsWith(window.contextPath + '/uploads/')) {
+      const fileName = getDisplayFileName(messageText.split('/').pop());
+      content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
+    } else {
+      content = messageText;
+    }
+    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
     const msgBox = document.getElementById('chatbox-messages');
     if(msgBox) {
       msgBox.appendChild(messageElement);
@@ -50,17 +63,18 @@ function renderSelfMessage(messageText) {
   messageElement.className = 'chatbox-msg-row self';
   let content = '';
   if(messageText.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' target='_blank' download><img src='${messageText}' /></a></div>`;
+    content = `<a href='${messageText}' target='_blank' download><img src='${messageText}' /></a>`;
   } else if(messageText.match(/\.pdf$/i)) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+    content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
   } else if(messageText.startsWith(window.contextPath + '/uploads/')) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+    content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
   } else {
-    content = `<div class=\"chatbox-msg-bubble\">${messageText}</div>`;
+    content = messageText;
   }
-  messageElement.innerHTML = `<div class=\"chatbox-msg-time self\">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>${content}`;
+  const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
   if(msgBox) {
     msgBox.appendChild(messageElement);
     msgBox.scrollTop = msgBox.scrollHeight;
@@ -103,17 +117,15 @@ function renderChatHistory(messages) {
     messageElement.className = 'chatbox-msg-row' + (message.isSelf ? ' self' : '');
     
     let content = '';
-    if (message.messageType === 'file' || message.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
+    if (message.messageType === 'file' || (message.content && message.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i))) {
       const fileName = getDisplayFileName(message.content);
-      content = `<div class="chatbox-msg-bubble"><a href='${message.content}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+      content = `<a href='${message.content}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
     } else {
-      content = `<div class="chatbox-msg-bubble">${message.content}</div>`;
+      content = message.content;
     }
     
     const time = new Date(message.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    messageElement.innerHTML = message.isSelf ? 
-      `<div class="chatbox-msg-time self">${time}</div>${content}` :
-      `${content}<div class="chatbox-msg-time">${time}</div>`;
+    messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
     
     msgBox.appendChild(messageElement);
   });
@@ -155,7 +167,7 @@ function sendPrivateMessage() {
       const messageElement = document.createElement('div');
       messageElement.className = 'chatbox-msg-row self';
       const time = new Date(data.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      messageElement.innerHTML = `<div class="chatbox-msg-time self">${time}</div><div class="chatbox-msg-bubble">${data.content}</div>`;
+      messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${data.content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
       
       const msgBox = document.getElementById('chatbox-messages');
       if(msgBox) {
@@ -274,17 +286,18 @@ function handleWsMessage(event) {
   messageElement.className = 'chatbox-msg-row';
   let content = '';
   if(messageText.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' target='_blank' download><img src='${messageText}' /></a></div>`;
+    content = `<a href='${messageText}' target='_blank' download><img src='${messageText}' /></a>`;
   } else if(messageText.match(/\.pdf$/i)) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+    content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
   } else if(messageText.startsWith(window.contextPath + '/uploads/')) {
     const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<div class=\"chatbox-msg-bubble\"><a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+    content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
   } else {
-    content = `<div class=\"chatbox-msg-bubble\">${messageText}</div>`;
+    content = messageText;
   }
-  messageElement.innerHTML = `${content}<div class=\"chatbox-msg-time\">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>`;
+  const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
   if(msgBox) {
     msgBox.appendChild(messageElement);
     msgBox.scrollTop = msgBox.scrollHeight;
@@ -345,7 +358,7 @@ if(chatboxUpload && chatboxFile) {
               messageElement.className = 'chatbox-msg-row self';
               const fileName = getDisplayFileName(data.url);
               const time = new Date(result.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-              messageElement.innerHTML = `<div class="chatbox-msg-time self">${time}</div><div class="chatbox-msg-bubble"><a href='${data.url}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+              messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\"><a href='${data.url}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div><div class=\"chatbox-msg-time\">${time}</div></div>`;
               
               const msgBox = document.getElementById('chatbox-messages');
               if(msgBox) {
