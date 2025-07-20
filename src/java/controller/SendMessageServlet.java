@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
+import controller.ChatboxSessionManager;
 
 @WebServlet("/SendMessageServlet")
 public class SendMessageServlet extends HttpServlet {
@@ -68,6 +69,8 @@ public class SendMessageServlet extends HttpServlet {
                     "}";
                 
                 System.out.println("[SendMessageServlet] JSON result: " + jsonResult);
+                // Broadcast qua WebSocket
+                ChatboxSessionManager.broadcast(jsonResult);
                 response.getWriter().write(jsonResult);
             } else {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

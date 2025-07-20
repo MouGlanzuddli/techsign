@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import controller.ChatboxSessionManager;
 
 @ServerEndpoint("/chatbox")
 public class ChatboxWebSocketServlet {
@@ -16,7 +17,7 @@ public class ChatboxWebSocketServlet {
 
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session);
+        ChatboxSessionManager.add(session);
     }
 
     @OnMessage
@@ -33,6 +34,6 @@ public class ChatboxWebSocketServlet {
 
     @OnClose
     public void onClose(Session session) {
-        sessions.remove(session);
+        ChatboxSessionManager.remove(session);
     }
 }

@@ -296,21 +296,44 @@ chatLinks.forEach(function(link) {
 // Hiển thị file nhận được qua WebSocket
 ws_onmessage_old = ws && ws.onmessage;
 function handleWsMessage(event) {
-  const messageText = event.data;
+  let data;
+  try {
+    data = JSON.parse(event.data);
+  } catch (e) {
+    // fallback: nếu không phải JSON thì giữ nguyên cũ
+    data = { content: event.data };
+  }
+  console.log('[WS] Received:', data, 'currentUserId:', window.currentUserId, 'currentChatUserId:', currentChatUserId);
+  // Nếu có senderId/receiverId thì xử lý realtime
+  if (data.senderId && data.receiverId) {
+    // Nếu đang chat với đúng user (bạn là sender hoặc receiver)
+    if (
+      (currentChatUserId && data.senderId == currentChatUserId && data.receiverId == window.currentUserId) ||
+      (currentChatUserId && data.receiverId == currentChatUserId && data.senderId == window.currentUserId)
+    ) {
+      console.log('[WS] Realtime: loadChatHistory', currentChatUserId);
+      loadChatHistory(currentChatUserId);
+    } else {
+      console.log('[WS] Not current chat, fetchUserList');
+      fetchUserList();
+    }
+    return;
+  }
+  // fallback: nếu chỉ có content (tin nhắn cũ)
   const msgBox = document.getElementById('chatbox-messages');
   const messageElement = document.createElement('div');
   messageElement.className = 'chatbox-msg-row';
   let content = '';
-  if(messageText.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
-    content = `<a href='${messageText}' target='_blank' download><img src='${messageText}' /></a>`;
-  } else if(messageText.match(/\.pdf$/i)) {
-    const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
-  } else if(messageText.startsWith(window.contextPath + '/uploads/')) {
-    const fileName = getDisplayFileName(messageText.split('/').pop());
-    content = `<a href='${messageText}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
+  if(data.content && data.content.match && data.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
+    content = `<a href='${data.content}' target='_blank' download><img src='${data.content}' /></a>`;
+  } else if(data.content && data.content.match && data.content.match(/\.pdf$/i)) {
+    const fileName = getDisplayFileName(data.content.split('/').pop());
+    content = `<a href='${data.content}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
+  } else if(data.content && data.content.startsWith && data.content.startsWith(window.contextPath + '/uploads/')) {
+    const fileName = getDisplayFileName(data.content.split('/').pop());
+    content = `<a href='${data.content}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
   } else {
-    content = messageText;
+    content = data.content || '';
   }
   const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
