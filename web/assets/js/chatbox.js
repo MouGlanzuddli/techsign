@@ -133,7 +133,18 @@ function renderChatHistory(messages) {
     let content = '';
     if (message.messageType === 'file' || (message.content && message.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i))) {
       const fileName = getDisplayFileName(message.content);
-      content = `<a href='${message.content}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a>`;
+      if (message.content && message.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
+        // Nếu là ảnh, hiển thị ảnh preview, click phóng to, có nút tải về bên dưới
+        content = `
+          <div style='display:flex;flex-direction:column;align-items:flex-start;'>
+            <img src='${message.content}' class='chatbox-img-preview' style='max-width:160px;max-height:160px;border-radius:10px;box-shadow:0 2px 8px #0001;cursor:pointer;margin-bottom:4px;' onclick='window.__showChatboxImgModal && window.__showChatboxImgModal(\'${message.content}\')' />
+            <a href='${message.content}' download style='font-size:13px;color:#2196f3;text-decoration:none;display:inline-block;margin-top:2px;'>⬇ Tải ảnh</a>
+          </div>
+        `;
+      } else {
+        // Nếu là file khác, hiển thị icon file và tên file
+        content = `<span style='font-size:18px;margin-right:6px;'>📄</span> <a href='${message.content}' class='chatbox-file-link' target='_blank' download>${fileName} (Tải xuống)</a>`;
+      }
     } else {
       content = message.content;
     }
@@ -430,4 +441,36 @@ if(chatboxClose) {
     var chatbox = document.getElementById('chatbox-container');
     if(chatbox) chatbox.style.display = 'none';
   });
+}
+
+// Preview ảnh lớn khi click vào ảnh trong bubble
+if (typeof window.__chatbox_img_modal_init === 'undefined') {
+  window.__chatbox_img_modal_init = true;
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.closest('.chatbox-msg-bubble')) {
+      const src = e.target.getAttribute('src');
+      const modal = document.getElementById('chatbox-img-modal');
+      const modalImg = document.getElementById('chatbox-img-modal-img');
+      if (modal && modalImg && src) {
+        modalImg.src = src;
+        modal.style.display = 'flex';
+      }
+    }
+  });
+  const modal = document.getElementById('chatbox-img-modal');
+  const modalClose = document.getElementById('chatbox-img-modal-close');
+  if (modal && modalClose) {
+    modalClose.onclick = function() { modal.style.display = 'none'; }
+    modal.onclick = function(e) { if (e.target === modal) modal.style.display = 'none'; }
+  }
+}
+
+// Hàm hỗ trợ phóng to ảnh
+window.__showChatboxImgModal = function(src) {
+  const modal = document.getElementById('chatbox-img-modal');
+  const modalImg = document.getElementById('chatbox-img-modal-img');
+  if (modal && modalImg && src) {
+    modalImg.src = src;
+    modal.style.display = 'flex';
+  }
 }

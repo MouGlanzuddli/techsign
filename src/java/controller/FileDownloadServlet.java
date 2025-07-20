@@ -19,7 +19,7 @@ public class FileDownloadServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        File file = new File(System.getProperty("user.dir") + "/uploads", requestedFile);
+        File file = new File(getServletContext().getRealPath("/uploads"), requestedFile);
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;

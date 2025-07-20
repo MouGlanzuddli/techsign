@@ -30,4 +30,9 @@
     </div>
   </div>
 </div>
+<!-- Modal xem ảnh lớn -->
+<div id="chatbox-img-modal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;">
+  <span id="chatbox-img-modal-close" style="position:absolute;top:24px;right:36px;font-size:36px;color:#fff;cursor:pointer;z-index:10001;">&times;</span>
+  <img id="chatbox-img-modal-img" src="" style="max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 4px 24px #0008;display:block;margin:auto;z-index:10000;" />
+</div>
 <!-- Nhớ include FontAwesome và chatbox.css ở trang chính --> 
