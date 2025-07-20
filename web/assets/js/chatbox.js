@@ -107,15 +107,29 @@ function renderChatHistory(messages) {
     return;
   }
   
+  // Tìm id lớn nhất của message self có isRead=true
+  let lastReadSelfMsgId = null;
+  for (let i = 0; i < messages.length; i++) {
+    if (messages[i].isSelf && messages[i].isRead) {
+      lastReadSelfMsgId = messages[i].id;
+    }
+  }
+  // Kiểm tra sau đó có message nào từ phía người nhận gửi lại không
+  let hasReplyAfterRead = false;
+  if (lastReadSelfMsgId !== null) {
+    for (let i = 0; i < messages.length; i++) {
+      if (!messages[i].isSelf && messages[i].id > lastReadSelfMsgId) {
+        hasReplyAfterRead = true;
+        break;
+      }
+    }
+  }
   messages.forEach(message => {
-    // Kiểm tra message có hợp lệ không
     if (!message || typeof message !== 'object') {
       return;
     }
-    
     const messageElement = document.createElement('div');
     messageElement.className = 'chatbox-msg-row' + (message.isSelf ? ' self' : '');
-    
     let content = '';
     if (message.messageType === 'file' || (message.content && message.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i))) {
       const fileName = getDisplayFileName(message.content);
@@ -123,10 +137,12 @@ function renderChatHistory(messages) {
     } else {
       content = message.content;
     }
-    
     const time = new Date(message.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-time\">${time}</div></div>`;
-    
+    let readHtml = '';
+    if (message.isSelf && message.id === lastReadSelfMsgId && !hasReplyAfterRead) {
+      readHtml = `<span class='chatbox-msg-read'>Đã xem</span>`;
+    }
+    messageElement.innerHTML = `<div class=\"chatbox-msg-bubble\"><div class=\"message-text\">${content}</div><div class=\"chatbox-msg-meta\">${readHtml}<span class=\"chatbox-msg-time\">${time}</span></div></div>`;
     msgBox.appendChild(messageElement);
   });
   msgBox.scrollTop = msgBox.scrollHeight;
