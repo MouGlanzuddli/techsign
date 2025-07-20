@@ -1,4 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.User" %>
+<%
+  User currentUser = (User) session.getAttribute("user");
+%>
 <!doctype html>
 <html lang="en">
 	
@@ -1282,6 +1286,7 @@
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/chatbox.css">
 		<script>
 		  window.contextPath = '<%= request.getContextPath() %>';
+		  window.currentUserId = <%= (currentUser != null) ? currentUser.getId() : -1 %>;
 		</script>
 		<script src="${pageContext.request.contextPath}/assets/js/chatbox.js"></script>
 		<script>window.contextPath = '${pageContext.request.contextPath}';</script>
