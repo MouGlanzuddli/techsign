@@ -60,7 +60,7 @@
                     </li>
                     <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="employer-grid-1.html">Company List</a></li>
+                            <li><a href="CompanyListServlet">Company List</a></li>
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>

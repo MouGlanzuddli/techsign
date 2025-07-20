@@ -301,79 +301,72 @@
                             <h4>Basic Information</h4>
                         </div>
                         <div class="card-body">
-                            <form action="updateEmployerProfile" method="post" enctype="multipart/form-data">
+                            <form action="UpdateCompanyProfile" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                 
                                     <div class="col-xl-6 col-lg-6 col-md-12">
                                         <div class="form-group">
-                                            <label>Employer Name</label>
-                                            <input type="text" name="companyName" class="form-control" value="" required>
+                                            <label>Company Name</label>
+                                            <input type="text" name="companyName" class="form-control" value="${companyName}" required>
                                         </div>
                                     </div>
                                     
                                     <div class="col-xl-6 col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label>Email</label>
-                                            <input type="email" name="email" class="form-control" value="" required>
+                                            <input type="email" name="email" class="form-control" value="${email}" required>
                                         </div>
                                     </div>
                                     
                                     <div class="col-xl-6 col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label>Phone Number</label>
-                                            <input type="text" name="phone" class="form-control" value="">
+                                            <input type="text" name="phone" class="form-control" value="${phone}" required>
                                         </div>
                                     </div>
                                     
                                     <div class="col-xl-6 col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label>Website</label>
-                                            <input type="url" name="website" class="form-control" value="">
+                                            <input type="text" name="website" class="form-control" value="${website}" required>
                                         </div>
                                     </div>
                                     
-                                    <div class="col-xl-6 col-lg-6 col-md-12">
-                                        <div class="form-group">
-                                            <label>Founded Year</label>
-                                            <input type="number" name="foundedYear" class="form-control" value="" min="1800" max="2024">
-                                        </div>
-                                    </div>
                                     <div class="col-xl-6 col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label>Company Category</label>
-                                            <div class="select-ops">
-                                                <select name="category" required>
-                                                    <option value="">Select Category</option>
-                                                    <option value="Web & Application">Web & Applications</option>
-                                                    <option value="Banking Services">Banking Services</option>
-                                                    <option value="UI/UX Design">UI/UX Design</option>
-                                                    <option value="IOS/App Application">IOS/App Applications</option>
-                                                    <option value="Education">Education</option>
-                                                </select>
-                                            </div>
+                                            <select name="industryId" class="form-control" required>
+                                                <option value="1" ${industryId == 1 ? 'selected' : ''}>Web & Application</option>
+                                                <option value="3" ${industryId == 3 ? 'selected' : ''}>UI/UX Design</option>
+                                                <option value="4" ${industryId == 4 ? 'selected' : ''}>IOS/App Application</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-12">
                                         <div class="form-group">
-                                            <label>Company Size</label>
-                                            <input type="text" name="companySize" class="form-control" value="">
+                                            <label>Address</label>
+                                            <input type="text" name="address" class="form-control" value="${address}" required>
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-12">
-                                        <div class="form-group">
-                                            <label>Introduction Video</label>
-                                            <input type="url" name="videoUrl" class="form-control" value="">
-                                        </div>
-                                    </div>
-                                    
                                     <div class="col-xl-12 col-lg-12 col-md-12">
                                         <div class="form-group">
-                                            <label>About Company</label>
-                                            <textarea name="aboutCompany" class="form-control ht-80"></textarea>
+                                            <label>Description</label>
+                                            <textarea name="description" class="form-control" required>${description}</textarea>
                                         </div>
                                     </div>
-                                    
-                                </div> 
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label>Avatar</label>
+                                            <input type="file" name="avatar" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <button type="submit" class="btn ft--medium btn-primary">Update Profile</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <!-- Card Row End -->

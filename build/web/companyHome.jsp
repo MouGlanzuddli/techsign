@@ -60,7 +60,7 @@
                     </li>
                     <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="employer-grid-1.html">Company List</a></li>
+                            <li><a href="CompanyListServlet">Company List</a></li>
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Candidates<span class="submenu-indicator"></span></a>
@@ -90,7 +90,7 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="companyHome.jsp">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="company-dashboard.jsp">Dashboard</a></li>
                             <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
                         </ul>
                     </li>

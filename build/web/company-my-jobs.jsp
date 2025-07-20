@@ -109,7 +109,7 @@
                 <div class="dashboard-inner">
                     <ul data-submenu-title="Main Navigation">
                         <li><a href="companyHome.jsp"><i class="fa-solid fa-gauge-high me-2"></i>User Dashboard</a></li>
-                        <li><a href="companyProfile.jsp"><i class="fa-regular fa-user me-2"></i>User Profile</a></li>
+                        <li><a href="company-dashboard.jsp"><i class="fa-regular fa-user me-2"></i>User Profile</a></li>
                         <li class="active"><a href="MyJobsServlet"><i class="fa-solid fa-briefcase me-2"></i>My Jobs</a></li>
                         <li><a href="PostJobServlet"><i class="fa-solid fa-pen-ruler me-2"></i>Submit Jobs</a></li>
                         <li><a href="#"><i class="fa-solid fa-user-group me-2"></i>Applicants Jobs</a></li>
