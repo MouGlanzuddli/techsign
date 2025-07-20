@@ -33,10 +33,14 @@
 #chatbox-search input {
   border: none;
   background: transparent;
-  color: #1b5e20;
+  color: #43ea7c;
   width: 100%;
   outline: none;
   font-size: 15px;
+}
+#chatbox-search input::placeholder {
+  color: #43ea7c;
+  opacity: 1;
 }
 #chatbox-search i {
   color: #43ea7c;
