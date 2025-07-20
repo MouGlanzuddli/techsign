@@ -217,7 +217,7 @@ function renderUserList(users) {
     const div = document.createElement('div');
     div.className = 'chatbox-user' + (user.id === currentChatUserId ? ' active' : '');
     div.innerHTML = `
-      <div class="chatbox-user-avatar">${user.avatarUrl && user.avatarUrl !== 'a' ? `<img src='${user.avatarUrl}' style='width:32px;height:32px;border-radius:50%;'/>` : '<i class=\"fas fa-user\"></i>'}</div>
+      <div class="chatbox-user-avatar">${user.avatarUrl && user.avatarUrl !== 'a' ? `<img src='${user.avatarUrl}' style='width:38px;height:38px;border-radius:50%;object-fit:cover;'/>` : '<i class=\"fas fa-user\"></i>'}</div>
       <div class="chatbox-user-info">
         <div class="chatbox-user-name">${user.fullName || user.email}</div>
         <div class="chatbox-user-status">${user.email}</div>

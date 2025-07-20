@@ -134,21 +134,21 @@ public class UserDao {
     // Helper method để map ResultSet về User object
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         try {
-            User user = new User();
-            user.setId(rs.getInt("id"));
-            user.setRoleId(rs.getInt("role_id"));
-            user.setEmail(rs.getString("email"));
-            user.setPhone(rs.getString("phone"));
-            user.setPasswordHash(rs.getString("password_hash"));
-            user.setFullName(rs.getString("full_name"));
-            user.setEmailVerified(rs.getBoolean("is_email_verified"));
-            user.setPhoneVerified(rs.getBoolean("is_phone_verified"));
-            user.setAvatarUrl(rs.getString("avatar_url"));
-            user.setStatus(rs.getString("status"));
-            user.setCreatedAt(rs.getTimestamp("created_at"));
-            user.setUpdatedAt(rs.getTimestamp("updated_at"));
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setRoleId(rs.getInt("role_id"));
+        user.setEmail(rs.getString("email"));
+        user.setPhone(rs.getString("phone"));
+        user.setPasswordHash(rs.getString("password_hash"));
+        user.setFullName(rs.getString("full_name"));
+        user.setEmailVerified(rs.getBoolean("is_email_verified"));
+        user.setPhoneVerified(rs.getBoolean("is_phone_verified"));
+        user.setAvatarUrl(rs.getString("avatar_url"));
+        user.setStatus(rs.getString("status"));
+        user.setCreatedAt(rs.getTimestamp("created_at"));
+        user.setUpdatedAt(rs.getTimestamp("updated_at"));
             System.out.println("[UserDao] Mapped user: id=" + user.getId() + ", name=" + user.getFullName() + ", email=" + user.getEmail());
-            return user;
+        return user;
         } catch (SQLException e) {
             System.err.println("[UserDao] Error mapping ResultSet: " + e.getMessage());
             throw e;
