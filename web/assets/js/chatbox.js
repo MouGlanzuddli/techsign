@@ -72,28 +72,121 @@ function renderSelfMessage(messageText) {
   }
 }
 
-// Sửa gửi tin nhắn text
-function sendWsMessage() {
-  if(!ws) {
-    console.warn('[Chatbox] WebSocket chưa khởi tạo!');
+// Load lịch sử chat
+function loadChatHistory(receiverId) {
+  if (!receiverId) return;
+  
+  fetch(window.contextPath + '/ChatHistoryServlet?receiver_id=' + receiverId)
+    .then(response => response.json())
+    .then(messages => {
+      console.log('[Chatbox] Loaded chat history:', messages);
+      renderChatHistory(messages);
+    })
+    .catch(e => {
+      console.error('[Chatbox] Lỗi load chat history:', e);
+    });
+}
+
+// Render lịch sử chat
+function renderChatHistory(messages) {
+  const msgBox = document.getElementById('chatbox-messages');
+  if (!msgBox) return;
+  
+  msgBox.innerHTML = '';
+  
+  // Kiểm tra messages có hợp lệ không
+  if (!messages || !Array.isArray(messages)) {
+    console.warn('[Chatbox] Messages không hợp lệ:', messages);
     return;
   }
-  if(ws.readyState !== WebSocket.OPEN) {
-    console.warn('[Chatbox] WebSocket chưa kết nối!');
+  
+  messages.forEach(message => {
+    // Kiểm tra message có hợp lệ không
+    if (!message || typeof message !== 'object') {
+      console.warn('[Chatbox] Message không hợp lệ:', message);
+      return;
+    }
+    
+    const messageElement = document.createElement('div');
+    messageElement.className = 'chatbox-msg-row' + (message.isSelf ? ' self' : '');
+    
+    let content = '';
+    if (message.messageType === 'file' || message.content.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
+      const fileName = getDisplayFileName(message.content);
+      content = `<div class="chatbox-msg-bubble"><a href='${message.content}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+    } else {
+      content = `<div class="chatbox-msg-bubble">${message.content}</div>`;
+    }
+    
+    const time = new Date(message.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    messageElement.innerHTML = message.isSelf ? 
+      `<div class="chatbox-msg-time self">${time}</div>${content}` :
+      `${content}<div class="chatbox-msg-time">${time}</div>`;
+    
+    msgBox.appendChild(messageElement);
+  });
+  msgBox.scrollTop = msgBox.scrollHeight;
+}
+
+// Gửi tin nhắn riêng
+function sendPrivateMessage() {
+  if (!currentChatUserId) {
+    console.warn('[Chatbox] Chưa chọn user để chat!');
     return;
   }
   if(chatboxInput.value.trim() === '') {
     console.warn('[Chatbox] Không có nội dung để gửi!');
     return;
   }
-  console.log('[Chatbox] Gửi tin nhắn:', chatboxInput.value.trim());
-  ws.send(chatboxInput.value.trim());
-  renderSelfMessage(chatboxInput.value.trim());
-  chatboxInput.value = '';
+  
+  const messageData = {
+    receiver_id: currentChatUserId,
+    content: chatboxInput.value.trim(),
+    message_type: 'text'
+  };
+  
+  // Gửi qua SendMessageServlet
+  fetch(window.contextPath + '/SendMessageServlet', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(messageData)
+  })
+  .then(response => {
+    console.log('[Chatbox] Response status:', response.status);
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('[Chatbox] Response data:', data);
+    if (data && data.success) {
+      // Render tin nhắn mới
+      const messageElement = document.createElement('div');
+      messageElement.className = 'chatbox-msg-row self';
+      const time = new Date(data.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      messageElement.innerHTML = `<div class="chatbox-msg-time self">${time}</div><div class="chatbox-msg-bubble">${data.content}</div>`;
+      
+      const msgBox = document.getElementById('chatbox-messages');
+      if(msgBox) {
+        msgBox.appendChild(messageElement);
+        msgBox.scrollTop = msgBox.scrollHeight;
+      }
+      
+      chatboxInput.value = '';
+    } else {
+      console.error('[Chatbox] Lỗi gửi tin nhắn:', data ? data.message : 'Response data is null');
+    }
+  })
+  .catch(err => {
+    console.error('[Chatbox] Lỗi gửi tin nhắn:', err);
+  });
 }
-if(chatboxSend) chatboxSend.addEventListener('click', sendWsMessage);
+if(chatboxSend) chatboxSend.addEventListener('click', sendPrivateMessage);
 if(chatboxInput) chatboxInput.addEventListener('keypress', function(e) {
-  if(e.key === 'Enter') sendWsMessage();
+  if(e.key === 'Enter') sendPrivateMessage();
 });
 
 // === User Search & Sidebar ===
@@ -114,7 +207,7 @@ function renderUserList(users) {
     const div = document.createElement('div');
     div.className = 'chatbox-user' + (user.id === currentChatUserId ? ' active' : '');
     div.innerHTML = `
-      <div class="chatbox-user-avatar">${user.avatarUrl ? `<img src='${user.avatarUrl}' style='width:32px;height:32px;border-radius:50%;'/>` : '<i class=\"fas fa-user\"></i>'}</div>
+      <div class="chatbox-user-avatar">${user.avatarUrl && user.avatarUrl !== 'a' ? `<img src='${user.avatarUrl}' style='width:32px;height:32px;border-radius:50%;'/>` : '<i class=\"fas fa-user\"></i>'}</div>
       <div class="chatbox-user-info">
         <div class="chatbox-user-name">${user.fullName || user.email}</div>
         <div class="chatbox-user-status">${user.email}</div>
@@ -123,7 +216,8 @@ function renderUserList(users) {
     div.addEventListener('click', function() {
       currentChatUserId = user.id;
       renderUserList(allUsers);
-      // TODO: load lịch sử chat với user này, gửi tin nhắn riêng
+      // Load lịch sử chat với user này
+      loadChatHistory(user.id);
       console.log('[Chatbox] Chọn user để chat:', user.fullName || user.email, user.id);
     });
     chatboxUserList.appendChild(div);
@@ -239,12 +333,44 @@ if(chatboxUpload && chatboxFile) {
       .then(res => res.json())
       .then(data => {
         if(data.url) {
-          // Gửi URL file qua WebSocket
-          if(ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(data.url);
-          }
-          // Tự render message file vừa gửi (bên phải)
-          renderSelfMessage(data.url);
+          // Gửi file qua SendMessageServlet
+          const fileData = {
+            receiver_id: currentChatUserId || 1, // Fallback nếu chưa chọn user
+            content: data.url,
+            message_type: 'file',
+            file_url: data.url
+          };
+          
+          fetch(window.contextPath + '/SendMessageServlet', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(fileData)
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result.success) {
+              console.log('[Chatbox] File đã gửi:', result);
+              // Render file message
+              const messageElement = document.createElement('div');
+              messageElement.className = 'chatbox-msg-row self';
+              const fileName = getDisplayFileName(data.url);
+              const time = new Date(result.sentAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+              messageElement.innerHTML = `<div class="chatbox-msg-time self">${time}</div><div class="chatbox-msg-bubble"><a href='${data.url}' class='chatbox-file-link' target='_blank' download>📄 ${fileName} (Tải xuống)</a></div>`;
+              
+              const msgBox = document.getElementById('chatbox-messages');
+              if(msgBox) {
+                msgBox.appendChild(messageElement);
+                msgBox.scrollTop = msgBox.scrollHeight;
+              }
+            } else {
+              console.error('[Chatbox] Lỗi gửi file:', result ? result.message : 'Response data is null');
+            }
+          })
+          .catch(err => {
+            console.error('[Chatbox] Lỗi gửi file:', err);
+          });
         } else {
           alert('Lỗi upload file!');
         }
