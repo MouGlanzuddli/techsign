@@ -1,7 +1,7 @@
 package controller;
 
-import dal.DBContext;
-import dal.SmtpConfigDao;
+import dao.DBContext;
+import dao.SmtpConfigDao;
 import model.SmtpConfig;
 
 import jakarta.servlet.ServletException;

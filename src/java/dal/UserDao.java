@@ -85,10 +85,20 @@ public class UserDao {
     public List<User> getAllUsers() throws SQLException {
         String sql = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
+        System.out.println("[UserDao] Bắt đầu getAllUsers()");
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            int count = 0;
             while (rs.next()) {
-                users.add(mapResultSetToUser(rs));
+                count++;
+                User user = mapResultSetToUser(rs);
+                System.out.println("[UserDao] User " + count + ": " + 
+                    (user != null ? "id=" + user.getId() + ", name=" + user.getFullName() : "null"));
+                users.add(user);
             }
+            System.out.println("[UserDao] Tổng số users: " + count);
+        } catch (SQLException e) {
+            System.err.println("[UserDao] SQL Error: " + e.getMessage());
+            throw e;
         }
         return users;
     }
@@ -159,16 +169,55 @@ public class UserDao {
         }
     }
     // Lấy User theo email
-    public User getUserByEmail(String email) throws SQLException {
-        String sql = "SELECT * FROM users WHERE email = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return mapResultSetToUser(rs);
-            }
+    public User getUserByEmail(String email) {
+    String sql = "SELECT * FROM Users WHERE email = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            User u = new User();
+            u.setId(rs.getInt("id"));
+            u.setEmail(rs.getString("email"));
+            u.setFullName(rs.getString("full_name"));
+            u.setRoleId(rs.getInt("role_id"));
+            u.setAvatarUrl(rs.getString("avatar_url"));
+            u.setStatus(rs.getString("status"));
+            // ... các trường khác
+            return u;
         }
-        return null;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
 }
+    public int getTotalUsers() throws SQLException {
+    String sql = "SELECT COUNT(*) FROM users";
+    try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    }
+    return 0;
+}
+
+    // Update user status (e.g., "online", "offline", etc.)
+    public boolean updateUserStatus(int userId, String status) {
+        String sql = "UPDATE users SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Set user status to "online"
+    public boolean setUserOnline(int userId) {
+        return updateUserStatus(userId, "online");
+    }
+
+    
 
 }

@@ -27,7 +27,7 @@ public class CompanyHomeServlet extends HttpServlet {
         boolean isSearchable = true;
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             CompanyDAO companyDAO = new CompanyDAO(conn);
             Company company = companyDAO.getCompanyByUserId(user.getId());
             if (company != null) {

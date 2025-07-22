@@ -1,7 +1,7 @@
 package util;
 
-import dal.DBContext;
-import dal.SmtpConfigDao;
+import dao.DBContext;
+import dao.SmtpConfigDao;
 import model.SmtpConfig;
 import javax.mail.*;
 import javax.mail.internet.*;

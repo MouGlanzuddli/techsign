@@ -1,6 +1,6 @@
 package controller;
 
-import dal.DBContext;
+import dao.DBContext;
 import dal.UserDao;
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;

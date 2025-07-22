@@ -25,7 +25,7 @@ public class ToggleCandidateProfileVisibilityServlet extends HttpServlet {
         boolean isSearchable = request.getParameter("isSearchable") != null;
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             dao.CandidateDAO candidateDAO = new dao.CandidateDAO(conn);
             candidateDAO.toggleProfileVisibility(userId, isSearchable);
         } catch (Exception e) {

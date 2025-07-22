@@ -55,12 +55,12 @@
                     <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
                             <li><a href="grid-style-1.html">Job List</a></li>
-                            
+          
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="employer-grid-1.html">Company List</a></li>
+                            <li><a href="UpdateCompanyProfileServlet">Company Dashboard</a></li>
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Candidates<span class="submenu-indicator"></span></a>

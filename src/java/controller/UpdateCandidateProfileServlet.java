@@ -73,7 +73,7 @@ public class UpdateCandidateProfileServlet extends HttpServlet {
         // Chỉ cập nhật database khi không có lỗi
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             dao.CandidateDAO candidateDAO = new dao.CandidateDAO(conn);
             dal.UserDao userDao = new dal.UserDao(conn);
             Candidate candidate = candidateDAO.getCandidateByUserId(userId);
@@ -142,7 +142,7 @@ public class UpdateCandidateProfileServlet extends HttpServlet {
         int userId = user.getId();
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             dao.CandidateDAO candidateDAO = new dao.CandidateDAO(conn);
             Candidate candidate = candidateDAO.getCandidateByUserId(userId);
             if (candidate != null) {

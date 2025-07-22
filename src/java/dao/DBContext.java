@@ -1,5 +1,5 @@
 
-package dal;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,7 +28,7 @@ public class DBContext {
      *
      * @return Connection nếu thành công, null nếu thất bại
      */
-    public Connection getConnection() throws SQLException {
+    public static  Connection getConnection() throws SQLException {
         Connection conn = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

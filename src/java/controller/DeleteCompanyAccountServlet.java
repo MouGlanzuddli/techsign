@@ -26,7 +26,7 @@ public class DeleteCompanyAccountServlet extends HttpServlet {
         int userId = user.getId();
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             CompanyDAO companyDAO = new CompanyDAO(conn);
             UserDAO userDAO = new UserDAO(conn);
             // Xóa company profile

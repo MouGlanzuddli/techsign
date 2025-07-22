@@ -1,7 +1,7 @@
 package controller;
 
-import dal.DBContext;
-import dal.EmailOtpDao;
+import dao.DBContext;
+import dao.EmailOtpDao;
 import dal.UserDao;
 import model.User;
 import model.EmailOtp;

@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import dal.DBContext;
+import dao.DBContext;
 import dal.UserDao;
 import model.User;
 import java.sql.Connection;

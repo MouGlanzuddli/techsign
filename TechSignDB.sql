@@ -1,10 +1,10 @@
-﻿USE [master]
+USE [master]
 GO
-/****** Object:  Database [TechSignDB]    Script Date: 6/13/2025 9:04:14 PM ******/
+/****** Object:  Database [TechSignDB]    Script Date: 21/07/2025 12:12:03 CH ******/
 CREATE DATABASE [TechSignDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'TechSignDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\TechSignDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'TechSignDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\TechSignDB.mdf' , SIZE = 73728KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
 ( NAME = N'TechSignDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\TechSignDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
  WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
@@ -82,7 +82,7 @@ ALTER DATABASE [TechSignDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANU
 GO
 USE [TechSignDB]
 GO
-/****** Object:  Table [dbo].[applications]    Script Date: 6/13/2025 9:04:15 PM ******/
+/****** Object:  Table [dbo].[applications]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -102,7 +102,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[audit_logs]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[audit_logs]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -117,19 +117,14 @@ CREATE TABLE [dbo].[audit_logs](
 	[new_value] [text] NULL,
 	[ip_address] [varchar](45) NULL,
 	[timestamp] [datetime] NULL,
-	[severity] [varchar](20) DEFAULT 'INFO',
+	[severity] [varchar](20) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-/*Add Mức độ cảnh báo  */
-
-
-
-/****** Object:  Table [dbo].[bookmarks]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[bookmarks]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -146,7 +141,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[candidate_cvs]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[candidate_cvs]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -165,23 +160,12 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[candidate_profiles]    Script Date: 6/13/2025 9:04:16 PM ******/
-DECLARE @sql NVARCHAR(MAX) = '';
-SELECT @sql += 'ALTER TABLE [' + OBJECT_SCHEMA_NAME(parent_object_id) + '].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + '];'
-FROM sys.foreign_keys
-WHERE referenced_object_id = OBJECT_ID('dbo.candidate_profiles');
-
-EXEC sp_executesql @sql;
-GO
-IF OBJECT_ID('dbo.candidate_profiles', 'U') IS NOT NULL
-    DROP TABLE dbo.candidate_profiles;
-GO
+/****** Object:  Table [dbo].[candidate_profiles]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
-CREATE TABLE [dbo].[candidate_profiles] (
+CREATE TABLE [dbo].[candidate_profiles](
 	[id] INT IDENTITY(1,1) NOT NULL,
 	[user_id] INT NOT NULL,
 	[experience_years] INT NULL,
@@ -194,21 +178,17 @@ CREATE TABLE [dbo].[candidate_profiles] (
 	[is_searchable] [bit] NULL,
 	[created_at] DATETIME NULL,
 	[updated_at] DATETIME NULL,
-	
-	PRIMARY KEY CLUSTERED (
-		[id] ASC
-	) WITH (
-		PAD_INDEX = OFF, 
-		STATISTICS_NORECOMPUTE = OFF, 
-		IGNORE_DUP_KEY = OFF, 
-		ALLOW_ROW_LOCKS = ON, 
-		ALLOW_PAGE_LOCKS = ON, 
-		OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
-	) ON [PRIMARY]
-) ON [PRIMARY]
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
-/****** Object:  Table [dbo].[candidate_skills]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[candidate_skills]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -224,7 +204,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[categories]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[categories]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -242,7 +222,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[certifications]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[certifications]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -261,7 +241,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[company_industries]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[company_industries]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -276,7 +256,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[company_profiles]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[company_profiles]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -300,10 +280,14 @@ CREATE TABLE [dbo].[company_profiles](
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[user_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[company_reviews]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[company_reviews]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -321,7 +305,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[connections]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[connections]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -338,7 +322,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[content]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[content]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -355,7 +339,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[education_details]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[education_details]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -375,7 +359,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[featured_companies]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[featured_companies]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -391,7 +375,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[group_members]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[group_members]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -407,7 +391,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[groups]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[groups]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -424,7 +408,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[industries]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[industries]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -441,7 +425,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[interviews]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[interviews]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -462,7 +446,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[job_posting_categories]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[job_posting_categories]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -477,7 +461,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[job_postings]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[job_postings]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -495,13 +479,14 @@ CREATE TABLE [dbo].[job_postings](
 	[status] [varchar](20) NULL,
 	[posted_at] [datetime] NULL,
 	[expires_at] [datetime] NULL,
+	[views] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[job_recommendations]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[job_recommendations]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -517,7 +502,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[job_required_skills]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[job_required_skills]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -532,7 +517,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[login_history]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[login_history]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -549,7 +534,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[messages]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[messages]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -561,13 +546,15 @@ CREATE TABLE [dbo].[messages](
 	[content] [text] NULL,
 	[sent_at] [datetime] NULL,
 	[is_read] [bit] NULL,
+	[message_type] [varchar](20) NULL,
+	[file_url] [varchar](500) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[otp_verifications]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[otp_verifications]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -589,7 +576,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[permissions]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[permissions]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -601,10 +588,14 @@ CREATE TABLE [dbo].[permissions](
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[role_permissions]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[role_permissions]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -619,7 +610,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[roles]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[roles]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -631,10 +622,14 @@ CREATE TABLE [dbo].[roles](
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[skills]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[skills]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -645,10 +640,14 @@ CREATE TABLE [dbo].[skills](
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[support_tickets]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[support_tickets]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -667,7 +666,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[system_feedback]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[system_feedback]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -683,7 +682,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[system_logs]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[system_logs]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -700,7 +699,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[user_follows]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[user_follows]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -717,7 +716,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[user_notifications]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[user_notifications]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -735,7 +734,32 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[users]    Script Date: 6/13/2025 9:04:16 PM ******/
+/****** Object:  Table [dbo].[user_sessions]    Script Date: 21/07/2025 12:12:03 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[user_sessions](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NOT NULL,
+	[session_token] [varchar](255) NOT NULL,
+	[ip_address] [varchar](45) NULL,
+	[device_info] [text] NULL,
+	[login_time] [datetime] NULL,
+	[last_active_time] [datetime] NULL,
+	[logout_time] [datetime] NULL,
+	[is_active] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[session_token] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[users]    Script Date: 21/07/2025 12:12:03 CH ******/
 DECLARE @sql NVARCHAR(MAX) = '';
 SELECT @sql += 'ALTER TABLE [' + OBJECT_SCHEMA_NAME(parent_object_id) + '].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + '];'
 FROM sys.foreign_keys
@@ -767,20 +791,14 @@ CREATE TABLE [dbo].[users](
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[work_experiences]    Script Date: 6/13/2025 9:04:16 PM ******/
-DECLARE @sql NVARCHAR(MAX) = '';
-SELECT @sql += 'ALTER TABLE [' + OBJECT_SCHEMA_NAME(parent_object_id) + '].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + '];'
-FROM sys.foreign_keys
-WHERE referenced_object_id = OBJECT_ID('dbo.work_experiences');
-
-EXEC sp_executesql @sql;
-GO
-IF OBJECT_ID('dbo.work_experiences', 'U') IS NOT NULL
-    DROP TABLE dbo.work_experiences;
-GO
+/****** Object:  Table [dbo].[work_experiences]    Script Date: 21/07/2025 12:12:03 CH ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -800,175 +818,6 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-INSERT [dbo].[applications] 
-([job_posting_id], [candidate_profile_id], [candidate_cv_id], [cover_letter], [status], [applied_at], [updated_at]) 
-VALUES (1, 1, 1, N'I am excited to apply...', N'pending', 
-CAST(N'2025-06-10T14:23:09.470' AS DateTime), 
-CAST(N'2025-06-10T14:23:09.470' AS DateTime))
-
-INSERT [dbo].[candidate_cvs] 
-([candidate_profile_id], [cv_name], [cv_url], [thumbnail_url], [is_default], [uploaded_at]) 
-VALUES (1, N'John_Doe_CV.pdf', N'https://example.com/cv/johndoe.pdf', NULL, 1, CAST(N'2025-06-10T14:22:34.583' AS DateTime))
-
-INSERT [dbo].[candidate_profiles] ([user_id],[experience_years],[address], [education_level], [profile_picture_url],[job_title], [ai_score], [ai_feedback], [is_searchable], [created_at], [updated_at]) 
-VALUES (3, N'Software Developer', N'Experienced in web development', 3, N'Bachelor', NULL, 85.5, NULL, 1, CAST(N'2025-06-10T14:22:30.290' AS DateTime), CAST(N'2025-06-10T14:22:30.290' AS DateTime));
-INSERT [dbo].[candidate_skills] ([candidate_cv_id], [skill_id], [proficiency_level]) VALUES (1, 1, N'Advanced')
-INSERT [dbo].[candidate_skills] ([candidate_cv_id], [skill_id], [proficiency_level]) VALUES (1, 2, N'Intermediate')
-INSERT [dbo].[candidate_skills] ([candidate_cv_id], [skill_id], [proficiency_level]) VALUES (1, 3, N'Advanced')
-GO
-
-SET IDENTITY_INSERT [dbo].[company_profiles] ON 
-
-INSERT [dbo].[company_profiles] ([id], [user_id], [industry_id], [company_name], [website], [description], [address], [phone], [logo_url], [banner_url], [icon_url], [is_featured], [is_searchable], [created_at], [updated_at]) VALUES (1, 3, 1, N'Acme Corp', N'https://acme.example.com', N'Leading tech company', N'123 Tech Street', N'0123456789', NULL, NULL, NULL, 1, 1, CAST(N'2025-06-10T14:22:59.257' AS DateTime), CAST(N'2025-06-10T14:22:59.257' AS DateTime))
-SET IDENTITY_INSERT [dbo].[company_profiles] OFF
-GO
-SET IDENTITY_INSERT [dbo].[education_details] ON 
-
-INSERT [dbo].[education_details] ([id], [candidate_cv_id], [degree], [major], [university], [start_date], [end_date], [gpa]) VALUES (1, 1, N'Bachelor', N'Computer Science', N'Tech University', CAST(N'2017-09-01' AS Date), CAST(N'2021-06-30' AS Date), CAST(3.80 AS Decimal(3, 2)))
-SET IDENTITY_INSERT [dbo].[education_details] OFF
-GO
-SET IDENTITY_INSERT [dbo].[industries] ON 
-
-INSERT [dbo].[industries] ([id], [name], [description], [created_at], [updated_at]) VALUES (1, N'Information Technology', N'IT Industry', CAST(N'2025-06-10T14:22:54.247' AS DateTime), CAST(N'2025-06-10T14:22:54.247' AS DateTime))
-SET IDENTITY_INSERT [dbo].[industries] OFF
-GO
-SET IDENTITY_INSERT [dbo].[interviews] ON 
-
-INSERT [dbo].[interviews] ([id], [application_id], [interview_date], [location], [interviewer], [status], [notes], [created_at], [updated_at]) VALUES (1, 1, CAST(N'2025-06-17T14:23:12.830' AS DateTime), N'Online', N'Jane HR', N'scheduled', NULL, CAST(N'2025-06-10T14:23:12.830' AS DateTime), CAST(N'2025-06-10T14:23:12.830' AS DateTime))
-SET IDENTITY_INSERT [dbo].[interviews] OFF
-GO
-SET IDENTITY_INSERT [dbo].[job_postings] ON 
-
-INSERT [dbo].[job_postings] ([id], [company_profile_id], [title], [description], [location], [salary_min], [salary_max], [job_type], [benefits], [status], [posted_at], [expires_at]) VALUES (1, 1, N'Frontend Developer', N'React developer needed', N'Remote', CAST(800.00 AS Decimal(10, 2)), CAST(1500.00 AS Decimal(10, 2)), N'Full-time', N'Health insurance, Remote work', N'open', CAST(N'2025-06-10T14:23:03.010' AS DateTime), CAST(N'2025-07-10T14:23:03.010' AS DateTime))
-SET IDENTITY_INSERT [dbo].[job_postings] OFF
-GO
-SET IDENTITY_INSERT [dbo].[job_recommendations] ON 
-
-INSERT [dbo].[job_recommendations] ([id], [candidate_profile_id], [job_posting_id], [recommended_at]) VALUES (1, 1, 1, CAST(N'2025-06-10T14:23:25.687' AS DateTime))
-SET IDENTITY_INSERT [dbo].[job_recommendations] OFF
-GO
-INSERT [dbo].[job_required_skills] ([job_posting_id], [skill_id]) VALUES (1, 1)
-INSERT [dbo].[job_required_skills] ([job_posting_id], [skill_id]) VALUES (1, 3)
-GO
-SET IDENTITY_INSERT [dbo].[login_history] ON 
-
-INSERT [dbo].[login_history] ([id], [user_id], [login_time], [ip_address], [device_info]) VALUES (1, 2, CAST(N'2025-06-10T14:23:31.010' AS DateTime), N'192.168.1.2', N'Chrome on Windows')
-SET IDENTITY_INSERT [dbo].[login_history] OFF
-GO
-SET IDENTITY_INSERT [dbo].[messages] ON 
-
-INSERT [dbo].[messages] ([id], [sender_id], [receiver_id], [content], [sent_at], [is_read]) VALUES (1, 2, 3, N'Hi, I have applied for the job.', CAST(N'2025-06-10T14:23:17.180' AS DateTime), 0)
-SET IDENTITY_INSERT [dbo].[messages] OFF
-GO
-SET IDENTITY_INSERT [dbo].[roles] ON 
-
-INSERT [dbo].[roles] ([id], [name], [description]) VALUES (1, N'Admin', N'System administrator')
-INSERT [dbo].[roles] ([id], [name], [description]) VALUES (2, N'Candidate', N'Job seeker')
-INSERT [dbo].[roles] ([id], [name], [description]) VALUES (3, N'Employer', N'Company representative')
-SET IDENTITY_INSERT [dbo].[roles] OFF
-GO
-SET IDENTITY_INSERT [dbo].[skills] ON 
-
-INSERT [dbo].[skills] ([id], [name]) VALUES (1, N'JavaScript')
-INSERT [dbo].[skills] ([id], [name]) VALUES (2, N'Python')
-INSERT [dbo].[skills] ([id], [name]) VALUES (3, N'SQL')
-SET IDENTITY_INSERT [dbo].[skills] OFF
-GO
-SET IDENTITY_INSERT [dbo].[system_feedback] ON 
-
-INSERT [dbo].[system_feedback] ([id], [user_id], [feedback_text], [created_at]) VALUES (1, 2, N'Great platform!', CAST(N'2025-06-10T14:23:28.517' AS DateTime))
-SET IDENTITY_INSERT [dbo].[system_feedback] OFF
-GO
-SET IDENTITY_INSERT [dbo].[system_logs] ON 
-
-INSERT [dbo].[system_logs] ([id], [user_id], [action], [description], [created_at]) VALUES (1, 2, N'Login', N'User logged in', CAST(N'2025-06-10T14:23:33.503' AS DateTime))
-SET IDENTITY_INSERT [dbo].[system_logs] OFF
-GO
-SET IDENTITY_INSERT [dbo].[user_notifications] ON 
-
-INSERT [dbo].[user_notifications] ([id], [user_id], [title], [message], [is_read], [created_at]) VALUES (1, 2, N'Application Received', N'Your application has been received.', 0, CAST(N'2025-06-10T14:23:20.483' AS DateTime))
-SET IDENTITY_INSERT [dbo].[user_notifications] OFF
-GO
-SET IDENTITY_INSERT [dbo].[users] ON 
-
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (1, 1, N'admin@example.com', N'1234567890', N'hashed_password_admin', N'Admin User', 1, 0, NULL, N'active', CAST(N'2025-06-10T14:22:22.933' AS DateTime), CAST(N'2025-06-10T14:22:22.933' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (2, 2, N'candidate@example.com', N'0987654321', N'hashed_password_candidate', N'John Doe', 1, 0, NULL, N'active', CAST(N'2025-06-10T14:22:22.933' AS DateTime), CAST(N'2025-06-10T14:22:22.933' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (3, 3, N'employer@example.com', N'0123456789', N'hashed_password_employer', N'Acme Corp HR', 1, 0, NULL, N'active', CAST(N'2025-06-10T14:22:22.933' AS DateTime), CAST(N'2025-06-10T14:22:22.933' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (4, 2, N'21@gg', N'', N'$2a$10$8yIL5hwrRbNLQis.2hYVP.m.D8sSGMh30zYLtWHxiqO7ZqMGx2JjS', N'12', 0, 0, NULL, N'active', CAST(N'2025-06-12T22:14:53.347' AS DateTime), CAST(N'2025-06-12T22:14:53.347' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (5, 1, N'21@gg2', N'', N'$2a$10$66inarHKlFDMuVN3lbbaVenCcl8Kze03vBEc4o7xqWJoREFFku/Te', N'12', 0, 0, NULL, N'active', CAST(N'2025-06-12T22:19:15.767' AS DateTime), CAST(N'2025-06-12T22:19:15.767' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (6, 2, N'quanda@ngu', N'', N'$2a$10$G4l8hIROj59DahP1evbIi.eSJlqmhlUYaS4atTQ6k81D646Up3kQ6', N'12', 0, 0, NULL, N'active', CAST(N'2025-06-12T22:25:02.640' AS DateTime), CAST(N'2025-06-12T22:25:02.640' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (7, 3, N'quanhai1@gmail.com', N'', N'$2a$10$bYHPS3nsPclDjWe8/j7U6ufTOhfHrfBw0dbO6fZhKWQy6wZMGXw3G', N'quanhai', 0, 0, NULL, N'active', CAST(N'2025-06-12T22:29:16.160' AS DateTime), CAST(N'2025-06-12T22:29:16.160' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (8, 2, N'x', N'', N'$2a$10$YTi9jU/T6JkkxtHTLK.iSetbfz6NAMMwBcYvhoxGnst8RiYx5RuzO', N'abc', 0, 0, NULL, N'active', CAST(N'2025-06-12T22:39:53.790' AS DateTime), CAST(N'2025-06-12T22:39:53.790' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (9, 2, N'bc@gmail.com', N'', N'$2a$10$8oPew9RIJ97n5gCpLkJQQOfMlgNIeZPzaooIoDdkddqkSWdRYWwZO', N'bc', 0, 0, NULL, N'active', CAST(N'2025-06-13T07:05:10.340' AS DateTime), CAST(N'2025-06-13T07:05:10.340' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (10, 2, N'bcd@gmail.com', N'', N'$2a$10$HESDDlxSYEPF0oA9Jnj4Jea2UkDp7rdsGnfbqS5pJpSJzKNxMX346', N'bcd', 0, 0, NULL, N'active', CAST(N'2025-06-13T16:58:36.987' AS DateTime), CAST(N'2025-06-13T16:58:36.987' AS DateTime))
-INSERT [dbo].[users] ([id], [role_id], [email], [phone], [password_hash], [full_name], [is_email_verified], [is_phone_verified], [avatar_url], [status], [created_at], [updated_at]) VALUES (11, 3, N'abcde@gmail.com', N'', N'$2a$10$iY2cmzVhFS9NbyKhvkiUhOFKAEHJqQGGVMp5Rmkby67QkGLadkQsm', N'aaas', 0, 0, NULL, N'active', CAST(N'2025-06-13T20:41:44.213' AS DateTime), CAST(N'2025-06-13T20:41:44.213' AS DateTime))
-SET IDENTITY_INSERT [dbo].[users] OFF
-GO
-SET IDENTITY_INSERT [dbo].[work_experiences] ON 
-
-INSERT [dbo].[work_experiences] ([id], [candidate_cv_id], [job_title], [company_name], [start_date], [end_date], [description], [achievements]) VALUES (1, 1, N'Web Developer', N'ABC Corp', CAST(N'2021-01-01' AS Date), CAST(N'2023-01-01' AS Date), N'Developed web applications', N'Improved performance by 30%')
-SET IDENTITY_INSERT [dbo].[work_experiences] OFF
-GO
-SET IDENTITY_INSERT [dbo].[audit_logs] ON
-
-INSERT [dbo].[audit_logs] ([id], [user_id], [action_type], [entity_type], [entity_id], [old_value], [new_value], [ip_address], [timestamp], [severity]) VALUES (12, 1, 'USER_LOGIN', 'users', 1, NULL, NULL, '192.168.1.100', CAST(N'2025-06-14T09:15:22.000' AS DateTime), 'INFO')
-
-INSERT [dbo].[audit_logs] ([id], [user_id], [action_type], [entity_type], [entity_id], [old_value], [new_value], [ip_address], [timestamp], [severity]) VALUES (13, NULL, 'SYSTEM_WARNING', 'system', 0, NULL, '{"message":"Disk space low"}', '127.0.0.1', CAST(N'2025-06-14T09:20:35.000' AS DateTime), 'WARNING')
-
-INSERT [dbo].[audit_logs] ([id], [user_id], [action_type], [entity_type], [entity_id], [old_value], [new_value], [ip_address], [timestamp], [severity]) VALUES (14, 2, 'PROFILE_UPDATE', 'candidate_profiles', 2, '{"headline":"Developer"}', '{"headline":"Senior Developer"}', '10.0.0.15', CAST(N'2025-06-14T09:25:47.000' AS DateTime), 'CRITICAL')
-
-INSERT [dbo].[audit_logs] ([id], [user_id], [action_type], [entity_type], [entity_id], [old_value], [new_value], [ip_address], [timestamp], [severity]) VALUES (15, 3, 'JOB_CREATE', 'job_postings', 5, NULL, '{"title":"Backend Engineer"}', '172.16.0.22', CAST(N'2025-06-14T09:30:12.000' AS DateTime), 'INFO')
-
-SET IDENTITY_INSERT [dbo].[audit_logs] OFF
-
-
-
-
-
-/****** Object:  Index [UQ__candidat__B9BE370E2361BC7F]    Script Date: 6/13/2025 9:04:16 PM ******/
-ALTER TABLE [dbo].[candidate_profiles] ADD UNIQUE NONCLUSTERED 
-(
-	[user_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-/****** Object:  Index [UQ__company___B9BE370ECD8AD42D]    Script Date: 6/13/2025 9:04:16 PM ******/
-ALTER TABLE [dbo].[company_profiles] ADD UNIQUE NONCLUSTERED 
-(
-	[user_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__permissi__72E12F1BCD3E5589]    Script Date: 6/13/2025 9:04:16 PM ******/
-ALTER TABLE [dbo].[permissions] ADD UNIQUE NONCLUSTERED 
-(
-	[name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__roles__72E12F1B5983BD44]    Script Date: 6/13/2025 9:04:16 PM ******/
-ALTER TABLE [dbo].[roles] ADD UNIQUE NONCLUSTERED 
-(
-	[name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__skills__72E12F1BDFD27332]    Script Date: 6/13/2025 9:04:16 PM ******/
-ALTER TABLE [dbo].[skills] ADD UNIQUE NONCLUSTERED 
-(
-	[name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__users__AB6E6164D3855612]    Script Date: 6/13/2025 9:04:16 PM ******/
-ALTER TABLE [dbo].[users] ADD UNIQUE NONCLUSTERED 
-(
-	[email] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
 ALTER TABLE [dbo].[applications] ADD  DEFAULT ('pending') FOR [status]
 GO
 ALTER TABLE [dbo].[applications] ADD  DEFAULT (getdate()) FOR [applied_at]
@@ -976,6 +825,8 @@ GO
 ALTER TABLE [dbo].[applications] ADD  DEFAULT (getdate()) FOR [updated_at]
 GO
 ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT (getdate()) FOR [timestamp]
+GO
+ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT ('INFO') FOR [severity]
 GO
 ALTER TABLE [dbo].[bookmarks] ADD  DEFAULT (getdate()) FOR [created_at]
 GO
@@ -1029,6 +880,8 @@ ALTER TABLE [dbo].[messages] ADD  DEFAULT (getdate()) FOR [sent_at]
 GO
 ALTER TABLE [dbo].[messages] ADD  DEFAULT ((0)) FOR [is_read]
 GO
+ALTER TABLE [dbo].[messages] ADD  DEFAULT ('text') FOR [message_type]
+GO
 ALTER TABLE [dbo].[otp_verifications] ADD  DEFAULT ((0)) FOR [attempts]
 GO
 ALTER TABLE [dbo].[otp_verifications] ADD  DEFAULT ((0)) FOR [is_used]
@@ -1050,6 +903,10 @@ GO
 ALTER TABLE [dbo].[user_notifications] ADD  DEFAULT ((0)) FOR [is_read]
 GO
 ALTER TABLE [dbo].[user_notifications] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[user_sessions] ADD  DEFAULT (getdate()) FOR [login_time]
+GO
+ALTER TABLE [dbo].[user_sessions] ADD  DEFAULT ((1)) FOR [is_active]
 GO
 ALTER TABLE [dbo].[users] ADD  DEFAULT ((0)) FOR [is_email_verified]
 GO
@@ -1190,6 +1047,9 @@ GO
 ALTER TABLE [dbo].[user_notifications]  WITH CHECK ADD FOREIGN KEY([user_id])
 REFERENCES [dbo].[users] ([id])
 GO
+ALTER TABLE [dbo].[user_sessions]  WITH CHECK ADD FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([id])
+GO
 ALTER TABLE [dbo].[users]  WITH CHECK ADD FOREIGN KEY([role_id])
 REFERENCES [dbo].[roles] ([id])
 GO
@@ -1200,6 +1060,3 @@ USE [master]
 GO
 ALTER DATABASE [TechSignDB] SET  READ_WRITE 
 GO
-
-
-

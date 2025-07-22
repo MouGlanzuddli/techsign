@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import dal.DBContext;
+import dao.DBContext;
 import dal.UserDao;
 import java.util.Date;
 import java.util.logging.Level;

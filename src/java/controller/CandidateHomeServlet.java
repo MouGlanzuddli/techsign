@@ -11,6 +11,7 @@ import model.User;
 import java.sql.Connection;
 import dao.CandidateDAO;
 import model.Candidate;
+import dao.DBContext;
 
 @WebServlet(name = "CandidateHome", urlPatterns = {"/CandidateHome"})
 public class CandidateHomeServlet extends HttpServlet {
@@ -26,7 +27,7 @@ public class CandidateHomeServlet extends HttpServlet {
         boolean isSearchable = true;
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             CandidateDAO candidateDAO = new CandidateDAO(conn);
             Candidate candidate = candidateDAO.getCandidateByUserId(user.getId());
             if (candidate != null) {

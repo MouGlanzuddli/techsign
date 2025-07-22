@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dal.DBContext;
+import dao.DBContext;
 import dal.UserDao;
 import java.util.Date;
 import model.User;

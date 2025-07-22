@@ -26,7 +26,7 @@ public class DeleteCandidateAccountServlet extends HttpServlet {
         int userId = user.getId();
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             CandidateDAO candidateDAO = new CandidateDAO(conn);
             UserDAO userDAO = new UserDAO(conn);
             // Xóa candidate profile

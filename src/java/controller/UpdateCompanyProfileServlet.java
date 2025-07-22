@@ -19,6 +19,10 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
             throws ServletException, IOException {
         // 1. Kiểm tra đăng nhập & phân quyền
         HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
         User user = (User) session.getAttribute("user");
         if (user == null || user.getRoleId() != 3) {
             response.sendRedirect("login.jsp");
@@ -93,7 +97,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
         // 5. Cập nhật dữ liệu vào DB
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             dao.CompanyDAO companyDAO = new dao.CompanyDAO(conn);
             dal.UserDao userDao = new dal.UserDao(conn);
             model.Company company = companyDAO.getCompanyByUserId(userId);
@@ -180,6 +184,10 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
         User user = (User) session.getAttribute("user");
         if (user == null || user.getRoleId() != 3) {
             response.sendRedirect("login.jsp");
@@ -189,7 +197,7 @@ public class UpdateCompanyProfileServlet extends HttpServlet {
 
         Connection conn = null;
         try {
-            conn = new dal.DBContext().getConnection();
+            conn = new dao.DBContext().getConnection();
             dao.CompanyDAO companyDAO = new dao.CompanyDAO(conn);
             model.Company company = companyDAO.getCompanyByUserId(userId);
 

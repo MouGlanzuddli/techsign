@@ -1,4 +1,4 @@
-package dal;
+package dao;
 
 import model.EmailOtp;
 import java.sql.*;
