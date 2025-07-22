@@ -4,7 +4,7 @@ import dal.DBContext;
 import dal.JobDao;
 import dal.UserDao;
 import dal.JobViewDao;
-import dal.ApplicationDao;
+import dal.ADao2;
 import model.Job;
 import model.User;
 import model.JobView;
@@ -44,7 +44,7 @@ public class JobDetailServlet extends HttpServlet {
             JobDao jobDao = new JobDao(conn);
             UserDao userDao = new UserDao(conn);
             JobViewDao jobViewDao = new JobViewDao(conn);
-            ApplicationDao applicationDao = new ApplicationDao(conn);
+            ADao2 applicationDao = new ADao2(conn);
             
             // Lấy thông tin job
             Job job = jobDao.getJobById(jobId);

@@ -1,7 +1,7 @@
 package controller;
 
 import dal.DBContext;
-import dal.ApplicationDao;
+import dal.ADao2;
 import dal.JobDao;
 import dal.UserDao;
 import model.Application;
@@ -45,7 +45,7 @@ public class ManageApplicationsServlet extends HttpServlet {
             DBContext dbContext = new DBContext();
             Connection conn = dbContext.getConnection();
             
-            ApplicationDao applicationDao = new ApplicationDao(conn);
+            ADao2 applicationDao = new ADao2(conn);
             JobDao jobDao = new JobDao(conn);
             UserDao userDao = new UserDao(conn);
             
@@ -135,7 +135,7 @@ public class ManageApplicationsServlet extends HttpServlet {
     }
     
     private void handleUpdateStatus(HttpServletRequest request, HttpServletResponse response, 
-                                   ApplicationDao applicationDao, UserDao userDao) throws IOException {
+                                   ADao2 applicationDao, UserDao userDao) throws IOException {
         
         String applicationIdStr = request.getParameter("applicationId");
         String newStatus = request.getParameter("status");

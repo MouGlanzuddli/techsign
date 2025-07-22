@@ -1,7 +1,7 @@
 package controller;
 
 import dal.DBContext;
-import dal.ApplicationDao;
+import dal.ADao2;
 import dal.JobDao;
 import dal.UserDao;
 import model.Application;
@@ -42,7 +42,7 @@ public class MyApplicationsServlet extends HttpServlet {
             DBContext dbContext = new DBContext();
             Connection conn = dbContext.getConnection();
             
-            ApplicationDao applicationDao = new ApplicationDao(conn);
+            ADao2 applicationDao = new ADao2(conn);
             JobDao jobDao = new JobDao(conn);
             UserDao userDao = new UserDao(conn);
             

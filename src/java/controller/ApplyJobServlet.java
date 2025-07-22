@@ -2,7 +2,7 @@ package controller;
 
 import dal.DBContext;
 import dal.JobDao;
-import dal.ApplicationDao;
+import dal.ADao2;
 import dal.UserDao;
 import model.Job;
 import model.User;
@@ -124,7 +124,7 @@ public class ApplyJobServlet extends HttpServlet {
             
             DBContext dbContext = new DBContext();
             Connection conn = dbContext.getConnection();
-            ApplicationDao applicationDao = new ApplicationDao(conn);
+            ADao2 applicationDao = new ADao2(conn);
             
             // Kiểm tra đã ứng tuyển chưa
             if (applicationDao.hasApplied(user.getId(), jobId)) {

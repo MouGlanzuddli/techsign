@@ -166,4 +166,15 @@ public class UserDao {
             return rs.next();
         }
     }
+    public int getCandidateProfileId(int userId) throws SQLException {
+    String sql = "SELECT id FROM candidate_profiles WHERE user_id = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, userId);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id");
+        }
+    }
+    return -1; // Trả về -1 nếu không tìm thấy candidate profile
+}
 }

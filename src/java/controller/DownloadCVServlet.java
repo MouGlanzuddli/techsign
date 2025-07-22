@@ -1,7 +1,7 @@
 package controller;
 
 import dal.DBContext;
-import dal.ApplicationDao;
+import dal.ADao2;
 import model.User;
 
 import jakarta.servlet.ServletException;
@@ -49,7 +49,7 @@ public class DownloadCVServlet extends HttpServlet {
             // Kiểm tra quyền truy cập file
             DBContext dbContext = new DBContext();
             Connection conn = dbContext.getConnection();
-            ApplicationDao applicationDao = new ApplicationDao(conn);
+            ADao2 applicationDao = new ADao2(conn);
             
             boolean hasAccess = false;
             if (user.getRoleId() == 1) { // Employer

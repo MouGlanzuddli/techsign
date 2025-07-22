@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -14,18 +15,18 @@ import java.util.logging.Logger;
 
 import dal.DBContext;
 import dal.UserDao;
-import dal.CompanyDao; // Import CompanyDao
+import dal.CompanyDao;
 import model.User;
-import model.Company; // Import Company model
+import model.Company;
 import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet(name = "SignupServlet", urlPatterns = {"/SignupServlet"})
 public class SignupServlet extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(SignupServlet.class.getName());
-    // Giả định roleId = 2 là vai trò cho tài khoản công ty.
-    // Vui lòng điều chỉnh giá trị này nếu schema cơ sở dữ liệu của bạn sử dụng ID khác.
-    private static final int COMPANY_ROLE_ID = 3; 
+
+    private static final int COMPANY_ROLE_ID = 3;
+    private static final int CANDIDATE_ROLE_ID = 2;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +39,6 @@ public class SignupServlet extends HttpServlet {
             throws ServletException, IOException {
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
-        // Đã loại bỏ useridStr vì ID người dùng nên được cơ sở dữ liệu tự động tạo
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm_password");
         String roleStr = request.getParameter("role");
@@ -62,12 +62,11 @@ public class SignupServlet extends HttpServlet {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         User user = new User();
-        // Không đặt ID ở đây, ID sẽ được DB tạo và gán lại bởi UserDao
         user.setFullName(fullname);
         user.setEmail(email);
         user.setPasswordHash(hashedPassword);
         user.setRoleId(roleId);
-        user.setPhone(""); // Có thể thêm input cho số điện thoại nếu cần
+        user.setPhone("");
         user.setEmailVerified(false);
         user.setPhoneVerified(false);
         user.setAvatarUrl(null);
@@ -80,48 +79,58 @@ public class SignupServlet extends HttpServlet {
         try {
             conn = new DBContext().getConnection();
             UserDao userDao = new UserDao(conn);
-            CompanyDao companyDao = new CompanyDao(conn); // Khởi tạo CompanyDao
+            CompanyDao companyDao = new CompanyDao(conn);
 
-            // Kiểm tra xem email đã tồn tại chưa
-            if (userDao.checkEmailExists(email)) { // Sử dụng checkEmailExists từ UserDao của bạn
+            if (userDao.checkEmailExists(email)) {
                 request.setAttribute("registerError", "Email already registered.");
                 request.getRequestDispatcher("signup.jsp").forward(request, response);
                 return;
             }
 
-            // Chèn người dùng vào DB. user.getId() sẽ được điền sau khi chèn thành công.
-            boolean userInsertSuccess = userDao.insertUser(user); 
+            boolean userInsertSuccess = userDao.insertUser(user);
 
             if (userInsertSuccess) {
-                // Nếu người dùng đăng ký là công ty, tạo hồ sơ công ty tương ứng
-                if (user.getRoleId() == COMPANY_ROLE_ID) { 
+                if (user.getRoleId() == COMPANY_ROLE_ID) {
                     Company company = new Company();
-                    company.setUserId(user.getId()); // Liên kết với ID của người dùng vừa tạo
-                    company.setCompanyName(fullname); // Sử dụng tên đầy đủ làm tên công ty (có thể thêm input riêng)
-                    company.setWebsite(""); // Giá trị mặc định hoặc thêm input vào signup.jsp
-                    company.setDescription(""); // Giá trị mặc định hoặc thêm input vào signup.jsp
-                    company.setAddress(""); // Giá trị mặc định hoặc thêm input vào signup.jsp
-                    company.setPhone(""); // Giá trị mặc định hoặc thêm input vào signup.jsp
+                    company.setUserId(user.getId());
+                    company.setCompanyName(fullname);
+                    company.setWebsite("");
+                    company.setDescription("");
+                    company.setAddress("");
+                    company.setPhone("");
                     company.setLogoUrl(null);
                     company.setBannerUrl(null);
                     company.setIconUrl(null);
                     company.setFeatured(false);
-                    company.setSearchable(true); // Đặt là true để công ty hiển thị trên trang danh sách
+                    company.setSearchable(true);
                     company.setCreatedAt(now);
                     company.setUpdatedAt(now);
-                    company.setIndustryId(0); // Giá trị mặc định hoặc thêm input vào signup.jsp, hoặc đặt null nếu DB cho phép
+                    company.setIndustryId(0);
 
                     boolean companyInsertSuccess = companyDao.insertCompany(company);
                     if (!companyInsertSuccess) {
                         LOGGER.log(Level.WARNING, "Failed to create company profile for user: {0}", user.getEmail());
-                        // Tùy chọn: Nếu tạo hồ sơ công ty thất bại, có thể xóa người dùng đã tạo để duy trì tính toàn vẹn dữ liệu
-                        // userDao.deleteUser(user.getId()); 
                         request.setAttribute("registerError", "Account created, but failed to create company profile. Please contact support.");
                         request.getRequestDispatcher("signup.jsp").forward(request, response);
                         return;
                     }
+
+                } else if (user.getRoleId() == CANDIDATE_ROLE_ID) {
+                    // ✅ Tạo hồ sơ ứng viên mặc định
+                    String sql = "INSERT INTO candidate_profiles (user_id, headline, summary, experience_years, education_level) VALUES (?, '', '', 0, '')";
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setInt(1, user.getId());
+                        ps.executeUpdate();
+                    } catch (SQLException ex) {
+                        LOGGER.log(Level.WARNING, "Failed to create candidate profile for user: {0}", user.getEmail());
+                        request.setAttribute("registerError", "Account created, but failed to create candidate profile. Please contact support.");
+                        request.getRequestDispatcher("signup.jsp").forward(request, response);
+                        return;
+                    }
                 }
-                response.sendRedirect("index.jsp?message=registrationSuccess"); // Chuyển hướng về trang chủ với thông báo thành công
+
+                response.sendRedirect("index.jsp?message=registrationSuccess");
+
             } else {
                 request.setAttribute("registerError", "Failed to create account. Please try again.");
                 request.getRequestDispatcher("signup.jsp").forward(request, response);
