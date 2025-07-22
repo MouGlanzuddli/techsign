@@ -44,8 +44,8 @@ public class UserListServlet extends HttpServlet {
             }
             
             final Integer finalCurrentUserId = currentUserId;
-            List<User> filtered = (finalCurrentUserId == null) ? allUsers : allUsers.stream()
-                .filter(u -> u != null && u.getId() != finalCurrentUserId)
+            List<User> filtered = allUsers.stream()
+                .filter(u -> u != null && u.getId() != finalCurrentUserId && u.getRoleId() != 1)
                 .collect(Collectors.toList());
                 
             System.out.println("[UserListServlet] Số users sau filter: " + filtered.size());
