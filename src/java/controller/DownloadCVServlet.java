@@ -1,103 +1,69 @@
 package controller;
 
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.*;
+import java.sql.*;
 import dal.DBContext;
-import dal.ADao2;
-import model.User;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-@WebServlet(name = "DownloadCVServlet", urlPatterns = {"/DownloadCVServlet"})
 public class DownloadCVServlet extends HttpServlet {
-
-    private static final String UPLOAD_DIR = "uploads/cv";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        
-        if (user == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+
+        String cvIdParam = request.getParameter("id");
+        if (cvIdParam == null || cvIdParam.trim().isEmpty()) {
+            response.getWriter().println("CV ID is missing or empty");
             return;
         }
-        
-        String fileName = request.getParameter("file");
-        String applicationIdStr = request.getParameter("applicationId");
-        
-        if (fileName == null || applicationIdStr == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters");
-            return;
-        }
-        
+
+        int cvId;
         try {
-            int applicationId = Integer.parseInt(applicationIdStr);
-            
-            // Kiểm tra quyền truy cập file
-            DBContext dbContext = new DBContext();
-            Connection conn = dbContext.getConnection();
-            ADao2 applicationDao = new ADao2(conn);
-            
-            boolean hasAccess = false;
-            if (user.getRoleId() == 1) { // Employer
-                hasAccess = applicationDao.canEmployerAccessCV(user.getId(), applicationId);
-            } else if (user.getRoleId() == 2) { // Candidate
-                hasAccess = applicationDao.canCandidateAccessCV(user.getId(), applicationId);
-            }
-            
-            if (!hasAccess) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
-                return;
-            }
-            
-            // Đường dẫn file
-            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-            File file = new File(uploadPath, fileName);
-            
-            if (!file.exists()) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
-                return;
-            }
-            
-            // Set response headers
-            String mimeType = getServletContext().getMimeType(file.getAbsolutePath());
-            if (mimeType == null) {
-                mimeType = "application/octet-stream";
-            }
-            
-            response.setContentType(mimeType);
-            response.setContentLength((int) file.length());
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-            
-            // Stream file
-            try (FileInputStream inStream = new FileInputStream(file);
-                 OutputStream outStream = response.getOutputStream()) {
-                
+            cvId = Integer.parseInt(cvIdParam);
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Invalid CV ID");
+            return;
+        }
+
+        try (Connection conn = new DBContext().getConnection()) {
+            String sql = "SELECT cv_name, cv_url FROM candidate_cvs WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, cvId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String fileName = rs.getString("cv_name");
+                String fileUrl = rs.getString("cv_url");
+
+                String absolutePath = getServletContext().getRealPath("/") + fileUrl;
+
+                File file = new File(absolutePath);
+                if (!file.exists()) {
+                    response.getWriter().println("File not found");
+                    return;
+                }
+
+                response.setContentType("application/octet-stream");
+                response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+                FileInputStream inStream = new FileInputStream(file);
+                OutputStream outStream = response.getOutputStream();
+
                 byte[] buffer = new byte[4096];
-                int bytesRead;
+                int bytesRead = -1;
                 while ((bytesRead = inStream.read(buffer)) != -1) {
                     outStream.write(buffer, 0, bytesRead);
                 }
+
+                inStream.close();
+                outStream.close();
+
+            } else {
+                response.getWriter().println("CV not found");
             }
-            
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid application ID");
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
         }
     }
 }

@@ -1,5 +1,5 @@
+<%@page import="dal.DBContext"%>
 <%@page import="model.User"%>
-<%@page import="connectDB.DBContext"%>
 <%@page import="java.sql.*" %>
 
 <!doctype html>
