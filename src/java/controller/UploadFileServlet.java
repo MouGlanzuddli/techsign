@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-@WebServlet("/UploadFileServlet")
 @MultipartConfig
 public class UploadFileServlet extends HttpServlet {
     @Override

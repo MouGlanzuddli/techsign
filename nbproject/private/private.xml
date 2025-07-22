@@ -3,14 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/PRJ301/TechSign/web/views/components/sidebar.jsp</file>
-            <file>file:/D:/PRJ301/TechSign/web/companyHome.jsp</file>
-            <file>file:/D:/PRJ301/TechSign/web/assets/js/bootstrap.min.js</file>
-            <file>file:/D:/PRJ301/TechSign/web/assets/js/chatbox.js</file>
-            <file>file:/D:/PRJ301/TechSign/web/views/sections/statistics-reports.jsp</file>
-            <file>file:/D:/PRJ301/TechSign/web/assets/css/chatbox.css</file>
-            <file>file:/D:/PRJ301/TechSign/web/adminHome.jsp</file>
-            <file>file:/D:/PRJ301/TechSign/web/candidateHome.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/assets/js/admin.js</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/service/LoginHistoryService.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/companyHome.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/dao/RoleAssignmentDAO.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/index.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/check_session.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/views/components/chatbox.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/controller/LoginHistoryServlet.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/dao/LoginHistoryDAO.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/controller/UserListServlet.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/views/components/sidebar.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/controller/SignupServlet.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/META-INF/context.xml</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/controller/TestUserServlet.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/util/JaversProvider.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/adminHome.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/nbproject/build-impl.xml</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/assets/css/styles.css</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/controller/VerifyServlet.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/controller/UserServlet.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/util/DBConnection.java</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/web/candidateHome.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/NetBeansProjects/techsign/src/java/dao/UserDAO.java</file>
         </group>
     </open-files>
 </project-private>

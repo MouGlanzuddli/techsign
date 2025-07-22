@@ -31,6 +31,10 @@ import java.util.Date;
     public User(int id, int roleId, String email, String phone, String passwordHash,
                 String fullName, boolean isEmailVerified, boolean isPhoneVerified,
                 String avatarUrl, String status, Date createdAt, Date updatedAt) {
+        this(id, email, phone, passwordHash, fullName, avatarUrl);
+    }
+
+    public User(int id, String email, String phone, String passwordHash, String fullName, String avatarUrl) {
         this.id = id;
         this.roleId = roleId;
         this.email = email;

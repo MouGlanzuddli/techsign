@@ -6,8 +6,8 @@
 package controller;
 
 import java.sql.Connection;
-import dal.DBContext;
-import dal.UserDao;
+import dao.DBContext;
+import dao.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -25,7 +25,6 @@ import org.mindrot.jbcrypt.BCrypt;
  *
  * @author Admin
  */
-@WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
    
     /** 
@@ -97,14 +96,14 @@ public class LoginServlet extends HttpServlet {
                 int roleId = rs.getInt("role_id");
 
                 // Get user object from UserDao
-                User user = new UserDao(conn).login(email, password);
+                User user = new UserDAO(conn).login(email, password);
                 if (user != null) {
                     // User is authenticated, store in session
                     session.setAttribute("user", user);
 
                     // Ghi log vào user_sessions
                     try {
-                        dal.LoginDao loginDao = new dal.LoginDao(conn);
+                        dao.LoginDao loginDao = new dao.LoginDao(conn);
                         String sessionToken = session.getId();
                         loginDao.logUserSession(user.getId(), sessionToken);
                     } catch (Exception ex) {

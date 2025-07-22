@@ -1,7 +1,7 @@
 package controller;
 
-import dal.DBContext;
-import dal.StatisticsDAO;
+import dao.DBContext;
+import dao.StatisticsDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;

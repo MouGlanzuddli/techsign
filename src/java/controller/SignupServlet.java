@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import dal.DBContext;
-import dal.UserDao;
+import dao.DBContext;
+import dao.UserDAO;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +19,6 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * @author MouGlanzuddli
  */
-@WebServlet(name = "SignupServlet", urlPatterns = {"/SignupServlet"})
 public class SignupServlet extends HttpServlet {
 
     @Override
@@ -85,7 +84,7 @@ public class SignupServlet extends HttpServlet {
         Connection conn = null;
         try {
             conn = new DBContext().getConnection();
-            UserDao userDao = new UserDao(conn);
+            UserDAO userDao = new UserDAO(conn);
 
           if (userDao.getUserById(userid) != null) {
                 request.setAttribute("registerError", "User ID already exists.");

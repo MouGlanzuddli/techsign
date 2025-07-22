@@ -1,7 +1,7 @@
 package controller;
 
-import dal.AuditDao;
-import dal.DBContext;
+import dao.AuditDao;
+import dao.DBContext;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
-@WebServlet("/activityReport")
 public class ActivityReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

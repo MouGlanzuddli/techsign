@@ -1,6 +1,6 @@
 package controller;
 
-import dal.MessageDao;
+import dao.MessageDao;
 import model.Message;
 import model.User;
 import jakarta.servlet.ServletException;
@@ -15,14 +15,13 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/ChatHistoryServlet")
 public class ChatHistoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        try (Connection conn = dal.DBContext.getConnection()) {
+        try (Connection conn = dao.DBContext.getConnection()) {
             // Lấy current user từ session
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("user") == null) {

@@ -1,7 +1,7 @@
 package controller;
 
-import dal.JobPostDao;
-import dal.DBContext;
+import dao.JobPostDao;
+import dao.DBContext;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
-@WebServlet("/jobReport")
 public class JobReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
