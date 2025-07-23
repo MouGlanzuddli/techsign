@@ -739,9 +739,19 @@ window.addEventListener('hashchange', loadSectionFromHash);
 
 // Modal logic for SPA using Bootstrap Modal API
 window.openModal = function() {
+  // Check if Bootstrap is loaded properly
+  if (typeof bootstrap === 'undefined' || !bootstrap.Modal) {
+    console.error('Bootstrap Modal not loaded!');
+    return;
+  }
+  
   var modalEl = document.getElementById('userAddModal');
   if (modalEl) {
-    var myModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    // Initialize with proper options
+    var myModal = new bootstrap.Modal(modalEl, {
+      backdrop: 'static',
+      keyboard: false
+    });
     myModal.show();
   } else {
     console.error('userAddModal not found');

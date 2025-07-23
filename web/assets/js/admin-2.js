@@ -1480,68 +1480,104 @@ function deleteJob(jobId) {
     });
 } 
 
+document.addEventListener('DOMContentLoaded', function() {
+    populateUserManagementTable(loginHistoryData);
+});
+
 // Add this function to the end of admin.js file
 function populateUserManagementTable(loginHistory) {
     console.log('populateUserManagementTable called with:', loginHistory);
     
-    const tableBody = document.getElementById('loginHistoryTableBody');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const tableContainer = document.getElementById('tableContainer');
+    // Ensure required elements exist or create them
+    const ensureElement = (id, tagName = 'div', parent = document.body) => {
+        let el = document.getElementById(id);
+        if (!el) {
+            el = document.createElement(tagName);
+            el.id = id;
+            parent.appendChild(el);
+            console.warn(`Created missing element: #${id}`);
+        }
+        return el;
+    };
+
+    // Get or create required elements
+    const tableContainer = ensureElement('tableContainer');
+    const loadingSpinner = ensureElement('loadingSpinner');
     
+    // Create full table structure if missing
+    let tableBody = document.getElementById('loginHistoryTableBody');
     if (!tableBody) {
-        console.error('loginHistoryTableBody not found!');
-        return;
+        const tableHTML = `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                        <th>Login Time</th>
+                        <th>IP Address</th>
+                        <th>Device Info</th>
+                    </tr>
+                </thead>
+                <tbody id="loginHistoryTableBody"></tbody>
+            </table>
+        `;
+        tableContainer.innerHTML = tableHTML;
+        tableBody = document.getElementById('loginHistoryTableBody');
     }
-    
-    // Hide loading spinner and show table
-    if (loadingSpinner) {
-        loadingSpinner.style.display = 'none';
-        console.log('Loading spinner hidden');
-    }
-    
-    if (tableContainer) {
-        tableContainer.style.display = 'block';
-        console.log('Table container shown');
-    }
+
+    // UI State Management
+    loadingSpinner.style.display = 'none';
+    tableContainer.style.display = 'block';
     
     // Clear existing data
     tableBody.innerHTML = '';
     
-    if (loginHistory && loginHistory.length > 0) {
-        console.log('Populating table with', loginHistory.length, 'records');
-        
-        loginHistory.forEach((history, index) => {
-            const row = document.createElement('tr');
-            
-            // Format the login time
-            let formattedTime = 'N/A';
-            try {
-                const loginTime = new Date(history.loginTime);
-                formattedTime = loginTime.toLocaleString('vi-VN');
-            } catch (e) {
-                console.error('Error formatting date:', e);
-                formattedTime = history.loginTime || 'N/A';
-            }
-            
-            row.innerHTML = `
-                <td>${history.id || '-'}</td>
-                <td>${history.userId || '-'}</td>
-                <td>${formattedTime}</td>
-                <td>${history.ipAddress || '-'}</td>
-                <td>${history.deviceInfo || '-'}</td>
-            `;
-            
-            tableBody.appendChild(row);
-        });
-        
-        console.log('Table populated successfully');
-    } else {
+    // Handle empty data case
+    if (!loginHistory || loginHistory.length === 0) {
         console.log('No login history data, showing empty message');
-        // Show no data message
-        const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="5" style="text-align:center;">Không có dữ liệu lịch sử truy cập.</td>';
-        tableBody.appendChild(row);
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-muted py-3">
+                    Không có dữ liệu lịch sử truy cập.
+                </td>
+            </tr>
+        `;
+        return;
     }
+
+    // Populate table with data
+    console.log(`Populating table with ${loginHistory.length} records`);
+    
+    const fragment = document.createDocumentFragment();
+    
+    loginHistory.forEach(history => {
+        const row = document.createElement('tr');
+        
+        // Format login time with error handling
+        let formattedTime = 'N/A';
+        try {
+            const loginTime = new Date(history.loginTime);
+            if (!isNaN(loginTime)) {
+                formattedTime = loginTime.toLocaleString('vi-VN');
+            }
+        } catch (e) {
+            console.error('Error formatting date:', e);
+            formattedTime = history.loginTime || 'N/A';
+        }
+        
+        row.innerHTML = `
+            <td>${history.id || '-'}</td>
+            <td>${history.userId || '-'}</td>
+            <td>${formattedTime}</td>
+            <td>${history.ipAddress || '-'}</td>
+            <td>${history.deviceInfo || '-'}</td>
+        `;
+        
+        fragment.appendChild(row);
+    });
+    
+    tableBody.appendChild(fragment);
+    console.log('Table populated successfully');
 }
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('editUserForm');

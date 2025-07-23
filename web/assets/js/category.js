@@ -4,18 +4,24 @@
  */
 
 // Global variables
+let categoryModal;
 let editingId = null;
-let categories = [];
-let categoryModal = null;
+let mode = 'add'; // 'add' or 'edit'
+
 
 /**
  * Initialize category management functionality
  */
+
 function initCategoryManagement() {
-    console.log('Initializing category management...');
     const modalElement = document.getElementById('categoryModal');
+    console.log('modalElement:', modalElement);
+    console.log('bootstrap.Modal:', window.bootstrap?.Modal);
     if (modalElement && window.bootstrap && bootstrap.Modal) {
         categoryModal = new bootstrap.Modal(modalElement);
+        console.log('categoryModal initialized:', categoryModal);
+    } else {
+        console.warn('Category modal or Bootstrap Modal not found');
     }
     
     const addBtn = document.getElementById('addCategoryBtn');
@@ -46,14 +52,19 @@ function initCategoryManagement() {
  * Show the add category form
  */
 function showAddForm() {
+    mode = 'add';
+    editingId = null;
+
+    resetForm(); // Reset trước để tránh đè dữ liệu cũ
+
     const modalTitle = document.getElementById('categoryModalLabel');
     if (modalTitle) {
         modalTitle.textContent = 'Thêm danh mục mới';
     }
-    resetForm();
-    populateParentDropdown();
+
     categoryModal.show();
 }
+
 
 /**
  * Reset the form
@@ -63,7 +74,10 @@ function resetForm() {
     if (form) {
         form.reset();
     }
+
     editingId = null;
+    
+
     hideIconPreview();
 }
 
@@ -108,7 +122,7 @@ function handleFormSubmit(e) {
     
     const form = e.target;
     const formData = new FormData(form);
-    const action = editingId ? 'update' : 'add';
+    const action = mode === 'edit' ? 'update' : 'add';
     
     // Add action to form data
     formData.append('action', action);
@@ -218,47 +232,63 @@ function populateCategoriesTable(categoriesData) {
     tbody.innerHTML = html;
     
     // Initialize drag and drop functionality
-    initDragAndDrop();
+//    initDragAndDrop();
 }
 
 /**
  * Edit a category
  */
+
+document.addEventListener('DOMContentLoaded', () => {
+    initCategoryManagement();
+});
 function editCategory(categoryId) {
+    if (!categoryModal) {
+        console.error('categoryModal chưa được khởi tạo! Vui lòng gọi initCategoryManagement() trước.');
+        return;
+    }
+
     const category = categories.find(cat => cat.id === categoryId);
     if (!category) {
         showErrorMessage('Không tìm thấy danh mục');
         return;
     }
-    
+
+    mode = 'edit';
+    editingId = category.id;
+
+    // Đặt dữ liệu sau khi reset
+    resetForm();
+
     const modalTitle = document.getElementById('categoryModalLabel');
     const categoryIdInput = document.getElementById('categoryId');
     const categoryNameInput = document.getElementById('categoryName');
     const categoryDescriptionInput = document.getElementById('categoryDescription');
     const categoryIconUrlInput = document.getElementById('categoryIconUrl');
-    
+
     if (modalTitle && categoryIdInput && categoryNameInput && categoryDescriptionInput && categoryIconUrlInput) {
-        editingId = category.id;
         modalTitle.textContent = 'Chỉnh sửa danh mục';
         categoryIdInput.value = category.id;
         categoryNameInput.value = category.name;
         categoryDescriptionInput.value = category.description || '';
         categoryIconUrlInput.value = category.iconUrl || '';
-        
-        // Show icon preview if exists
-        if (category.iconUrl) {
-            const iconPreview = document.getElementById('iconPreview');
-            const previewImage = document.getElementById('previewImage');
-            if (iconPreview && previewImage) {
-                previewImage.src = category.iconUrl;
-                iconPreview.style.display = 'block';
-            }
+
+        // Preview icon
+        const iconPreview = document.getElementById('iconPreview');
+        const previewImage = document.getElementById('previewImage');
+        if (category.iconUrl && iconPreview && previewImage) {
+            previewImage.src = category.iconUrl;
+            iconPreview.style.display = 'block';
+        } else {
+            hideIconPreview();
         }
-        
-        populateParentDropdown(category.id, category.parentId);
+
+        // Mở modal
         categoryModal.show();
     }
 }
+
+
 
 /**
  * Delete a category
@@ -300,75 +330,75 @@ function deleteCategory(categoryId) {
 /**
  * Initialize drag and drop functionality for reordering
  */
-function initDragAndDrop() {
-    const tbody = document.getElementById('categoriesTableBody');
-    if (!tbody) return;
-    
-    let dragSrcEl = null;
-    
-    tbody.querySelectorAll('tr').forEach(row => {
-        row.draggable = true;
-        
-        row.addEventListener('dragstart', function(e) {
-            dragSrcEl = this;
-            e.dataTransfer.effectAllowed = 'move';
-            this.classList.add('table-active');
-        });
-        
-        row.addEventListener('dragend', function() {
-            this.classList.remove('table-active');
-        });
-        
-        row.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-        });
-        
-        row.addEventListener('drop', function(e) {
-            e.preventDefault();
-            if (dragSrcEl !== this) {
-                tbody.insertBefore(dragSrcEl, this.nextSibling);
-                saveNewOrder();
-            }
-        });
-    });
-}
+//function initDragAndDrop() {
+//    const tbody = document.getElementById('categoriesTableBody');
+//    if (!tbody) return;
+//    
+//    let dragSrcEl = null;
+//    
+//    tbody.querySelectorAll('tr').forEach(row => {
+//        row.draggable = true;
+//        
+//        row.addEventListener('dragstart', function(e) {
+//            dragSrcEl = this;
+//            e.dataTransfer.effectAllowed = 'move';
+//            this.classList.add('table-active');
+//        });
+//        
+//        row.addEventListener('dragend', function() {
+//            this.classList.remove('table-active');
+//        });
+//        
+//        row.addEventListener('dragover', function(e) {
+//            e.preventDefault();
+//            e.dataTransfer.dropEffect = 'move';
+//        });
+//        
+//        row.addEventListener('drop', function(e) {
+//            e.preventDefault();
+//            if (dragSrcEl !== this) {
+//                tbody.insertBefore(dragSrcEl, this.nextSibling);
+//                saveNewOrder();
+//            }
+//        });
+//    });
+//}
 
 /**
  * Save the new order after drag and drop
  */
-function saveNewOrder() {
-    const tbody = document.getElementById('categoriesTableBody');
-    if (!tbody) return;
-    
-    const newOrder = Array.from(tbody.querySelectorAll('tr'))
-        .map(tr => tr.getAttribute('data-id'))
-        .filter(id => id !== null);
-    
-    if (newOrder.length === 0) return;
-    
-    const basePath = getBasePath();
-    fetch(basePath + 'category', {
-        method: 'POST',
-        body: new URLSearchParams({
-            action: 'reorder',
-            order: newOrder.join(',')
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('HTTP error ' + response.status);
-        return response.json();
-    })
-    .then(data => {
-        if (!data.success) {
-            showErrorMessage(data.message || 'Lỗi khi sắp xếp lại danh mục');
-        }
-    })
-    .catch(error => {
-        console.error('Error reordering categories:', error);
-        showErrorMessage('Lỗi khi sắp xếp lại danh mục');
-    });
-}
+//function saveNewOrder() {
+//    const tbody = document.getElementById('categoriesTableBody');
+//    if (!tbody) return;
+//    
+//    const newOrder = Array.from(tbody.querySelectorAll('tr'))
+//        .map(tr => tr.getAttribute('data-id'))
+//        .filter(id => id !== null);
+//    
+//    if (newOrder.length === 0) return;
+//    
+//    const basePath = getBasePath();
+//    fetch(basePath + 'category', {
+//        method: 'POST',
+//        body: new URLSearchParams({
+//            action: 'reorder',
+//            order: newOrder.join(',')
+//        })
+//    })
+//    .then(response => {
+//        if (!response.ok) throw new Error('HTTP error ' + response.status);
+//        return response.json();
+//    })
+//    .then(data => {
+//        if (!data.success) {
+//            showErrorMessage(data.message || 'Lỗi khi sắp xếp lại danh mục');
+//        }
+//    })
+//    .catch(error => {
+//        console.error('Error reordering categories:', error);
+//        showErrorMessage('Lỗi khi sắp xếp lại danh mục');
+//    });
+//}
 
 /**
  * Utility function to escape HTML
@@ -418,27 +448,34 @@ function showErrorMessage(message) {
     }
 }
 
-function populateParentDropdown(currentId = null, selectedParentId = null) {
-    const select = document.getElementById('parentCategory');
-    if (!select) return;
-    let html = '<option value="">(Không có - Danh mục gốc)</option>';
-    categories.forEach(cat => {
-        if (!currentId || cat.id !== currentId) {
-            html += `<option value="${cat.id}"${selectedParentId == cat.id ? ' selected' : ''}>${cat.name}</option>`;
-        }
-    });
-    select.innerHTML = html;
+//function populateParentDropdown(currentId = null, selectedParentId = null) {
+//    const select = document.getElementById('parentCategory');
+//    if (!select) return;
+//    let html = '<option value="">(Không có - Danh mục gốc)</option>';
+//    categories.forEach(cat => {
+//        if (!currentId || cat.id !== currentId) {
+//            html += `<option value="${cat.id}"${selectedParentId == cat.id ? ' selected' : ''}>${cat.name}</option>`;
+//        }
+//    });
+//    select.innerHTML = html;
+//}
+
+function loadCategories() {
+    const basePath = getBasePath();
+    return fetch(basePath + 'category?action=list')
+        .then(response => {
+            if (!response.ok) throw new Error('HTTP error ' + response.status);
+            return response.json();
+        });
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Small delay to ensure all elements are loaded
-    setTimeout(initCategoryManagement, 100);
-});
-
-// Also initialize immediately if DOM is already loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCategoryManagement);
-} else {
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Khởi tạo modal & sự kiện
     initCategoryManagement();
-}
+
+    // 2. Tải danh sách categories và hiển thị bảng
+    loadCategories()
+        .then(categories => populateCategoriesTable(categories))
+        .catch(error => console.error('Error loading categories:', error));
+});

@@ -133,7 +133,7 @@
     </div>
 
     <!-- Edit User Modal (AJAX content will be loaded here) -->
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="editUserModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <!-- AJAX-loaded content goes here -->
@@ -147,7 +147,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/admin.js"></script>
+    <script src="${pageContext.request.contextPath}/js/admin (2).js"></script>
 
     
 </html>

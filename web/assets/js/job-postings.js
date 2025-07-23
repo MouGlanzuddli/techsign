@@ -25,10 +25,10 @@ function loadCompanies() {
             <i class="fas fa-spinner"></i>
             <p>Đang tải danh sách công ty...</p>
         </div>
-    `;
+    `
 
     // Try to fetch real data (replace with your actual API call if needed)
-    fetch('/adminscreen/CompanyPostingServlet?action=getCompanies')
+    fetch('/TechSign/CompanyPostingServlet?action=getCompanies')
         .then(response => response.json())
         .then(data => {
             if (data.companies && data.companies.length > 0) {
@@ -93,7 +93,7 @@ function loadJobsForCompany(companyId) {
             <p>Đang tải tin tuyển dụng...</p>
         </div>
     `;
-    fetch(`/adminscreen/CompanyPostingServlet?action=getJobsByCompany&companyId=${companyId}`)
+    fetch(`/TechSign/CompanyPostingServlet?action=getJobsByCompany&companyId=${companyId}`)
         .then(response => response.json())
         .then(data => {
             if (data.jobs && data.jobs.length > 0) {

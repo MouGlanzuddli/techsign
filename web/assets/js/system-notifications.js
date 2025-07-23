@@ -265,34 +265,49 @@ function waitForSystemNotificationsInit() {
 document.addEventListener('DOMContentLoaded', waitForSystemNotificationsInit);
 
 // Expose a global function for section loader
-document.addEventListener('DOMContentLoaded', () => {
-  waitForSystemNotificationsInit();
-
-  // DEBUG check (wrapped correctly now)
-  (function() {
-    const modalEl = document.getElementById('editNotificationModal');
-    if (modalEl) {
-      console.log('[CHECK] Modal editNotificationModal đã tồn tại trong DOM.');
-    } else {
-      console.error('[CHECK] Modal editNotificationModal KHÔNG tồn tại trong DOM!');
-    }
-
-    const ids = [
-      'edit-noti-id',
-      'edit-noti-title',
-      'edit-noti-type',
-      'edit-noti-message',
-      'edit-noti-auto-dismiss',
-      'edit-noti-duration',
-      'edit-noti-pinned'
-    ];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        console.log(`[CHECK] Element với id: ${id} đã tồn tại.`);
-      } else {
-        console.error(`[CHECK] Element với id: ${id} KHÔNG tồn tại!`);
+window.loadNotificationsData = function() {
+  const section = document.getElementById('system-notifications');
+  if (!section) return;
+  const listContainer = section.querySelector('#notificationListContainer');
+  fetch('notifications?action=ajax')
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP error ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      renderNotificationList(data.pinnedNotifications  [], data.notifications  []);
+    })
+    .catch(error => {
+      console.error('Error loading notifications:', error);
+      if (listContainer) {
+        listContainer.innerHTML = '<div class="alert alert-danger">Lỗi khi tải thông báo</div>';
       }
     });
-  })();
-});
+}
+
+// DEBUG: Kiểm tra modal và các input trong DOM
+(function() {
+  const modalEl = document.getElementById('editNotificationModal');
+  if (modalEl) {
+    console.log('[CHECK] Modal editNotificationModal đã tồn tại trong DOM.');
+  } else {
+    console.error('[CHECK] Modal editNotificationModal KHÔNG tồn tại trong DOM!');
+  }
+  const ids = [
+    'edit-noti-id',
+    'edit-noti-title',
+    'edit-noti-type',
+    'edit-noti-message',
+    'edit-noti-auto-dismiss',
+    'edit-noti-duration',
+    'edit-noti-pinned'
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      console.log([CHECK] Element với id: ${id} đã tồn tại.);
+    } else {
+      console.error([CHECK] Element với id: ${id} KHÔNG tồn tại!);
+    }
+  });
+})();

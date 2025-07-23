@@ -5,6 +5,16 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+    <title>Quản lý Danh Mục</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>   
+
+
 <div id="categories" class="section-container">
     <div class="section-header d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0"><i class="fas fa-list"></i> Quản lý danh mục</h2>
@@ -105,5 +115,8 @@
     </div>
 </div>
 
-<script src="/assets/js/category.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/category.js"></script>
 
+
+</html>

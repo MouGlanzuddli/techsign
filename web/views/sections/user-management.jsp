@@ -1,195 +1,150 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<jsp:include page="addUser.jsp" />
-
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-<style>
-    .header-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background-color: #f9fafb;
-        padding: 16px;
-        border-radius: 8px;
-        max-width: 800px;
-        margin: 20px auto;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .search-input {
-        flex-grow: 1;
-        padding: 10px 12px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        outline: none;
-        transition: border-color 0.2s;
-    }
-
-    .search-input:focus {
-        border-color: #1e88e5;
-    }
-
-    .btn-add {
-        background-color: #1e88e5;
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        font-size: 14px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .btn-add:hover {
-        background-color: #1565c0;
-    }
-</style>
-</head>
-<h2>Quản lý Người dùng</h2>
-
-<!-- Quản lý tài khoản -->
-<section id="user-accounts" class="user-management">
-    <div class="header-bar">
-    <input type="text" class="search-input" name="searchQuery" placeholder="Tìm tài khoản theo tên hoặc email" />
-    <button class="btn-add" onclick="searchUser()">Tìm kiếm</button>
-   <button class="btn-add" onclick="openModal()">+ Thêm tài khoản</button>
-
-</div>
-
-    <table class="user-table">
-        <thead>
-            <tr>
-                <th>Tên nhân viên</th>
-                <th>Quyền truy cập</th>
-                <th>Trạng thái</th>
-                <th>Ngày tạo</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <div class="user-info">
-                        <div class="avatar bg-green">A</div>
-                        <div>
-                            <div class="name">Nguyễn Văn A</div>
-                            <div class="email">nguyenvana@mail.com</div>
-                        </div>
-                    </div>
-                </td>
-                <td>Admin<br><span class="note">(trừ cài app, tạo nhân viên)</span></td>
-                <td class="status-active">Hoạt động</td>
-                <td>Hôm qua lúc 09:34 SA</td>
-                <td class="actions">
-                    <i class="fas fa-edit edit-btn"></i>
-                    <i class="fas fa-trash delete-btn"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="user-info">
-                        <div class="avatar bg-blue">B</div>
-                        <div>
-                            <div class="name">Trần Thị B</div>
-                            <div class="email">tranthib@mail.com</div>
-                        </div>
-                    </div>
-                </td>
-                <td>Người dùng</td>
-                <td class="status-invite">Khóa</td>
-                <td>27/10/2023 05:22 CH</td>
-                <td class="actions">
-                    <i class="fas fa-edit edit-btn"></i>
-                    <i class="fas fa-trash delete-btn"></i>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Người dùng</title>
     
-</section>
-<script src="${pageContext.request.contextPath}/modal.js"></script>
-<!-- Gán quyền tài khoản 
-<section id="permissions">
-    <h3>Gán Quyền Tài khoản</h3>
-    <div class="form-container">
-        <h4>Gán quyền cho người dùng</h4>
-        <label>Chọn người dùng</label>
-        <select>
-            <option value="">Chọn người dùng...</option>
-            <option value="1001">Nguyễn Văn A</option>
-            <option value="1002">Trần Thị B</option>
-        </select>
-        <label>Quyền</label>
-        <select multiple>
-            <option value="read">Đọc</option>
-            <option value="write">Ghi</option>
-            <option value="admin">Quản trị</option>
-            <option value="moderate">Kiểm duyệt</option>
-        </select>
-        <button>Gán quyền</button>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <link rel="stylesheet" href="/assets/css/admin.css"> 
+    
+    <link rel="stylesheet" href="/assets/css/modal_styles.css"> 
+    <link rel="stylesheet" href="/assets/css/ui-common.css"> 
+
+    <style>
+        /* Inline styles from your previous code */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <h2 class="mb-4"><i class="fas fa-history me-2"></i>Quản lý Người dùng</h2>
+        <section id="user-management">
+            <div class="d-flex align-items-center mb-3" style="gap: 16px;">
+                <h2 class="section-title mb-0">
+                    <i class="fas fa-history"></i> Lịch sử Truy cập
+                </h2>
+                <button class="btn btn-outline" id="reloadHistoryBtn" type="button" title="Tải lại lịch sử">
+                    <i class="fas fa-sync"></i> Tải lại
+                </button>
+            </div>
+            <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Đang tải dữ liệu lịch sử truy cập...</p>
+            </div>
+            <div class="table-container" id="tableContainer">
+                <table class="access-history-table" id="loginHistoryTable">
+                    <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User ID</th>
+                                <th>Thời gian</th>
+                                <th>IP Address</th>
+                                <th>Device Info</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loginHistoryTableBody">
+                        <!-- Rows here, server-side loop or JS render -->
+                        </tbody>
+                    </table>
+            </div>
+        </section>
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên</th>
-                <th>Quyền</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1001</td>
-                <td>Nguyễn Văn A</td>
-                <td>Admin, Đọc, Ghi</td>
-                <td>
-                    <button class="action-btn edit-btn">Sửa</button>
-                    <button class="action-btn delete-btn">Xóa</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</section>-->
-<!-- Lịch sử truy cập -->
-<section id="access-history">
-    <h3>Lịch sử Truy cập</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên người dùng</th>
-                <th>Thời gian</th>
-                <th>IP</th>
-                <th>Hoạt động</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1001</td>
-                <td>Nguyễn Văn A</td>
-                <td>2025-06-14 10:00</td>
-                <td>192.168.1.1</td>
-                <td>Đăng nhập</td>
-            </tr>
-            <tr>
-                <td>1002</td>
-                <td>Trần Thị B</td>
-                <td>2025-06-14 09:45</td>
-                <td>192.168.1.2</td>
-                <td>Đăng xuất</td>
-            </tr>
-        </tbody>
-    </table>
-</section>
-<!-- Hồ sơ cá nhân -->
-<section id="profile">
-    <h3>Hồ sơ cá nhân</h3>
-    <!-- UI block for profile (placeholder) -->
-    <p>Chức năng đang phát triển...</p>
-</section>
-<!-- Đăng nhập -->
-<section id="login">
-    <h3>Đăng nhập</h3>
-    <!-- UI block for login (placeholder) -->
-    <p>Chức năng đang phát triển...</p>
-</section> 
+    <script>
+        // Function to populate the login history table
+        function populateUserManagementTable(loginHistory) {
+            const tableBody = document.getElementById('loginHistoryTableBody');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const tableContainer = document.getElementById('tableContainer');
+            
+            if (!tableBody) return;
+            
+            // Hide loading spinner and show table
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            if (tableContainer) tableContainer.style.display = 'block';
+            
+            // Clear existing data
+            tableBody.innerHTML = '';
+            
+            if (loginHistory && loginHistory.length > 0) {
+                loginHistory.forEach(history => {
+                    const row = document.createElement('tr');
+                    
+                    // Format the login time
+                    const loginTime = new Date(history.loginTime);
+                    const formattedTime = loginTime.toLocaleString('vi-VN');
+                    
+                    row.innerHTML = `
+                        <td>${history.id}</td>
+                        <td>${history.userId}</td>
+                        <td>${formattedTime}</td>
+                        <td>${history.ipAddress || '-'}</td>
+                        <td>${history.deviceInfo || '-'}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // Show no data message
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="5" style="text-align:center;">Không có dữ liệu lịch sử truy cập.</td>';
+                tableBody.appendChild(row);
+            }
+        }
+    </script>
+    <script>
+// Reload button handler for access history
+const reloadBtn = document.getElementById('reloadHistoryBtn');
+if (reloadBtn) {
+  reloadBtn.addEventListener('click', function() {
+    // Show spinner, hide table
+    const spinner = document.getElementById('loadingSpinner');
+    const tableContainer = document.getElementById('tableContainer');
+    if (spinner) spinner.style.display = 'flex';
+    if (tableContainer) tableContainer.style.display = 'none';
+    // Use section loader if available
+    if (window.sectionLoader && typeof sectionLoader.loadUserManagementData === 'function') {
+      sectionLoader.loadUserManagementData();
+    } else if (typeof loadUserManagementData === 'function') {
+      loadUserManagementData();
+    } else {
+      // fallback: reload page
+      window.location.reload();
+    }
+  });
+        }
+    </script>
+</body>
+</html>

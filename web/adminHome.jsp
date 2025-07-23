@@ -6,9 +6,14 @@
         <meta charset="UTF-8" />
         <title>Admin Dashboard - Hệ thống tuyển dụng</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-        <link href="<c:url value='assets/css/plugins/admin.css'/>" rel="stylesheet" />
-        <link href="<c:url value='assets/css/plugins/chatbox.css'/>" rel="stylesheet" /> <%-- Link to chatbox.css --%>
-
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- In your <head> section -->
+<link href="${pageContext.request.contextPath}/assets/css/plugins/admin.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/css/plugins/chatbox.css" rel="stylesheet"> 
+<link href="${pageContext.request.contextPath}/assets/css/plugins/ui-common.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/css/plugins/content.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/css/plugins/job-postings.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/css/statistics-reports.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/statistics-reports.css">
 
 
@@ -123,23 +128,133 @@
                 </div>
             </div>
         </div>
+        
+        
+        <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Thêm danh mục mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="categoryForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="categoryId" name="id">
+                        <div class="mb-3">
+                            <label for="parentCategory" class="form-label">Danh mục cha</label>
+                            <select class="form-select" id="parentCategory" name="parent_id">
+                                <option value="">(Không có - Danh mục gốc)</option>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label">Tên danh mục <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="categoryName" name="name" required 
+                                   placeholder="Nhập tên danh mục">
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryDescription" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="categoryDescription" name="description" 
+                                      rows="3" placeholder="Nhập mô tả danh mục"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryIconUrl" class="form-label">Icon URL</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="categoryIconUrl" name="iconUrl" 
+                                       placeholder="https://example.com/icon.png">
+                                <button class="btn btn-outline-secondary" type="button" id="previewIconBtn">
+                                    <i class="fas fa-eye"></i> Xem trước
+                                </button>
+                            </div>
+                            <div id="iconPreview" class="mt-2" style="display: none;">
+                                <img id="previewImage" src="" alt="Icon preview" style="width: 32px; height: 32px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Lưu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <div class="modal fade" id="editNotificationModal" tabindex="-1" aria-labelledby="editNotificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content p-2">
+        <form id="editNotificationForm" class="needs-validation" novalidate>
+          <div class="modal-header pb-2 mb-1">
+            <h5 class="modal-title d-flex align-items-center gap-2" id="editNotificationModalLabel"><i class="fas fa-edit"></i> Sửa Thông Báo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body pt-2 pb-1">
+            <input type="hidden" id="edit-noti-id" name="id">
+            <div class="mb-2">
+              <label for="edit-noti-title" class="form-label mb-1">Tiêu đề</label>
+              <input type="text" class="form-control form-control-sm" id="edit-noti-title" name="title" required>
+            </div>
+            <div class="mb-2">
+              <label for="edit-noti-type" class="form-label mb-1">Loại</label>
+              <select class="form-select form-select-sm" id="edit-noti-type" name="type" required>
+                <option value="system">Info</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="security">Security</option>
+                <option value="update">Update</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label for="edit-noti-message" class="form-label mb-1">Nội dung</label>
+              <textarea class="form-control form-control-sm" id="edit-noti-message" name="message" rows="2" required></textarea>
+            </div>
+            <div class="form-check mb-1">
+              <input class="form-check-input" type="checkbox" id="edit-noti-auto-dismiss" name="auto_dismiss">
+              <label class="form-check-label" for="edit-noti-auto-dismiss">Tự động ẩn</label>
+            </div>
+            <div class="mb-1">
+              <label for="edit-noti-duration" class="form-label mb-1">Thời gian (ms)</label>
+              <input type="number" class="form-control form-control-sm" id="edit-noti-duration" name="duration_ms" min="1000" value="5000">
+            </div>
+            <div class="form-check mb-1">
+              <input class="form-check-input" type="checkbox" id="edit-noti-pinned" name="pinned">
+              <label class="form-check-label" for="edit-noti-pinned">Ghim</label>
+            </div>
+            <div id="editNotificationMsg" class="mt-1"></div>
+          </div>
+          <div class="modal-footer pt-2 pb-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+        
+        
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script src="<c:url value='assets/js/admin.js'/>"></script>
-        <script src="<c:url value='assets/js/admin (2).js'/>"
-        <script src="<c:url value='/assets/js/chatbox.js'/>"></script>
-        <script src="<c:url value='/assets/js/job-postings.js'/>"></script>
-        <script src="<c:url value='/assets/js/section-loader.js'/>"></script>
-        <script src="<c:url value='/assets/js/alert.js'/>"></script>
-        <script src="<c:url value='/assets/js/content.js'/>"></script>
-        <script src="<c:url value='/assets/js/category.js'/>"></script>
-        <script src="/TechSign/assets/js/system-notifications.js"></script>
-        <script src="<c:url value='/assets/js/settings.js'/>"></script>
+
+<!-- Before closing </body> -->
+<script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/admin-2.js"></script> <!-- Fixed filename -->
+<script src="${pageContext.request.contextPath}/assets/js/chatbox.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/job-postings.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/section-loader.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/alert.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/content.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/category.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/system-notifications.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/settings.js"></script>
 
  <%-- Link to chatbox.js --%>
 
 <script src="${pageContext.request.contextPath}/assets/js/statistics-reports.js?v=<%= System.currentTimeMillis() %>"></script>
 
-               <script>s
+               <script>
   function updateDashboardStats() {
     console.log('Fetching dashboard stats...');
     fetch('<c:url value="/adminHome" />', {
