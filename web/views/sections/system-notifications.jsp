@@ -6,9 +6,9 @@
   <title>Quản lý Thông báo</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/assets/css/ui-common.css">
+  <link rel="stylesheet" href="css/ui-common.css">
 </head>
-<body>
+<body data-context-path="${pageContext.request.contextPath}">
   <section id="system-notifications">
     <div class="container-fluid py-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -24,7 +24,7 @@
       </ul>
       <div class="tab-content" id="notificationTabsContent">
         <div class="tab-pane fade show active" id="tab-demo" role="tabpanel" aria-labelledby="tab-demo-tab">
-          <div class="mb-4">
+<!--          <div class="mb-4">
             <h4><span style="color:#22c55e;font-size:1.2em;">●</span> Demo Thông Báo</h4>
             <p>Thử nghiệm các loại thông báo khác nhau và xem cách chúng hiển thị</p>
             <div class="btn-group mb-3 demo-notification-buttons" role="group">
@@ -33,7 +33,7 @@
               <button class="btn btn-warning">Cảnh Báo</button>
               <button class="btn btn-info">Thông Tin</button>
             </div>
-          </div>
+          </div>-->
           <form id="createNotificationForm" class="row g-3">
             <h4><i class="fas fa-plus-circle"></i> Tạo Thông Báo Mới</h4>
             <div class="col-md-6">
@@ -156,7 +156,10 @@ if (reloadBtn) {
   });
 }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/system-notifications.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/system-notifications.js"></script>
 </body>
 </html>
+
+
+
+

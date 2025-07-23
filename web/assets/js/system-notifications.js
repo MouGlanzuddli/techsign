@@ -1,3 +1,18 @@
+// ===== System Notifications JS =====
+// Helper to compute base path once
+let BASE_PATH = (window.sectionLoader && sectionLoader.basePath) || (document.body && document.body.dataset ? document.body.dataset.contextPath : '');
+// Fallback: derive from the first path segment in location.pathname (e.g. /TechSign)
+if (!BASE_PATH) {
+  const parts = window.location.pathname.split('/');
+  if (parts.length > 1 && parts[1]) BASE_PATH = '/' + parts[1];
+}
+if (!BASE_PATH.endsWith('/')) BASE_PATH += '/';
+function apiUrl(p) {
+  if (!p) return BASE_PATH;
+  const url = BASE_PATH.replace(/\/$/, '/') + p.replace(/^\/?/, '');
+  console.log('Constructed API URL:', url);
+  return url;
+}
 // Wait for #system-notifications to exist before running logic
 function initSystemNotifications() {
   const section = document.getElementById('system-notifications');
@@ -21,11 +36,14 @@ function initSystemNotifications() {
       for (let [k, v] of formData.entries()) {
         params.append(k, v);
       }
-      fetch('notifications', {
+      fetch(apiUrl('notifications'), {
         method: 'POST',
         body: params
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP error ' + res.status);
+        return res.json();
+      })
       .then(data => {
         if (data.success) {
           msgDiv.innerHTML = '<div class="alert alert-success mb-2"><i class="fas fa-check-circle"></i> Thông báo đã được tạo thành công!</div>';
@@ -41,6 +59,7 @@ function initSystemNotifications() {
         }
       })
       .catch(err => {
+        console.error('Error creating notification:', err);
         msgDiv.innerHTML = '<div class="alert alert-danger mb-2"><i class="fas fa-times-circle"></i> Lỗi kết nối máy chủ.</div>';
       });
     });
@@ -61,7 +80,7 @@ function initSystemNotifications() {
         type = 'update'; title = 'Thông Tin'; message = 'Đây là thông báo thông tin.';
       }
       if (type) {
-        fetch('notifications', {
+        fetch(apiUrl('notifications'), {
           method: 'POST',
           body: new URLSearchParams({
             title: title,
@@ -71,11 +90,19 @@ function initSystemNotifications() {
             duration_ms: 5000
           })
         })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP error ' + res.status);
+          return res.json();
+        })
         .then(data => {
           if (data.success) {
             loadNotifications();
+          } else {
+            console.error('Demo notification failed:', data.message);
           }
+        })
+        .catch(err => {
+          console.error('Error creating demo notification:', err);
         });
       }
     });
@@ -85,10 +112,21 @@ function initSystemNotifications() {
   loadNotifications();
 
   function loadNotifications() {
-    fetch('notifications?action=ajax')
-      .then(res => res.json())
+    console.log('Loading notifications...');
+    fetch(apiUrl('notifications?action=ajax'))
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP error ' + res.status);
+        return res.json();
+      })
       .then(data => {
+        console.log('Notifications data received:', data);
         renderNotificationList(data.pinnedNotifications || [], data.notifications || []);
+      })
+      .catch(err => {
+        console.error('Error loading notifications:', err);
+        if (listContainer) {
+          listContainer.innerHTML = '<div class="alert alert-danger">Lỗi khi tải thông báo: ' + err.message + '</div>';
+        }
       });
   }
 
@@ -155,68 +193,75 @@ function initSystemNotifications() {
         console.warn('[DEBUG] Không tìm thấy element với id:', id);
       }
     }
-    const listContainer = document.getElementById('notificationListContainer');
-    if (listContainer) {
-      listContainer.addEventListener('click', function(event) {
-        // Edit button
-        if (event.target.closest('.notif-edit-btn')) {
-          const btn = event.target.closest('.notif-edit-btn');
-          let card = btn.closest('.card');
-          if (!card) return;
-          const id = btn.getAttribute('data-id');
-          const title = card.querySelector('.fw-semibold')?.textContent || '';
-          const message = card.querySelector('.text-muted.small')?.textContent || '';
-          const badge = card.querySelector('.badge');
-          let type = 'system';
-          if (badge) {
-            const label = badge.textContent.trim();
-            if (label === 'Info') type = 'system';
-            else if (label === 'Maintenance') type = 'maintenance';
-            else if (label === 'Security') type = 'security';
-            else if (label === 'Update') type = 'update';
-          }
-          console.log('[DEBUG] (Delegation) Mở modal sửa thông báo:', {id, title, message, type});
-          safeSetValue('edit-noti-id', id);
-          safeSetValue('edit-noti-title', title);
-          safeSetValue('edit-noti-type', type);
-          safeSetValue('edit-noti-message', message);
-          safeSetChecked('edit-noti-auto-dismiss', true);
-          safeSetValue('edit-noti-duration', 5000);
-          safeSetChecked('edit-noti-pinned', card.classList.contains('border-primary'));
-          const msgDiv = document.getElementById('editNotificationMsg');
-          if (msgDiv) msgDiv.innerHTML = '';
-          else console.warn('[DEBUG] Không tìm thấy element với id: editNotificationMsg');
-          const modalEl = document.getElementById('editNotificationModal');
-          if (!modalEl) {
-            console.error('[DEBUG] Không tìm thấy modal editNotificationModal trong DOM!');
-          } else {
-            console.log('[DEBUG] Đã tìm thấy modal editNotificationModal, chuẩn bị show modal.');
-          }
-          const modal = new bootstrap.Modal(modalEl);
-          modal.show();
-        }
-        // Delete button
-        if (event.target.closest('.notif-delete-btn')) {
-          const btn = event.target.closest('.notif-delete-btn');
-          const id = btn.getAttribute('data-id');
-          if (confirm('Bạn có chắc chắn muốn xóa thông báo này?')) {
-            fetch('notifications', {
-              method: 'POST',
-              body: new URLSearchParams({ action: 'delete', id })
-            })
-            .then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                loadNotifications();
-              } else {
-                alert('Xóa thất bại: ' + (data.message || 'Lỗi không xác định'));
-              }
-            })
-            .catch(() => alert('Lỗi kết nối máy chủ.'));
-          }
-        }
-      });
+    if (!listContainer) {
+      console.error('listContainer not found for attachNotificationActions!');
+      return;
     }
+    listContainer.addEventListener('click', function(event) {
+      // Edit button
+      if (event.target.closest('.notif-edit-btn')) {
+        const btn = event.target.closest('.notif-edit-btn');
+        let card = btn.closest('.card');
+        if (!card) return;
+        const id = btn.getAttribute('data-id');
+        const title = card.querySelector('.fw-semibold')?.textContent || '';
+        const message = card.querySelector('.text-muted.small')?.textContent || '';
+        const badge = card.querySelector('.badge');
+        let type = 'system';
+        if (badge) {
+          const label = badge.textContent.trim();
+          if (label === 'Info') type = 'system';
+          else if (label === 'Maintenance') type = 'maintenance';
+          else if (label === 'Security') type = 'security';
+          else if (label === 'Update') type = 'update';
+        }
+        console.log('[DEBUG] (Delegation) Mở modal sửa thông báo:', {id, title, message, type});
+        safeSetValue('edit-noti-id', id);
+        safeSetValue('edit-noti-title', title);
+        safeSetValue('edit-noti-type', type);
+        safeSetValue('edit-noti-message', message);
+        safeSetChecked('edit-noti-auto-dismiss', true);
+        safeSetValue('edit-noti-duration', 5000);
+        safeSetChecked('edit-noti-pinned', card.classList.contains('border-primary'));
+        const msgDiv = document.getElementById('editNotificationMsg');
+        if (msgDiv) msgDiv.innerHTML = '';
+        else console.warn('[DEBUG] Không tìm thấy element với id: editNotificationMsg');
+        const modalEl = document.getElementById('editNotificationModal');
+        if (!modalEl) {
+          console.error('[DEBUG] Không tìm thấy modal editNotificationModal trong DOM!');
+        } else {
+          console.log('[DEBUG] Đã tìm thấy modal editNotificationModal, chuẩn bị show modal.');
+        }
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+      }
+      // Delete button
+      if (event.target.closest('.notif-delete-btn')) {
+        const btn = event.target.closest('.notif-delete-btn');
+        const id = btn.getAttribute('data-id');
+        if (confirm('Bạn có chắc chắn muốn xóa thông báo này?')) {
+          fetch(apiUrl('notifications'), {
+            method: 'POST',
+            body: new URLSearchParams({ action: 'delete', id })
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP error ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (data.success) {
+              loadNotifications();
+            } else {
+              alert('Xóa thất bại: ' + (data.message || 'Lỗi không xác định'));
+            }
+          })
+          .catch(err => {
+            console.error('Error deleting notification:', err);
+            alert('Lỗi kết nối máy chủ.');
+          });
+        }
+      }
+    });
 
     // Xử lý submit form sửa thông báo
     const editForm = document.getElementById('editNotificationForm');
@@ -231,11 +276,14 @@ function initSystemNotifications() {
           params.append(k, v);
         }
         params.append('action', 'edit');
-        fetch('notifications', {
+        fetch(apiUrl('notifications'), {
           method: 'POST',
           body: params
         })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP error ' + res.status);
+          return res.json();
+        })
         .then(data => {
           if (data.success) {
             msgDiv.innerHTML = '<div class="alert alert-success mb-2"><i class="fas fa-check-circle"></i> Đã cập nhật thông báo!</div>';
@@ -247,7 +295,8 @@ function initSystemNotifications() {
             msgDiv.innerHTML = '<div class="alert alert-danger mb-2"><i class="fas fa-times-circle"></i> ' + (data.message || 'Không thể cập nhật') + '</div>';
           }
         })
-        .catch(() => {
+        .catch(err => {
+          console.error('Error updating notification:', err);
           msgDiv.innerHTML = '<div class="alert alert-danger mb-2"><i class="fas fa-times-circle"></i> Lỗi kết nối máy chủ.</div>';
         });
       };
@@ -255,6 +304,7 @@ function initSystemNotifications() {
   }
   return true;
 }
+
 function waitForSystemNotificationsInit() {
   if (initSystemNotifications()) return;
   const observer = new MutationObserver(() => {
@@ -262,20 +312,24 @@ function waitForSystemNotificationsInit() {
   });
   observer.observe(document.body, { childList: true, subtree: true });
 }
+
 document.addEventListener('DOMContentLoaded', waitForSystemNotificationsInit);
+
+
 
 // Expose a global function for section loader
 window.loadNotificationsData = function() {
   const section = document.getElementById('system-notifications');
   if (!section) return;
   const listContainer = section.querySelector('#notificationListContainer');
-  fetch('notifications?action=ajax')
+  fetch(apiUrl('notifications?action=ajax'))
     .then(res => {
       if (!res.ok) throw new Error('HTTP error ' + res.status);
       return res.json();
     })
     .then(data => {
-      renderNotificationList(data.pinnedNotifications  [], data.notifications  []);
+      console.log('Notifications data received:', data);
+      renderNotificationList(data.pinnedNotifications || [], data.notifications || []);
     })
     .catch(error => {
       console.error('Error loading notifications:', error);
@@ -305,9 +359,9 @@ window.loadNotificationsData = function() {
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
-      console.log([CHECK] Element với id: ${id} đã tồn tại.);
+      console.log(`[CHECK] Element với id: ${id} đã tồn tại.`);
     } else {
-      console.error([CHECK] Element với id: ${id} KHÔNG tồn tại!);
+      console.error(`[CHECK] Element với id: ${id} KHÔNG tồn tại!`);
     }
   });
 })();

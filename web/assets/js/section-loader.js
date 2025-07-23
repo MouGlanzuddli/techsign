@@ -413,6 +413,12 @@ class SectionLoader {
      * Load notifications data
      */
     loadNotificationsData() {
+        // If system-notifications.js already registered a global loader, delegate to it
+        if (typeof window.loadNotificationsData === 'function') {
+            console.log('Delegating notification data load to system-notifications.js');
+            window.loadNotificationsData();
+            return;
+        }
         console.log('Loading notifications data...');
         fetch(this.basePath + 'notifications?action=ajax')
             .then(response => {
@@ -428,6 +434,7 @@ class SectionLoader {
                 console.error('Error loading notifications:', error);
                 this.showErrorMessage('Lỗi khi tải thông báo');
             });
+            
     }
     
 
