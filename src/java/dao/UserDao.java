@@ -1,4 +1,4 @@
-package dal;
+ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -203,6 +203,23 @@ public class UserDao {
     }
     return 0;
 }
+    
+    public boolean updateUserStatus(int userId, String status) {
+        String sql = "UPDATE users SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    // Set user status to "online"
+    public boolean setUserOnline(int userId) {
+        return updateUserStatus(userId, "online");
+    }
+    
     
 }

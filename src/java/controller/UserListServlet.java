@@ -1,6 +1,6 @@
 package controller;
 
-import dal.UserDao;
+import dao.UserDao;
 import model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,17 +14,16 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/UserListServlet")
 public class UserListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         System.out.println("[UserListServlet] Bắt đầu doGet()");
-        try (Connection conn = dal.DBContext.getConnection()) {
+        try (Connection conn = dao.DBContext.getConnection()) {
             System.out.println("[UserListServlet] Kết nối DB thành công");
-            UserDao userDao = new UserDao(conn);
-            List<User> allUsers = userDao.getAllUsers();
+            UserDao UserDao = new UserDao(conn);
+            List<User> allUsers = UserDao.getAllUsers();
             
             System.out.println("[UserListServlet] Số users từ DB: " + (allUsers != null ? allUsers.size() : "null"));
             if (allUsers != null) {

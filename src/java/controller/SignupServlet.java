@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import dal.DBContext;
-import dal.UserDao;
+import dao.DBConnection;
+import dao.UserDao;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +19,6 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * @author MouGlanzuddli
  */
-@WebServlet(name = "SignupServlet", urlPatterns = {"/SignupServlet"})
 public class SignupServlet extends HttpServlet {
 
     @Override
@@ -84,14 +83,14 @@ public class SignupServlet extends HttpServlet {
 
         Connection conn = null;
         try {
-            conn = new DBContext().getConnection();
-            UserDao userDao = new UserDao(conn);
+            conn = DBConnection.getConnection();
+            UserDao UserDao = new UserDao(conn);
 
-          if (userDao.getUserById(userid) != null) {
+          if (UserDao.getUserById(userid) != null) {
                 request.setAttribute("registerError", "User ID already exists.");
                 request.getRequestDispatcher("signup.jsp").forward(request, response);
            } else {
-                boolean success = userDao.insertUser(user);
+                boolean success = UserDao.insertUser(user);
                 if (success) {
                    response.sendRedirect("index.jsp");
                 } else {
@@ -104,6 +103,8 @@ public class SignupServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("registerError", "Database error: " + e.getMessage());
             request.getRequestDispatcher("signup.jsp").forward(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SignupServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) conn.close();

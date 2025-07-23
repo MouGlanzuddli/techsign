@@ -1,8 +1,8 @@
-package dal;
+package dao;
 
 import java.sql.*;
 import java.util.*;
-import dal.DBContext;
+import dao.DBContext;
 
 public class StatisticsDAO {
     private Connection connection;

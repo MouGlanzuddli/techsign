@@ -1,6 +1,6 @@
 package controller;
 
-import dal.MessageDao;
+import dao.MessageDao;
 import model.Message;
 import model.User;
 import jakarta.servlet.ServletException;
@@ -13,15 +13,15 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
 import controller.ChatboxSessionManager;
+import dao.MessageDao;
 
-@WebServlet("/SendMessageServlet")
 public class SendMessageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        try (Connection conn = dal.DBContext.getConnection()) {
+        try (Connection conn = dao.DBContext.getConnection()) {
             // Lấy current user từ session
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("user") == null) {

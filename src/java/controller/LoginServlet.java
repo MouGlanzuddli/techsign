@@ -6,12 +6,11 @@
 package controller;
 
 import java.sql.Connection;
-import dal.DBContext;
-import dal.UserDao;
+import dao.DBConnection;
+import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,22 +18,12 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.*;
 import model.User;
 
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -51,7 +40,6 @@ public class LoginServlet extends HttpServlet {
             out.println("</html>");
         }
     } 
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
@@ -76,88 +64,99 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    HttpSession session = request.getSession();
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        HttpSession session = request.getSession();
 
-    Connection conn = null;
-    PreparedStatement stmt = null;
-    ResultSet rs = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-    try {
-        conn = new DBContext().getConnection();
-        String sql = "SELECT password_hash, role_id FROM users WHERE email = ?";
         try {
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            rs = stmt.executeQuery();
+            conn = new DBConnection().getConnection();
+            String sql = "SELECT password_hash, role_id FROM users WHERE email = ?";
+            try {
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, email);
+                rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                String hashedPassword = rs.getString("password_hash");
-                int roleId = rs.getInt("role_id");
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("password_hash");
+                    int roleId = rs.getInt("role_id");
 
-                // Get user object from UserDao
-                User user = new UserDao(conn).login(email, password);
-                if (user != null) {
-                    // User is authenticated, store in session
-                    session.setAttribute("user", user);
+                    // Get user object from UserDao
+                    User user = new UserDao(conn).login(email, password);
+                    if (user != null) {
+                        // User is authenticated, store in session
+                        session.setAttribute("user", user);
 
-                    // Ghi log vào user_sessions
-                    try {
-                        dal.LoginDao loginDao = new dal.LoginDao(conn);
-                        String sessionToken = session.getId();
-                        loginDao.logUserSession(user.getId(), sessionToken);
-                    } catch (Exception ex) {
-                        System.err.println("Error logging user session: " + ex.getMessage());
-                    }
+                        // Ghi log vào user_sessions
+                        try {
+                            dao.LoginDao loginDao = new dao.LoginDao(conn);
+                            String sessionToken = session.getId();
+                            loginDao.logUserSession(user.getId(), sessionToken);
+                        } catch (Exception ex) {
+                            System.err.println("Error logging user session: " + ex.getMessage());
+                        }
 
-                    // Chuyển hướng theo vai trò
-                    switch (roleId) {
-                        case 1:
-                            response.sendRedirect(request.getContextPath() + "/adminHome");
-                            break;
-                        case 2:
-                            response.sendRedirect(request.getContextPath() + "/candidateHome.jsp");
-                            break;
-                        case 3:
-                            response.sendRedirect(request.getContextPath() + "/companyHome.jsp");
-                            break;   
-                        default:
-                            response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_role");
+                        // Chuyển hướng theo vai trò
+                        switch (roleId) {
+                            case 1:
+                                response.sendRedirect(request.getContextPath() + "/adminHome");
+                                return;
+                            case 2:
+                                response.sendRedirect(request.getContextPath() + "/candidateHome.jsp");
+                                return;
+                            case 3:
+                                response.sendRedirect(request.getContextPath() + "/companyHome.jsp");
+                                return;
+                            default:
+                                response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_role");
+                                return;
+                        }
+                    } else {
+                        // Invalid credentials
+                        response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_credentials");
+                        return;
                     }
                 } else {
+                    // Email not found
                     response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_credentials");
+                    return;
                 }
-            } else {
-                response.sendRedirect(request.getContextPath() + "/index.jsp?error=invalid_credentials");
+            } catch (SQLException e) {
+                System.err.println("Error in login: " + e.getMessage());
+                response.sendRedirect(request.getContextPath() + "/index.jsp?error=database_error");
+                return;
+            } finally {
+                try {
+                    if (rs != null) rs.close();
+                    if (stmt != null) stmt.close();
+                    // Don't close connection here as it's managed by the connection pool
+                } catch (SQLException e) {
+                    System.err.println("Error closing resources: " + e.getMessage());
+                }
             }
+
         } catch (SQLException e) {
-            System.err.println("Error in login: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/index.jsp?error=database_error");
+            e.printStackTrace();
+            request.setAttribute("error", "Lỗi kết nối cơ sở dữ liệu.");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        } catch (Exception e) {
+            // Catch any unexpected errors
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/index.jsp?error=unexpected_error");
+            return;
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
-                // Don't close connection here as it's managed by the connection pool
+                if (conn != null) conn.close();
             } catch (SQLException e) {
-                System.err.println("Error closing resources: " + e.getMessage());
+                e.printStackTrace();
             }
         }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        request.setAttribute("error", "Lỗi kết nối cơ sở dữ liệu.");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     }
 
     /** 

@@ -14,8 +14,8 @@
 //import jakarta.servlet.http.HttpSession;
 //import com.google.gson.Gson;
 //import com.google.gson.JsonObject;
-//import dal.DBContext;
-//import dal.UserDao;
+//import DBConnection;
+//import dao.UserDao;
 //import java.util.Date;
 //import model.User;
 //
@@ -54,12 +54,12 @@
 //            UserGoogleDto googleUser = getUserInfo(accessToken);
 //
 //            // Mở kết nối đến database
-//            DBContext dbContext = new DBContext();
-//            Connection conn = dbContext.getConnection();
-//            UserDao userDao = new UserDao(conn);
+//            DBConnection DBConnection = new DBConnection();
+//            Connection conn = DBConnection.getConnection();
+//            UserDao UserDao = new UserDao(conn);
 //
 //            // Kiểm tra email đã tồn tại chưa
-//            boolean emailExists = userDao.checkEmailExists(googleUser.getEmail());
+//            boolean emailExists = UserDao.checkEmailExists(googleUser.getEmail());
 //
 //            User user;
 //
@@ -79,13 +79,13 @@
 //                user.setCreatedAt(now);
 //                user.setUpdatedAt(now);
 //
-//                userDao.insertUser(user);
+//                UserDao.insertUser(user);
 //
 //                // Lấy lại user sau khi insert để có ID
-//                user = userDao.login(googleUser.getEmail(), "");
+//                user = UserDao.login(googleUser.getEmail(), "");
 //            } else {
 //                // Nếu đã tồn tại, lấy user theo email
-//                user = userDao.getUserByEmail(googleUser.getEmail());
+//                user = UserDao.getUserByEmail(googleUser.getEmail());
 // // Login không cần password cho Google
 //            }
 //

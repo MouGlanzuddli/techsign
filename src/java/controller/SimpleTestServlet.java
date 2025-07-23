@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-@WebServlet("/SimpleTestServlet")
 public class SimpleTestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -21,7 +20,7 @@ public class SimpleTestServlet extends HttpServlet {
             System.out.println("=== SIMPLE TEST ===");
             
             // Test connection
-            Connection conn = dal.DBContext.getConnection();
+            Connection conn = dao.DBContext.getConnection();
             System.out.println("✓ Connection OK");
             
             // Test query trực tiếp

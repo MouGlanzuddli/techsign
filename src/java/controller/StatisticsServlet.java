@@ -1,7 +1,6 @@
 package controller;
 
-import dal.DBContext;
-import dal.StatisticsDAO;
+import dao.StatisticsDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -11,30 +10,46 @@ import java.sql.SQLException;
 import java.util.Map;
 import com.google.gson.Gson;
 import java.util.List;
+import dao.DBConnection;
+import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StatisticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(StatisticsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StatisticsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(StatisticsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StatisticsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, ClassNotFoundException {
         
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
         
-        try {
+        try (Connection conn = DBConnection.getConnection()) {
             StatisticsDAO statisticsDAO = new StatisticsDAO();
             Map<String, Object> statistics = statisticsDAO.getAllStatistics();
             
@@ -73,7 +88,6 @@ public class StatisticsServlet extends HttpServlet {
                 List<Integer> values = new java.util.ArrayList<>(activityData.values());
                 String json = new Gson().toJson(Map.of("labels", labels, "values", values));
                 response.getWriter().write(json);
-                statisticsDAO.close();
                 return;
             }
 
@@ -86,7 +100,6 @@ public class StatisticsServlet extends HttpServlet {
                 List<Integer> values = new java.util.ArrayList<>(accountData.values());
                 String json = new Gson().toJson(Map.of("labels", labels, "values", values));
                 response.getWriter().write(json);
-                statisticsDAO.close();
                 return;
             }
 
@@ -99,15 +112,12 @@ public class StatisticsServlet extends HttpServlet {
                 List<Integer> values = new java.util.ArrayList<>(accessData.values());
                 String json = new Gson().toJson(Map.of("labels", labels, "values", values));
                 response.getWriter().write(json);
-                statisticsDAO.close();
                 return;
             }
 
             String jsonResponse = new Gson().toJson(statistics);
             
             response.getWriter().write(jsonResponse);
-            
-            statisticsDAO.close();
             
         } catch (SQLException e) {
             System.err.println("Error getting statistics: " + e.getMessage());

@@ -125,11 +125,21 @@
         </div>
 
         <script src="<c:url value='assets/js/admin.js'/>"></script>
-        <script src="<c:url value='assets/js/chatbox.js'/>"></script> <%-- Link to chatbox.js --%>
+        <script src="<c:url value='assets/js/admin (2).js'/>"
+        <script src="<c:url value='/assets/js/chatbox.js'/>"></script>
+        <script src="<c:url value='/assets/js/job-postings.js'/>"></script>
+        <script src="<c:url value='/assets/js/section-loader.js'/>"></script>
+        <script src="<c:url value='/assets/js/alert.js'/>"></script>
+        <script src="<c:url value='/assets/js/content.js'/>"></script>
+        <script src="<c:url value='/assets/js/category.js'/>"></script>
+        <script src="/TechSign/assets/js/system-notifications.js"></script>
+        <script src="<c:url value='/assets/js/settings.js'/>"></script>
+
+ <%-- Link to chatbox.js --%>
 
 <script src="${pageContext.request.contextPath}/assets/js/statistics-reports.js?v=<%= System.currentTimeMillis() %>"></script>
 
-               <script>
+               <script>s
   function updateDashboardStats() {
     console.log('Fetching dashboard stats...');
     fetch('<c:url value="/adminHome" />', {

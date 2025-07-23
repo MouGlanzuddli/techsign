@@ -25,8 +25,17 @@ import java.util.Date;
     private Date createdAt;
     private Date updatedAt;
 
-    // Constructors
-    public User() {}
+    public User(){};
+    public User(int roleId, String email, String phone, String passwordHash, String fullName, String avatarUrl) {
+        this.roleId = roleId;
+        this.email = email;
+        this.phone = phone;
+        this.passwordHash = passwordHash;
+        this.fullName = fullName;
+        this.avatarUrl = avatarUrl;
+    }
+
+    
 
     public User(int id, int roleId, String email, String phone, String passwordHash,
                 String fullName, boolean isEmailVerified, boolean isPhoneVerified,
@@ -81,5 +90,18 @@ import java.util.Date;
 
     public Date getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+    
+    public String getRoleName() {
+        switch (this.roleId) {
+            case 1:
+                return "Admin";
+            case 2:
+                return "Candidate";
+            case 3:
+                return "Company";
+            default:
+                return "Unknown"; // Or throw an exception for invalid roleId
+        }
+    }
 }
 

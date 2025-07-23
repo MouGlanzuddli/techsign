@@ -1,6 +1,6 @@
 package controller;
 
-import dal.UserDao;
+import dao.UserDao;
 import model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
-@WebServlet("/TestUserServlet")
 public class TestUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -22,15 +21,15 @@ public class TestUserServlet extends HttpServlet {
             System.out.println("=== TEST USER SERVLET ===");
             
             // Test connection
-            Connection conn = dal.DBContext.getConnection();
+            Connection conn = dao.DBContext.getConnection();
             System.out.println("✓ DB Connection OK");
             
             // Test UserDao
-            UserDao userDao = new UserDao(conn);
+            UserDao UserDao = new UserDao(conn);
             System.out.println("✓ UserDao created");
             
             // Test getAllUsers
-            List<User> users = userDao.getAllUsers();
+            List<User> users = UserDao.getAllUsers();
             System.out.println("✓ getAllUsers() called, size: " + (users != null ? users.size() : "null"));
             
             if (users != null && !users.isEmpty()) {
