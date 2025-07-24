@@ -117,9 +117,9 @@
 
                                         <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
                                             <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="about-us.html">About Us</a></li>
-                                                <li><a href="faq.html">FAQ's</a></li>
-                                                <li><a href="contact.html">Contacts</a></li>
+                                                <li><a href="about-us.jsp">About Us</a></li>
+                                                <li><a href="faq.jsp">FAQ's</a></li>
+                                                <li><a href="contact.jsp">Contacts</a></li>
                                                 <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
                                             </ul>
                                         </li>

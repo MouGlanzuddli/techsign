@@ -366,7 +366,7 @@
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </a>
                                                 
-                                                    <a href="DownloadSystemCVServlet?id=<%= rsSys.getInt("id")%>" class="btn btn-primary">
+                                                    <a href="DownloadSystemCVServlet?id=<%= rsSys.getInt("id")%>" class="btn btn-md btn-light-primary px-3">
                                                         Download System CV
                                                     </a>
                                                 

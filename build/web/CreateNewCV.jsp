@@ -36,7 +36,7 @@
                 <div class="container">
                     <nav id="navigation" class="navigation navigation-landscape">
                         <div class="nav-header">
-                            <a class="nav-brand static-logo" href="#"><img src="${pageContext.request.contextPath}/assets/img/logo-light.png" class="logo" alt=""></a>
+                            <a class="nav-brand static-logo" href="#"><img src="assets/img/logo-light.png" class="logo" alt=""></a>                            
 
                             <div class="nav-toggle"></div>
                             <div class="mobile_nav">
@@ -47,112 +47,110 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="nav-menus-wrapper">
-                            <c:choose>
+                        <c:choose>
 
-                                <c:when test="${sessionScope.user == null}">
+                            <c:when test="${sessionScope.user == null}">
 
-                                    <ul class="nav-menu">							
-                                        <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                                <ul class="nav-menu">							
+                                    <li class="active"><a href="index.jsp">Home<span class="submenu-indicator"></span></a></li>
 
-                                        <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="SearchandView">Job List</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchandView">Job List</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="JavaScript:Void(0);">Company list</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchCompaniesServlet;">Company list</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="about-us.html">About Us</a></li>
-                                                <li><a href="faq.html">FAQ's</a></li>
-                                                <li><a href="contact.html">Contacts</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="about-us.html">About Us</a></li>
+                                            <li><a href="faq.html">FAQ's</a></li>
+                                            <li><a href="contact.html">Contacts</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
+                                    <li><a href="#">Help</a></li>
+                                </ul>
 
-                                    <ul class="nav-menu nav-menu-social align-to-right">
-                                        <li>
-                                            <a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#login">
-                                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                                            </a>
-                                        </li>
-                                        <li class="list-buttons ms-2">
-                                            <a href="signup.html"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Upload Resume</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav-menu nav-menu-social align-to-right">
+                                    <li>
+                                        <a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#login">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                        </a>
+                                    </li>
+                                    <li class="list-buttons ms-2">
+                                        <a href="signup.html"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Upload Resume</a>
+                                    </li>
+                                </ul>
 
-                                </c:when>
+                            </c:when>
 
 
-                                <c:otherwise>
-                                    <ul class="nav-menu">
-                                        <li><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                            <c:otherwise>
+                                <ul class="nav-menu">
+                                    <li><a href="candidateHome.jsp">Home<span class="submenu-indicator"></span></a></li>
 
-                                        <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="SearchandView">Job List</a></li>
-                                                <li><a href="grid-style-2.html">Suitable Jobs</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchandView">Job List</a></li>
+                                            <li><a href="grid-style-2.html">Suitable Jobs</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="SearchCompaniesServlet">Company List</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchCompaniesServlet">Company List</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="#">Create CV</a></li>
-                                                <li><a href="#">Manage CV</a></li>
-                                            </ul>
-                                        </li>
+                                    <li class="active"><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li ><a href="CreateNewCV.jsp">Create CV</a></li>
+                                            <li><a href="resumeCandidate.jsp">Manage CV</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="about-us.html">About Us</a></li>
-                                                <li><a href="faq.html">FAQ's</a></li>
-                                                <li><a href="contact.html">Contacts</a></li>
-                                                <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="about-us.jsp">About Us</a></li>
+                                            <li><a href="faq.jsp">FAQ's</a></li>
+                                            <li><a href="contact.jsp">Contacts</a></li>
+                                            <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
+                                    <li><a href="#">Help</a></li>
+                                </ul>
 
-                                    <ul class="nav-menu nav-menu-social align-to-right">
-                                        <li>
-                                            <a href="JavaScript:Void(0);"><i class="fas fa-heart me-2"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="JavaScript:Void(0);"><i class="fas fa-bell me-2"></i></a>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="accountLogoDropdown"
-                                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img src="$assets/img/logo-account.png"
-                                                     class="nav-logo" alt="aa">
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                                                <li><a class="dropdown-item" href="dashboardcandidate.jsp">Dashboard</a></li>
-                                                <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </c:otherwise>
-                            </c:choose>   
-                        </div> 
+                                <ul class="nav-menu nav-menu-social align-to-right">
+                                    <li>
+                                        <a href="JavaScript:Void(0);"><i class="fas fa-heart me-2"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="JavaScript:Void(0);"><i class="fas fa-bell me-2"></i></a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="accountLogoDropdown"
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="$assets/img/logo-account.png"
+                                                 class="nav-logo" alt="aa">
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
+                                            <li><a class="dropdown-item" href="dashboardcandidate.jsp">Dashboard</a></li>
+                                            <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </c:otherwise>
+                        </c:choose>
                     </nav>
                 </div>
             </div>
@@ -169,76 +167,49 @@
                             <div class="mb-3">
                                 <label >Profile Title  </label> 
                                 <input type="text" name="jobtitle" id="jobtitle" class="form-control" oninput="updatePreview()" required>                                 
-                                <span class="text-danger" id="error-jobtitle"></span>
-                                <a onclick="clearField('jobtitle')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-jobtitle"></span>                             
                             </div>
 
 
                             <div class="mb-3">
                                 <label>Full name</label>
                                 <input type="text" name="fullname" id="fullname" class="form-control" oninput="updatePreview()" required>
-                                <span class="text-danger" id="error-fullname"></span>
-                                <a onclick="clearField('fullname')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-fullname"></span>                              
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label>Email</label>
                                 <input type="text" name="email" id="email" class="form-control" oninput="updatePreview()" required>
-                                <span class="text-danger" id="error-email"></span>
-                                <a onclick="clearField('email')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-email"></span>                              
                             </div>
                             <div class="mb-3">
                                 <label>Phone number</label>
                                 <input type="text" name="phone" id="phone" class="form-control" oninput="updatePreview()" required>
-                                <span class="text-danger" id="error-phone"></span>
-                                <a onclick="clearField('phone')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-phone"></span>                               
                             </div>
                             <div class="mb-3">
                                 <label>Date of birth</label>
                                 <input type="date" name="dob" id="dob" class="form-control" oninput="updatePreview()">
-                                <span class="text-danger" id="error-dob"></span>
-                                <a onclick="clearField('dob')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-dob"></span>                               
                             </div>
                             <div class="mb-3">
                                 <label>Address</label>
                                 <input type="text" name="address" id="address" class="form-control" oninput="updatePreview()">
-                                <span class="text-danger" id="error-address"></span>
-                                <a onclick="clearField('address')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-address"></span>                               
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label>Avatar</label>
                                 <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*" onchange="previewAvatar()">
-                                <span class="text-danger" id="error-avatar"></span>
-                                <a onclick="clearField('avatar')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <span class="text-danger" id="error-avatar"></span>                               
                             </div>
                             <div class="mb-3">
                                 <label>Career Objective</label>
-                                <textarea name="objective" id="objective" class="form-control" oninput="updatePreview()"></textarea>
-                                <a onclick="clearField('objective')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <textarea name="objective" id="objective" class="form-control" oninput="updatePreview()"></textarea>                               
                             </div>
                             <div class="mb-3">
                                 <label>Skills (1 skill per line)</label>
-                                <textarea name="skills" id="skills" class="form-control" oninput="updatePreview()"></textarea>
-                                <a onclick="clearField('skills')" class="btn btn-md btn-light-danger ">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
+                                <textarea name="skills" id="skills" class="form-control" oninput="updatePreview()"></textarea>                                
                             </div>
                             <h5 class="mt-4">Work Experience</h5>
                             <div id="experience-list">
@@ -246,7 +217,6 @@
                                     <input type="text" name="company" placeholder="Company name" class="form-control exp-company mb-2" oninput="updatePreview()">
                                     <input type="text" name="position" placeholder="Position" class="form-control exp-position mb-2" oninput="updatePreview()">
                                     <input type="text" name="period" placeholder="Time (e.g., March 2019 - September 2020)" class="form-control exp-period mb-2" oninput="updatePreview()">
-
                                     <textarea name="detail" placeholder="One line per idea" class="form-control exp-detail" oninput="updatePreview()"></textarea>
                                 </div>
                             </div>

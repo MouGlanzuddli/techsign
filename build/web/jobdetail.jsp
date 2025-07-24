@@ -1,8 +1,8 @@
 <%@page import="dal.DBContext"%>
 <%@page import="java.sql.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="model.User"%>  
 <!doctype html>
 <html lang="en">
@@ -42,7 +42,7 @@
                 <div class="container">
                     <nav id="navigation" class="navigation navigation-landscape">
                         <div class="nav-header">
-                            <a class="nav-brand static-logo" href="#"><img src="assets/img/logo-light.png" class="logo" alt=""></a>
+                            <a class="nav-brand static-logo" href="#"><img src="assets/img/logo-light.png" class="logo" alt=""></a>                            
 
                             <div class="nav-toggle"></div>
                             <div class="mobile_nav">
@@ -53,112 +53,110 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="nav-menus-wrapper">
-                            <c:choose>
+                        <c:choose>
 
-                                <c:when test="${sessionScope.user == null}">
+                            <c:when test="${sessionScope.user == null}">
 
-                                    <ul class="nav-menu">							
-                                        <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                                <ul class="nav-menu">							
+                                    <li class="active"><a href="index.jsp">Home<span class="submenu-indicator"></span></a></li>
 
-                                        <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="SearchandView">Job List</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchandView">Job List</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="JavaScript:Void(0);">Company list</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchCompaniesServlet;">Company list</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="about-us.html">About Us</a></li>
-                                                <li><a href="faq.html">FAQ's</a></li>
-                                                <li><a href="contact.html">Contacts</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="about-us.html">About Us</a></li>
+                                            <li><a href="faq.html">FAQ's</a></li>
+                                            <li><a href="contact.html">Contacts</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
+                                    <li><a href="#">Help</a></li>
+                                </ul>
 
-                                    <ul class="nav-menu nav-menu-social align-to-right">
-                                        <li>
-                                            <a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#login">
-                                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                                            </a>
-                                        </li>
-                                        <li class="list-buttons ms-2">
-                                            <a href="signup.html"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Upload Resume</a>
-                                        </li>
-                                    </ul>
+                                <ul class="nav-menu nav-menu-social align-to-right">
+                                    <li>
+                                        <a href="JavaScript:Void(0);" data-bs-toggle="modal" data-bs-target="#login">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                        </a>
+                                    </li>
+                                    <li class="list-buttons ms-2">
+                                        <a href="signup.html"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Upload Resume</a>
+                                    </li>
+                                </ul>
 
-                                </c:when>
+                            </c:when>
 
 
-                                <c:otherwise>
-                                    <ul class="nav-menu">
-                                        <li><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                            <c:otherwise>
+                                <ul class="nav-menu">
+                                    <li><a href="candidateHome.jsp">Home<span class="submenu-indicator"></span></a></li>
 
-                                        <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="SearchandView">Job List</a></li>
-                                                <li><a href="grid-style-2.html">Suitable Jobs</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchandView">Job List</a></li>
+                                            <li><a href="grid-style-2.html">Suitable Jobs</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="SearchCompaniesServlet">Company List</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="SearchCompaniesServlet">Company List</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="#">Create CV</a></li>
-                                                <li><a href="#">Manage CV</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="CreateNewCV.jsp">Create CV</a></li>
+                                            <li><a href="resumeCandidate.jsp">Manage CV</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
-                                            <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="about-us.html">About Us</a></li>
-                                                <li><a href="faq.html">FAQ's</a></li>
-                                                <li><a href="contact.html">Contacts</a></li>
-                                                <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
-                                            </ul>
-                                        </li>
+                                    <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
+                                        <ul class="nav-dropdown nav-submenu">
+                                            <li><a href="about-us.jsp">About Us</a></li>
+                                            <li><a href="faq.jsp">FAQ's</a></li>
+                                            <li><a href="contact.jsp">Contacts</a></li>
+                                            <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
+                                        </ul>
+                                    </li>
 
-                                        <li><a href="#">Help</a></li>
-                                    </ul>
+                                    <li><a href="#">Help</a></li>
+                                </ul>
 
-                                    <ul class="nav-menu nav-menu-social align-to-right">
-                                        <li>
-                                            <a href="JavaScript:Void(0);"><i class="fas fa-heart me-2"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="JavaScript:Void(0);"><i class="fas fa-bell me-2"></i></a>
-                                        </li>
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="accountLogoDropdown"
-                                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <img src="$assets/img/logo-account.png"
-                                                     class="nav-logo" alt="aa">
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                                                <li><a class="dropdown-item" href="dashboardcandidate.jsp">Dashboard</a></li>
-                                                <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </c:otherwise>
-                            </c:choose>   
-                        </div> 
+                                <ul class="nav-menu nav-menu-social align-to-right">
+                                    <li>
+                                        <a href="JavaScript:Void(0);"><i class="fas fa-heart me-2"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="JavaScript:Void(0);"><i class="fas fa-bell me-2"></i></a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="accountLogoDropdown"
+                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="$assets/img/logo-account.png"
+                                                 class="nav-logo" alt="aa">
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
+                                            <li><a class="dropdown-item" href="dashboardcandidate.jsp">Dashboard</a></li>
+                                            <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </c:otherwise>
+                        </c:choose>
                     </nav>
                 </div>
             </div>
@@ -182,71 +180,84 @@
                                     <div class="jbs-roots-y1-last">
                                         <div class="jbs-urt mb-2">
                                             <span class="label text-light primary-2-bg">${job.jobType}</span>
-                                        </div>
+                                            <span class="label text-light primary-2-bg">${job.placeofwork}</span>
+                                            <span class="label text-light primary-2-bg">${job.contracttype}</span>
+                                            <span class="label text-light primary-2-bg">${job.jobLevel}</span>
+                                        </div>                               
                                         <div class="jbs-title-iop mb-1">
                                             <h2 class="m-0 fs-2 text-light">${job.title}</h2>
                                         </div>
                                     </div>
                                     <div class="jbs-roots-y6 py-3">
-                                        <p class="text-light">${job.description}</p>
+                                        <p class="text-light">${job.category}</p>
                                     </div>
-                                    <div class="jbs-roots-y6 py-3">
-                                        <p class="text-light">We are looking for a experienced Senior Front-End Developer with an advanced level of english to design UI/UX interface for web and mobile apps.</p>
-                                    </div>
+
                                     <div class="jbs-roots-y6 py-3">
                                         <c:choose>
-                                            <c:when test="${sessionScope.user == null}">
-                                                <!-- user not access -->
 
-                                                <a data-bs-toggle="modal" data-bs-target="#login" class="btn btn-primary fw-medium px-lg-5 px-4 me-3">Apply Job</a>
-                                                <a data-bs-toggle="modal" data-bs-target="#login" class="btn btn-whites fw-medium px-lg-5 px-4">Save Job</a>
+                                            <c:when test="${sessionScope.user == null}">
+                                                <c:choose>
+                                                    <c:when test="${job.status == 'active'}">
+                                                        <a data-bs-toggle="modal" data-bs-target="#login"
+                                                           class="btn btn-primary fw-medium px-lg-5 px-4 me-3">
+                                                            Apply Job
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>                                                       
+                                                        <button class="btn btn-danger fw-medium px-lg-5 px-4 me-3" type="button" disabled>
+                                                            Closed
+                                                        </button>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <a data-bs-toggle="modal" data-bs-target="#login"
+                                                   class="btn btn-whites fw-medium px-lg-5 px-4">
+                                                    Save Job
+                                                </a>
                                             </c:when>
 
+
                                             <c:otherwise>
-                                                <!-- Đã đăng nhập -->
                                                 <input type="hidden" name="jobId" value="${job.id}"/>
 
 
-
-                                                <!-- ========== APPLY JOB ========== -->
-
                                                 <c:choose>
-
                                                     <c:when test="${applied}">
-                                                        <button class="btn btn-secondary fw-medium px-lg-5 px-4 me-3"
-                                                                type="button" disabled>
+                                                        <button class="btn btn-secondary fw-medium px-lg-5 px-4 me-3" type="button" disabled>
                                                             Waiting from Company
                                                         </button>
                                                     </c:when>
-
-                                                    <c:when test="${job.status == 'Closed'}">
-                                                        <button class="btn btn-danger fw-medium px-lg-5 px-4 me-3" type="button" disabled>Closed</button>
-                                                    </c:when>
-
-                                                    <c:otherwise>
+                                                    <c:when test="${job.status == 'active'}">
                                                         <button class="btn btn-primary fw-medium px-lg-5 px-4 me-3"
                                                                 type="button" data-bs-toggle="modal" data-bs-target="#applyjob">
                                                             Apply Job
                                                         </button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <button class="btn btn-danger fw-medium px-lg-5 px-4 me-3" type="button" disabled>
+                                                            Closed
+                                                        </button>
                                                     </c:otherwise>
-
                                                 </c:choose>
 
-                                                <!-- SAVE JOB (Form riêng) -->
+
                                                 <form method="post" action="SaveJobServlet" style="display:inline;">
                                                     <input type="hidden" name="jobId" value="${job.id}" />
                                                     <c:choose>
                                                         <c:when test="${saved}">
-                                                            <button class="btn btn-secondary fw-medium px-lg-5 px-4" type="button" disabled>Saved Job</button>
+                                                            <button class="btn btn-secondary fw-medium px-lg-5 px-4" type="button" disabled>
+                                                                Saved Job
+                                                            </button>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <button class="btn btn-outline-primary fw-medium px-lg-5 px-4" type="submit">Save Job</button>
+                                                            <button class="btn btn-outline-primary fw-medium px-lg-5 px-4" type="submit">
+                                                                Save Job
+                                                            </button>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                </form>   
-
+                                                </form>
                                             </c:otherwise>
                                         </c:choose>
+
                                     </div>
                                 </div>
                             </div>
@@ -258,8 +269,8 @@
                                 <i class="fa-solid fa-business-time text-primary fs-1"></i>
                             </div>
                             <div class="single-explot-last ps-2">
-                                <span class="text-light opacity-75">Department</span>
-                                <p class="text-light fw-bold fs-6 m-0">Software</p>
+                                <span class="text-light opacity-75">Experience</span>
+                                <p class="text-light fw-bold fs-6 m-0">${job.experienceRequired} Year</p>
                             </div>
                         </div>
                         <div class="single-explot d-flex align-items-center me-md-5 me-3 my-2">
@@ -271,20 +282,32 @@
                                 <p class="text-light fw-bold fs-6 m-0">${job.location}</p>
                             </div>
                         </div>
-                        <div class="single-explot d-flex align-items-center">
+
+                        <div class="single-explot d-flex align-items-center me-md-5 me-3 my-2">
                             <div class="single-explot-first">
                                 <i class="fa-solid fa-sack-dollar text-primary fs-1"></i>
                             </div>
                             <div class="single-explot-last ps-2">
-                                <span class="text-light opacity-75">Salary</span>
+                                <span class="text-light opacity-75">Salary</span> 
+
                                 <p class="text-light fw-bold fs-6 m-0">
-                                    <fmt:formatNumber value="${job.salaryMin}" type="number" maxFractionDigits="0" /><a>$</a> -
-                                    <fmt:formatNumber value="${job.salaryMax}" type="number" maxFractionDigits="0" /><a>$</a>
+                                    <a>${job.salary}</a>
                                 </p>
                             </div>
                         </div>
+
+                        <div class="single-explot d-flex align-items-center">
+                            <div class="single-explot-first">
+                                <img src="assets/img/calendar-icon.png" alt="Deadline Icon" class="fa-solid info-icon text-primary fs-1">
+                            </div>                                                                            
+                            <div class="single-explot-last ps-2">
+                                <span class="text-light opacity-75">Expires at</span> 
+                                <p class="text-light fw-bold fs-6 m-0">
+                                    <fmt:formatDate value="${job.expiresAt}" pattern="MM-dd-yyyy" />
+                                </p>
+                            </div>                          
+                        </div>
                     </div>
-                </div>
             </section>
         </div>
         <!-- ============================ Header Top End ================================== -->
@@ -299,42 +322,43 @@
                             <div class="jbs-blocs-body px-4 py-4">
                                 <div class="jbs-content mb-4">
                                     <h5>Job Description</h5>
-                                    <p>Themezhub Web provides equal employment opportunities to all qualified individuals without regard to race, color, religion, sex, gender identity, sexual orientation, pregnancy, age, national origin, physical or mental disability, military or veteran status, genetic information, or any other protected classification. Equal employment opportunity includes, but is not limited to, hiring, training, promotion, demotion, transfer, leaves of absence, and termination. Thynk Web takes allegations of discrimination, harassment, and retaliation seriously, and will promptly investigate when such behavior is reported.</p>
-                                    <p>Our company is seeking to hire a skilled Web Developer to help with the development of our current projects. Your duties will primarily revolve around building software by writing code, as well as modifying software to fix errors, adapt it to new hardware, improve its performance, or upgrade interfaces. You will also be involved in directing system testing and validation procedures, and also working with customers or departments on technical issues including software system design and maintenance.</p>
-                                    <p class="m-0">We are looking for a Senior Web Developer to build and maintain functional web pages and applications. Senior Web Developer will be leading junior developers, refining website specifications, and resolving technical issues. He/She should have extensive experience building web pages from scratch and in-depth knowledge of at least one of the following programming languages: Javascript, Ruby, or PHP. He/She will ensure our web pages are up and running and cover both internal and customer needs.</p>
+                                    <p>${job.description}</p>
+                                    <p class="m-0"></p>
                                 </div>
                                 <div class="jbs-content-body mb-4">
                                     <h5 class="mb-3">Job Requirements</h5>
                                     <div class="jbs-content mb-3">
                                         <h6>Requirements:</h6>
                                         <ul class="simple-list">
-                                            <li>Candidate must have a Bachelors or Masters degree in Computer. (B.tech, Bsc or BCA/MCA)</li>
-                                            <li>Candidate must have a good working knowledge of Javascript and Jquery.</li>
-                                            <li>Good knowledge of HTML and CSS is required.</li>
-                                            <li>Experience in Word press is an advantage</li>
-                                            <li>Jamshedpur, Jharkhand: Reliably commute or planning to relocate before starting work (Required)</li>
+                                            <c:forEach var="line" items="${job.requirements}">
+                                                <li>${line}</li>
+                                                </c:forEach>
                                         </ul>
                                     </div>
 
                                     <div class="jbs-content mb-4">
                                         <h6>Responsibilities:</h6>
                                         <ul class="simple-list">
-                                            <li>Write clean, maintainable and efficient code.</li>
-                                            <li>Design robust, scalable and secure features.</li>
-                                            <li>Collaborate with team members to develop and ship web applications within tight timeframes.</li>
-                                            <li>Work on bug fixing, identifying performance issues and improving application performance</li>
-                                            <li>Write unit and functional testcases.</li>
-                                            <li>Continuously discover, evaluate, and implement new technologies to maximise development efficiency. Handling complex technical iss</li>
+                                            <c:forEach var="line" items="${job.responsibility}">
+                                                <li>${line}</li>
+                                                </c:forEach>
                                         </ul>
                                     </div>
 
                                     <div class="jbs-content">
                                         <h6>Qualifications and Skills</h6>
                                         <ul class="colored-list">
-                                            <li>Bachelor's degree</li>
-                                            <li>BCA/MCA</li>
-                                            <li>BSC IT/Msc IT</li>
-                                            <li>Or any other equivalent degree</li>
+                                            <c:forEach var="skill" items="${skills}">
+                                                <li>${skill.name}</li>
+                                                </c:forEach>
+                                        </ul>
+                                    </div>
+                                    <div class="jbs-content">
+                                        <h6>Job Benefits:</h6>
+                                        <ul class="simple-list">
+                                            <c:forEach var="line" items="${job.benefits}">
+                                                <li>${line}</li>
+                                                </c:forEach>
                                         </ul>
                                     </div>
                                 </div>
@@ -414,7 +438,7 @@
                                                 <input type="text" name="coverLetter" class="form-control">
                                             </div>
 
-                                            <!-- Option select -->
+
                                             <div class="form-group mb-3">
                                                 <label><strong>Select how you want to apply:</strong></label><br>
                                                 <input type="radio" name="applyOption" id="uploadOption" value="upload" checked onclick="toggleApplyOption()"> Upload new Resume
@@ -422,7 +446,7 @@
                                                 <input type="radio" name="applyOption" id="selectOption" value="select" onclick="toggleApplyOption()"> Use existing CV
                                             </div>
 
-                                            <!-- Upload file -->
+
                                             <div id="uploadSection">
                                                 <div class="upload-btn-wrapper full-width mb-2">
                                                     <button id="uploadBtn" type="button" class="btn full-width"
@@ -444,11 +468,11 @@
                                                 <p id="fileError" style="color: red; display: none;">Please upload a PDF file only.</p>
                                             </div>
 
-                                            <!-- Select CV -->
+
                                             <div id="selectSection" style="display:none;">
                                                 <label><strong>Select which CV to use:</strong></label><br>
 
-                                                <!-- Candidate CV -->
+
                                                 <div id="candidateBlock">
                                                     <input type="radio" name="cvChoice" value="candidate" checked onclick="toggleCVSelect()">
                                                     Your Candidate CV
@@ -464,7 +488,7 @@
                                                     </select>
                                                 </div>
 
-                                                <!-- System CV -->
+
                                                 <div id="systemBlock">
                                                     <input type="radio" name="cvChoice" value="system" onclick="toggleCVSelect()">
                                                     Or System CV
@@ -488,7 +512,7 @@
                                     </form>
 
                                     <% } else { %>
-                                    <!-- Nếu chưa login -->
+
                                     <div class="alert alert-warning">
                                         Please <a href="login.jsp" class="text-primary">login</a> to apply for this job.
                                     </div>
@@ -511,50 +535,28 @@
                         <div class="side-jbs-info-blox bg-white mb-4">
                             <div class="side-jbs-info-header">
                                 <div class="side-jbs-info-thumbs">
-                                    <figure><img src="assets/img/l-12.png" class="img-fluid" alt=""></figure>
+                                    <figure>
+                                        <img src="${company.logoUrl != null ? company.logoUrl : 'assets/img/l-12.png'}" class="img-fluid" alt="">
+                                    </figure>
                                 </div>
                                 <div class="side-jbs-info-captionyo ps-3">
                                     <div class="sld-info-title">
-                                        <h5 class="rtls-title mb-1">${job.jobType}</h5>
+                                        <h5 class="rtls-title mb-1" href=''>${company.companyName}</h5>
                                         <div class="jbs-locat-oiu text-sm-muted">
-                                            <span class="me-1"><i class="fa-solid fa-location-dot me-1"></i>California, USA</span>.<span class="ms-1">Software & Consultancy</span>
+                                            <span class="me-1"><i class="fa-solid fa-location-dot me-1"></i>${job.location}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="side-jbs-info-middle">
-                                <div class="side-full-info-groups">
+                                <div class="side-full-info-groups">                                               
                                     <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Company Founder:</span>
-                                        <h6 class="sld-title">Mr. Daniel Mark</h6>
+                                        <span class="text-sm-muted sld-subtitle">Posted</span>
+                                        <h6 class="sld-title">${company.openJobs} jobs posted</h6>
                                     </div>
+
                                     <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Industry:</span>
-                                        <h6 class="sld-title">Technology</h6>
-                                    </div>
-                                    <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Founded:</span>
-                                        <h6 class="sld-title">1997</h6>
-                                    </div>
-                                    <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Head Office:</span>
-                                        <h6 class="sld-title">London, UK</h6>
-                                    </div>
-                                    <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Revenue</span>
-                                        <h6 class="sld-title">$70B+</h6>
-                                    </div>
-                                    <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Company Size:</span>
-                                        <h6 class="sld-title">20,000+ Emp.</h6>
-                                    </div>
-                                    <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Min Exp.</span>
-                                        <h6 class="sld-title">02 Years</h6>
-                                    </div>
-                                    <div class="single-side-info">
-                                        <span class="text-sm-muted sld-subtitle">Openings</span>
-                                        <h6 class="sld-title">06 Openings</h6>
+                                        <a class="btn btn-outline-primary fw-medium px-lg-5 px-4" href="CompanyDetailServlet?id=${company.id}">Company Detail</a>
                                     </div>
                                 </div>
                             </div>

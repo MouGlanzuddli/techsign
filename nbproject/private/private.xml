@@ -3,23 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/JobDetailServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/dal/JobDao.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/model/Job.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/my-applications.jsp</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/DownloadCVServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/DownloadCVServlet_1.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/EditSystemCVServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/DownloadSystemCVServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/ManageApplicationsServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/MyApplicationsServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/Constants_1.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/Constants.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/candidateHome.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/searchForCompanies.jsp</file>
             <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/searchandview.jsp</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/ApplyJobServlet.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/model/Application.java</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/resumeCandidate.jsp</file>
-            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/CreateNewCV.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/web/dashboardcandidate.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/JobSearchManagement/src/java/controller/Constants.java</file>
         </group>
     </open-files>
 </project-private>

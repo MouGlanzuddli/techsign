@@ -1,12 +1,12 @@
-
 package model;
 
 import java.sql.Timestamp;
 
 public class Companies {
+
     private int id;
     private int userId;
-        private int industryID;
+    private int industryID;
     private String companyName;
     private String website;
     private String description;
@@ -19,11 +19,14 @@ public class Companies {
     private boolean isSearchable;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private int jobCount;
+    private String email;
+    private String companybenefits;
 
     public Companies() {
     }
 
-    public Companies(int id, int userId, int industryID, String companyName, String website, String description, String address, String phone, String logoUrl, String bannerUrl, String iconUrl, boolean isFeatured, boolean isSearchable, Timestamp createdAt, Timestamp updatedAt) {
+    public Companies(int id, int userId, int industryID, String companyName, String website, String description, String address, String phone, String logoUrl, String bannerUrl, String iconUrl, boolean isFeatured, boolean isSearchable, Timestamp createdAt, Timestamp updatedAt, int jobCount, String email, String companybenefits) {
         this.id = id;
         this.userId = userId;
         this.industryID = industryID;
@@ -39,8 +42,51 @@ public class Companies {
         this.isSearchable = isSearchable;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.jobCount = jobCount;
+        this.email = email;
+        this.companybenefits = companybenefits;
+    }
+
+    public String getCompanybenefits() {
+        return companybenefits;
+    }
+
+    public void setCompanybenefits(String companybenefits) {
+        this.companybenefits = companybenefits;
     }
     
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(boolean isFeatured) {
+        this.isFeatured = isFeatured;
+    }
+
+    public boolean isIsSearchable() {
+        return isSearchable;
+    }
+
+    public void setIsSearchable(boolean isSearchable) {
+        this.isSearchable = isSearchable;
+    }
+
+    public int getJobCount() {
+        return jobCount;
+    }
+
+    public void setJobCount(int jobCount) {
+        this.jobCount = jobCount;
+    }
+
     public int getIndustryID() {
         return industryID;
     }
@@ -160,10 +206,5 @@ public class Companies {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    
-    
+
 }
-
-    
-

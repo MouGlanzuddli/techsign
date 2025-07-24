@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Date;
 
 public class CompanyDao {
+
     private final Connection connection;
 
     public CompanyDao(Connection connection) {
@@ -15,19 +16,18 @@ public class CompanyDao {
 
     // Lấy tất cả công ty có thể tìm kiếm được
     public List<Company> getAllSearchableCompanies() throws SQLException {
-        String sql = "SELECT cp.*, u.full_name, i.name AS industry_name, " +
-                    "(SELECT COUNT(*) FROM jobs j WHERE j.company_id = cp.user_id AND j.status = 'active') as open_jobs " +
-                    "FROM company_profiles cp " +
-                    "JOIN users u ON cp.user_id = u.id " +
-                    "LEFT JOIN industries i ON cp.industry_id = i.id " +
-                    "WHERE cp.is_searchable = 1 AND u.status = 'active' " +
-                    "ORDER BY cp.is_featured DESC, cp.created_at DESC"; // Sort by featured first, then newest
-        
+        String sql = "SELECT cp.*, u.full_name, i.name AS industry_name, "
+                + "(SELECT COUNT(*) FROM job_postings j WHERE j.company_profile_id = cp.user_id AND j.status = 'active') as open_jobs "
+                + "FROM company_profiles cp "
+                + "JOIN users u ON cp.user_id = u.id "
+                + "LEFT JOIN industries i ON cp.industry_id = i.id "
+                + "WHERE cp.is_searchable = 1 AND u.status = 'active' "
+                + "ORDER BY cp.is_featured DESC, cp.created_at DESC"; // Sort by featured first, then newest
+
         List<Company> companies = new ArrayList<>();
-        
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 companies.add(mapResultSetToCompany(rs));
             }
@@ -36,9 +36,9 @@ public class CompanyDao {
     }
 
     // Tìm kiếm công ty với các bộ lọc
-    public List<Company> searchCompanies(String searchKeyword, String industry, 
-                                       String location, String companySize, 
-                                       String companyType, String sortBy) throws SQLException {
+    public List<Company> searchCompanies(String searchKeyword, String industry,
+            String location, String companySize,
+            String companyType, String sortBy) throws SQLException {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT cp.*, u.full_name, i.name AS industry_name, "); // Added i.name AS industry_name
         sql.append("(SELECT COUNT(*) FROM jobs j WHERE j.company_id = cp.user_id AND j.status = 'active') as open_jobs ");
@@ -68,9 +68,8 @@ public class CompanyDao {
             sql.append("AND cp.address LIKE ? ");
             parameters.add("%" + location + "%");
         }
-        
-        // TODO: Add filters for companySize and companyType if corresponding columns exist in DB
 
+        // TODO: Add filters for companySize and companyType if corresponding columns exist in DB
         // Sắp xếp
         if ("name".equals(sortBy)) {
             sql.append("ORDER BY cp.company_name ASC");
@@ -81,12 +80,12 @@ public class CompanyDao {
         }
 
         List<Company> companies = new ArrayList<>();
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < parameters.size(); i++) {
                 stmt.setObject(i + 1, parameters.get(i));
             }
-            
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 companies.add(mapResultSetToCompany(rs));
@@ -97,17 +96,19 @@ public class CompanyDao {
 
     // Lấy công ty theo ID
     public Company getCompanyById(int id) throws SQLException {
-        String sql = "SELECT cp.*, u.full_name, i.name AS industry_name, " + // Added i.name AS industry_name
-                    "(SELECT COUNT(*) FROM jobs j WHERE j.company_id = cp.user_id AND j.status = 'active') as open_jobs " +
-                    "FROM company_profiles cp " +
-                    "JOIN users u ON cp.user_id = u.id " +
-                    "LEFT JOIN industries i ON cp.industry_id = i.id " + // Added JOIN for industries
-                    "WHERE cp.id = ?";
-        
+        String sql = "SELECT cp.*, u.full_name, i.name AS industry_name, "
+                + // Added i.name AS industry_name
+                "(SELECT COUNT(*) FROM jobs j WHERE j.company_id = cp.user_id AND j.status = 'active') as open_jobs "
+                + "FROM company_profiles cp "
+                + "JOIN users u ON cp.user_id = u.id "
+                + "LEFT JOIN industries i ON cp.industry_id = i.id "
+                + // Added JOIN for industries
+                "WHERE cp.id = ?";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 return mapResultSetToCompany(rs);
             }
@@ -117,19 +118,19 @@ public class CompanyDao {
 
     // Lấy công ty theo user ID
     public Company getCompanyByUserId(int userId) throws SQLException {
-        String sql = "SELECT cp.*, u.full_name, i.name AS industry_name, " + // Added i.name AS industry_name
-                    "(SELECT COUNT(*) FROM jobs j WHERE j.company_id = cp.user_id AND j.status = 'active') as open_jobs " +
-                    "FROM company_profiles cp " +
-                    "JOIN users u ON cp.user_id = u.id " +
-                    "LEFT JOIN industries i ON cp.industry_id = i.id " + // Added JOIN for industries
-                    "WHERE cp.user_id = ?";
-        
+        String sql = "SELECT cp.*, u.full_name, i.name AS industry_name, "
+                + "(SELECT COUNT(*) FROM job_postings j WHERE j.company_profile_id = cp.user_id AND j.status = 'active') AS open_jobs "
+                + "FROM company_profiles cp "
+                + "JOIN users u ON cp.user_id = u.id "
+                + "LEFT JOIN industries i ON cp.industry_id = i.id "
+                + "WHERE cp.user_id = ?";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                return mapResultSetToCompany(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToCompany(rs);
+                }
             }
         }
         return null;
@@ -137,14 +138,13 @@ public class CompanyDao {
 
     // Lấy danh sách ngành nghề
     public List<String> getAllIndustries() throws SQLException {
-        String sql = "SELECT DISTINCT i.name FROM industries i " +
-                    "ORDER BY i.name";
-        
+        String sql = "SELECT DISTINCT i.name FROM industries i "
+                + "ORDER BY i.name";
+
         List<String> industries = new ArrayList<>();
-        
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 String industry = rs.getString("name");
                 if (industry != null && !industry.trim().isEmpty()) {
@@ -157,15 +157,14 @@ public class CompanyDao {
 
     // Lấy danh sách địa điểm
     public List<String> getAllLocations() throws SQLException {
-        String sql = "SELECT DISTINCT address FROM company_profiles " +
-                    "WHERE address IS NOT NULL " +
-                    "ORDER BY address";
-        
+        String sql = "SELECT DISTINCT address FROM company_profiles "
+                + "WHERE address IS NOT NULL "
+                + "ORDER BY address";
+
         List<String> locations = new ArrayList<>();
-        
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 String location = rs.getString("address");
                 if (location != null && !location.trim().isEmpty()) {
@@ -178,13 +177,12 @@ public class CompanyDao {
 
     // Đếm tổng số công ty
     public int getTotalCompaniesCount() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM company_profiles cp " +
-                    "JOIN users u ON cp.user_id = u.id " +
-                    "WHERE cp.is_searchable = 1 AND u.status = 'active'";
-        
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
+        String sql = "SELECT COUNT(*) FROM company_profiles cp "
+                + "JOIN users u ON cp.user_id = u.id "
+                + "WHERE cp.is_searchable = 1 AND u.status = 'active'";
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -194,11 +192,11 @@ public class CompanyDao {
 
     // Thêm công ty mới
     public boolean insertCompany(Company company) throws SQLException {
-        String sql = "INSERT INTO company_profiles (user_id, industry_id, company_name, website, " +
-                    "description, address, phone, logo_url, banner_url, icon_url, is_featured, " +
-                    "is_searchable, created_at, updated_at) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+        String sql = "INSERT INTO company_profiles (user_id, industry_id, company_name, website, "
+                + "description, address, phone, logo_url, banner_url, icon_url, is_featured, "
+                + "is_searchable, created_at, updated_at) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             Date now = new Date();
             if (company.getCreatedAt() == null) {
@@ -207,7 +205,7 @@ public class CompanyDao {
             if (company.getUpdatedAt() == null) {
                 company.setUpdatedAt(now);
             }
-            
+
             stmt.setInt(1, company.getUserId());
             if (company.getIndustryId() > 0) {
                 stmt.setInt(2, company.getIndustryId());
@@ -226,7 +224,7 @@ public class CompanyDao {
             stmt.setBoolean(12, company.isSearchable());
             stmt.setTimestamp(13, new Timestamp(company.getCreatedAt().getTime()));
             stmt.setTimestamp(14, new Timestamp(company.getUpdatedAt().getTime()));
-            
+
             int result = stmt.executeUpdate();
             if (result > 0) {
                 ResultSet rs = stmt.getGeneratedKeys();
@@ -261,10 +259,10 @@ public class CompanyDao {
 
         Timestamp createdAt = rs.getTimestamp("created_at");
         company.setCreatedAt(createdAt != null ? new Date(createdAt.getTime()) : new Date());
-        
         Timestamp updatedAt = rs.getTimestamp("updated_at");
         company.setUpdatedAt(updatedAt != null ? new Date(updatedAt.getTime()) : new Date());
-        
+
         return company;
     }
+
 }

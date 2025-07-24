@@ -54,11 +54,11 @@
                             <c:when test="${sessionScope.user == null}">
 
                                 <ul class="nav-menu">							
-                                    <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                                    <li ><a href="index.jsp">Home<span class="submenu-indicator"></span></a></li>
 
-                                    <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
+                                    <li class="active"><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                                         <ul class="nav-dropdown nav-submenu">
-                                            <li><a href="SearchandView">Job List</a></li>
+                                            <li class="active"><a href="SearchandView">Job List</a></li>
                                         </ul>
                                     </li>
 
@@ -95,11 +95,11 @@
 
                             <c:otherwise>
                                 <ul class="nav-menu">
-                                    <li><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                                    <li><a href="candidateHome.jsp">Home<span class="submenu-indicator"></span></a></li>
 
                                     <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                                         <ul class="nav-dropdown nav-submenu">
-                                            <li><a href="SearchandView">Job List</a></li>
+                                            <li class="active"><a href="SearchandView">Job List</a></li>
                                             <li><a href="grid-style-2.html">Suitable Jobs</a></li>
                                         </ul>
                                     </li>
@@ -112,16 +112,16 @@
 
                                     <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
                                         <ul class="nav-dropdown nav-submenu">
-                                            <li><a href="#">Create CV</a></li>
-                                            <li><a href="#">Manage CV</a></li>
+                                            <li><a href="CreateNewCV.jsp">Create CV</a></li>
+                                            <li><a href="resumeCandidate.jsp">Manage CV</a></li>
                                         </ul>
                                     </li>
 
                                     <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
                                         <ul class="nav-dropdown nav-submenu">
-                                            <li><a href="about-us.html">About Us</a></li>
-                                            <li><a href="faq.html">FAQ's</a></li>
-                                            <li><a href="contact.html">Contacts</a></li>
+                                            <li><a href="about-us.jsp">About Us</a></li>
+                                            <li><a href="faq.jsp">FAQ's</a></li>
+                                            <li><a href="contact.jsp">Contacts</a></li>
                                             <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
                                         </ul>
                                     </li>
@@ -184,7 +184,7 @@
                                             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
                                                 <div class="form-group briod">
                                                     <div class="input-with-icon">
-                                                        <select name="description" class="form-control">
+                                                        <select name="category" class="form-control">
                                                             <option value="">Job Category</option>
                                                             <c:forEach var="cat" items="${des}">
                                                                 <option value="${cat}" ${param.description == cat ? 'selected' : ''}>${cat}</option>
@@ -235,22 +235,22 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
 
-                            <div class="row justify-content-center mb-5">
+                            <div class="row justify-content-center mb-4">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="item-shorting-box">
                                         <div class="item-shorting clearfix">
-                                            <h5 class="m-sm-0 mb-2">Showing ${jobList.size()} of ${totalJobs} Results</h5>
+                                            <h5 class="m-sm-0 mb-2">Showing ${param.keyword} of ${totalJobs} Results</h5>
                                         </div>
                                         <div class="item-shorting-box-right">
                                             <div class="shorting-by me-2 small">
                                                 <select name="sortBy" onchange="window.location = 'SearchandView?sortBy=' + this.value + '&papersPerPage=${papersPerPage}&description=${param.description}&city=${param.city}' + '&keyword=${param.keyword}'" >                                                   
-                                                    <option value="Internship" ${sortBy == 'Internship' ? 'selected' : ''}>Short by (Internship)</option>
-                                                    <option value="Freelancer" ${sortBy == 'Freelancer' ? 'selected' : ''}>Short by (Freelancer)</option>
-                                                    <option value="Part-time"  ${sortBy == 'Part-time' ? 'selected' : ''}>Short by (Part Time)</option>
-                                                    <option value="Full-time"  ${sortBy == 'Full-time' ? 'selected' : ''}>Short by (Full Time)</option>
+                                                    <option value="Internship" ${sortBy == 'Internship' ? 'selected' : ''}>Sort by (Internship)</option>
+                                                    <option value="Freelancer" ${sortBy == 'Freelancer' ? 'selected' : ''}>Sort by (Freelancer)</option>
+                                                    <option value="Part time"  ${sortBy == 'Part time' ? 'selected' : ''}>Sort by (Part Time)</option>
+                                                    <option value="Full time"  ${sortBy == 'Full time' ? 'selected' : ''}>Sort by (Full Time)</option>
                                                 </select>
                                             </div>
-                                            <div class="shorting-by small">
+                                            <div class="shorting-by me-2 small">
                                                 <select name="papersPerPage"
                                                         onchange="window.location.href = 'SearchandView?page=1&papersPerPage=' + this.value
                                                                         + '&description=${param.description}&city=${param.city}&keyword=${param.keyword}'">
@@ -258,6 +258,9 @@
                                                     <option value="16" ${papersPerPage == 16 ? 'selected' : ''}>16 Per Page</option>
                                                     <option value="32" ${papersPerPage == 32 ? 'selected' : ''}>32 Per Page</option>
                                                 </select>
+                                            </div>
+                                            <div class="shorting-by small">
+                                                <a href="SearchandView" class="btn btn-primary w-100 h-10">Restart the page</a>
                                             </div>
                                         </div>
                                     </div>
@@ -278,17 +281,27 @@
                                 <div class="job-instructor-layout border">
 
                                     <!-- Job Type -->
+
                                     <div class="brows-job-type">
-                                        <span class="${job.jobType}">
+                                        <span class="${fn:toLowerCase(fn:replace(job.jobType, ' ', '-'))}">
                                             <c:choose>
                                                 <c:when test="${job.jobType == 'Internship'}">Internship</c:when>
                                                 <c:when test="${job.jobType == 'Freelancer'}">Freelancer</c:when>
-                                                <c:when test="${job.jobType == 'Part-time'}">Part time</c:when>
+                                                <c:when test="${job.jobType == 'Part time'}">Part time</c:when>
                                                 <c:otherwise>Full time</c:otherwise>
                                             </c:choose>
-                                        </span>
+                                        </span>                                       
                                     </div>
 
+
+                                    <div class="left-tags-capt">
+                                        <c:if test="${job.newJob}">
+                                            <span class="urgent">NEW</span>
+                                        </c:if>
+                                        <span class="label text-light primary-2-bg">Place of Work: ${job.placeofwork}</span>
+                                        <span class="label text-light primary-2-bg">Contract type: ${job.contracttype}</span>
+                                        <span class="label text-light primary-2-bg">Job Level: ${job.jobLevel}</span>
+                                    </div>
                                     <!-- Logo -->
                                     <div class="job-instructor-thumb">
                                         <a href="JobDetail?id=${job.id}">
@@ -313,17 +326,18 @@
                                     </div>
 
                                     <!-- Footer -->
-                                    <div class="job-instructor-footer">
+                                    <div class="job-instructor-footer">                                       
+
                                         <div class="instructor-students">
                                             <h4 class="instructor-scount">
-                                                <fmt:formatNumber value="${job.salaryMin}" type="number" maxFractionDigits="0"/> ₫ - 
-                                                <fmt:formatNumber value="${job.salaryMax}" type="number" maxFractionDigits="0"/> ₫
+                                                ${job.salary}
                                             </h4>
                                         </div>
+
                                         <div class="instructor-corses">
                                             <span class="c-counting">
                                                 <c:choose>
-                                                    <c:when test="${job.status == 'open'}">Open</c:when>
+                                                    <c:when test="${job.status == 'active'}">Open</c:when>
                                                     <c:otherwise>Closed</c:otherwise>
                                                 </c:choose>
                                             </span>
@@ -465,27 +479,26 @@
                                     </div>
 
                                     <!-- Salary Range -->
-                                    <div class="single-tabs-group">
+                                    <div class="single-tabs-group">                 
                                         <div><h5>Salary Range (VND)</h5></div>
-                                        <select class="form-control" name="salary_range">
-                                            <option value="">-- Select salary range --</option>
-                                            <option value="0-20000000" <c:if test="${param.salary_range == '0-20000000'}">selected</c:if> >0 - 20.000.000</option>
-                                            <option value="20000000-40000000" <c:if test="${param.salary_range == '20000000-40000000'}">selected</c:if> >20000000-40000000</option>
-                                            <option value="40000000-60000000" <c:if test="${param.salary_range == '40000000-60000000'}">selected</c:if> >40.000.000 - 60.000.000</option>
-                                            <option value="60000000-80000000" <c:if test="${param.salary_range == '60000000-80000000'}">selected</c:if> >60.000.000 - 80.000.000</option>
-                                            <option value="80000000-100000000" <c:if test="${param.salary_range == '80000000-100000000'}">selected</c:if> >80.000.000 - 100.000.000</option>
-                                            </select>
-                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <input type="number" name="salary_min" min="0" step="1000000"
+                                                   placeholder="Min Salary" value="${param.salary_min}" class="form-control">
 
-                                        <!-- Categories -->
-                                        <div class="single-tabs-group">
-                                            <div class="single-tabs-group-header"><h5>Explore Top Categories</h5></div>
-                                            <div class="single-tabs-group-content">
-                                                <ul class="row p-0 m-0">
+                                            <input type="number" name="salary_max" min="0" step="1000000"
+                                                   placeholder="Max Salary" value="${param.salary_max}" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <!-- Categories -->
+                                    <div class="single-tabs-group">
+                                        <div class="single-tabs-group-header"><h5>Explore Top Categories</h5></div>
+                                        <div class="single-tabs-group-content">
+                                            <ul class="row p-0 m-0">
                                                 <c:forEach var="cat" items="${categories}">
                                                     <li class="col-lg-6 col-md-6 p-0">
                                                         <div class="form-check form-check-inline">
-                                                            <input type="checkbox" name="category" class="form-check-input" id="cat-${cat}" value="${cat}"
+                                                            <input type="checkbox" name="categories" class="form-check-input" id="cat-${cat}" value="${cat}"
                                                                    <c:if test="${fn:contains(paramValues.category, cat)}">checked</c:if>>
                                                             <label for="cat-${cat}" class="form-check-label">${cat}</label>
                                                         </div>
@@ -617,7 +630,71 @@
         </footer>
 
         <a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginmodal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+                <div class="modal-content" id="loginmodal">
+                    <span class="mod-close" data-bs-dismiss="modal" aria-hidden="true"><i class="fas fa-close"></i></span>
+                    <div class="modal-header">
+                        <div class="mdl-thumb">
+                            <img src="${pageContext.request.contextPath}/assets/img/ico.png" class="img-fluid" width="70" alt="">
+                        </div>
+                        <div class="mdl-title">
+                            <h4 class="modal-header-title">Hello, Again</h4>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <% if (request.getAttribute("error") != null) {%>
+                        <div class="alert alert-danger">
+                            <%= request.getAttribute("error")%>
+                        </div>
+                        <% }%>
+                        <div class="modal-login-form">
+                            <form action="${pageContext.request.contextPath}/LoginServlet" method="POST">
+                                <div class="form-floating mb-4">
+                                    <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                                    <label>Email</label>
+                                </div>
+                                <div class="form-floating mb-4">
+                                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                    <label>Password</label>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary full-width font--bold btn-lg">Log In</button>
+                                </div>
+                                <div class="modal-flex-item mb-3">
+                                    <div class="modal-flex-first">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="rem" id="savepassword" value="on">
+                                            <label class="form-check-label" for="savepassword">Save Password</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-flex-last">
+                                        <a href="forgot-password.jsp">Forget Password?</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
+                        <!-- Social login with Google centered and styled -->
+                        <div class="social-login mt-3">
+                            <ul class="list-unstyled d-flex justify-content-center mb-0">
+                                <li>
+                                    <a href="https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&access_type=online&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8080/JobSearchManagement/LoginGoogleHandler&client_id=662818990560-8t0tkh07kp0kktc2mk7177k5gj8dvkdn.apps.googleusercontent.com" class="btn connect-google">
+                                        <i class="fa-brands fa-google"></i> Login With Google
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <p>Don't have an account yet?
+                            <a href="${pageContext.request.contextPath}/SignupServlet" class="text-primary font--bold ms-1">Sign Up</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- =========================================================================== -->
         <!-- End Wrapper -->
         <!-- =========================================================================== -->

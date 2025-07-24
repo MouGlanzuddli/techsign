@@ -162,9 +162,7 @@
                                             <div class="emplr-yior-2"><h4 class="emplr-title text-light">${company.companyName}</h4></div>
                                             <div class="emplr-yior-3 justify-content-start">
                                                 <span class="text-light opacity-75"><i class="fa-solid fa-building-shield me-1"></i>Software</span>
-                                                <span class="text-light opacity-75"><i class="fa-solid fa-location-dot me-1"></i>${company.address}</span>
-                                                <span class="text-light opacity-75"><i class="fa-solid fa-location-dot me-1"></i>${company.description}</span>
-
+                                                <span class="text-light opacity-75"><i class="fa-solid fa-location-dot me-1"></i>${company.address}</span>                                              
                                             </div>
                                         </div>
                                     </div>
@@ -172,12 +170,12 @@
 
                                 <div class="emplr-head-right">
                                     <c:choose>
-                                        
+
                                         <c:when test="${sessionScope.user == null}">
                                             <button data-bs-toggle="modal" data-bs-target="#login" class="btn btn-success" type="button">Favourite Now</button>
                                         </c:when>
 
-                                        
+
                                         <c:otherwise>
                                             <c:choose>
                                                 <c:when test="${followed}">
@@ -214,65 +212,7 @@
                                 <div class="single-cdtsr-block">
                                     <div class="single-cdtsr-header"><h5>About Company</h5></div>
                                     <div class="single-cdtsr-body">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<p>
-                                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                    </div>
-                                </div>
-
-                                <div class="single-cdtsr-block">
-                                    <div class="single-cdtsr-header"><h5>Our Award</h5></div>
-                                    <div class="single-cdtsr-body">
-                                        <div class="row gx-3 gy-4">
-
-                                            <div class="col-xl-3 col-lg-3 col-md-3">
-                                                <div class="escort-award-wrap">
-                                                    <div class="escort-award-thumb">
-                                                        <figure><img src="assets/img/award-1.png" class="img-fluid" alt=""></figure>
-                                                    </div>
-                                                    <div class="escort-award-caption">
-                                                        <h6>FIFFA Award</h6>
-                                                        <label>May 2014</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xl-3 col-lg-3 col-md-3">
-                                                <div class="escort-award-wrap">
-                                                    <div class="escort-award-thumb">
-                                                        <figure><img src="assets/img/award-2.png" class="img-fluid" alt=""></figure>
-                                                    </div>
-                                                    <div class="escort-award-caption">
-                                                        <h6>COMPRA Award</h6>
-                                                        <label>Dec 2017</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xl-3 col-lg-3 col-md-3">
-                                                <div class="escort-award-wrap">
-                                                    <div class="escort-award-thumb">
-                                                        <figure><img src="assets/img/award-4.png" class="img-fluid" alt=""></figure>
-                                                    </div>
-                                                    <div class="escort-award-caption">
-                                                        <h6>ICCPR Award</h6>
-                                                        <label>Apr 2022</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xl-3 col-lg-3 col-md-3">
-                                                <div class="escort-award-wrap">
-                                                    <div class="escort-award-thumb">
-                                                        <figure><img src="assets/img/award-3.png" class="img-fluid" alt=""></figure>
-                                                    </div>
-                                                    <div class="escort-award-caption">
-                                                        <h6>XICAGO Award</h6>
-                                                        <label>July 2022</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
+                                        <p>${job.description}<p>                                                                          
                                     </div>
                                 </div>
 
@@ -287,13 +227,22 @@
                                             <span>UI/UX Design</span>
                                             <span>Laravel</span>
                                             <span>Magento 2.0</span>
+                                            <c:forEach var="line1" items="${company.companybenefits}">
+                                            <span>${line1}</span>
+                                           </c:forEach>
                                         </div>
                                     </div>
                                 </div>
 
-
-
-
+                                <div class="single-cdtsr-block">
+                                    <h6 class="single-cdtsr-header">Companies Benefits:</h6>
+                                    <ul class="simple-list">
+                                        <c:forEach var="line" items="${company.companybenefits}">
+                                            <li>${line}</li>
+                                           </c:forEach>
+                                    </ul>
+                                </div>
+                            
                                 <!-- Company Review -->
 
 
@@ -311,7 +260,7 @@
                                                 <div class="eflorio-list-icons"><i class="fa-solid fa-envelope-circle-check text-primary"></i></div>
                                                 <div class="eflorio-list-captions">
                                                     <label>Email Address</label>
-                                                    <h6>themezhub@gmail.com</h6>
+                                                    <h6>${company.email}</h6>
                                                 </div>
                                             </div>
 
@@ -347,7 +296,8 @@
                                     </div>
                                     <div class="eflorio-wrap-footer">
                                         <div class="eflorio-footer-body">
-                                            <button type="button" class="btn btn-primary fw-medium full-width">View Website</button>
+                                            <a href="${company.website}" target="_blank" class="btn btn-primary fw-medium full-width">View Website</a>
+
                                         </div>
                                     </div>
                                 </div>

@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<script src="plugins/jquery.min.js"></script>
+<script src="plugins/jquery.nice-select.min.js"></script>
 
 <!doctype html>
 <html lang="en">
@@ -10,9 +12,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Companies- Responsive Job Portal Bootstrap Template | ThemezHub</title>
+        <title>TechSign - Responsive Job Portal Bootstrap Template | ThemezHub</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
-
+        <link rel="stylesheet" href="assets/css/nice-select.css">
         <!-- Custom CSS -->
         <link href="assets/css/styles.css" rel="stylesheet">
 
@@ -58,7 +60,7 @@
                                 <c:when test="${sessionScope.user == null}">
 
                                     <ul class="nav-menu">							
-                                        <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                                        <li><a href="index.jsp">Home<span class="submenu-indicator"></span></a></li>
 
                                         <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                                             <ul class="nav-dropdown nav-submenu">
@@ -66,7 +68,7 @@
                                             </ul>
                                         </li>
 
-                                        <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
+                                        <li class="active"><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                                             <ul class="nav-dropdown nav-submenu">
                                                 <li><a href="SearchCompaniesServlet;">Company list</a></li>
                                             </ul>
@@ -108,7 +110,7 @@
                                             </ul>
                                         </li>
 
-                                        <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
+                                        <li class="active"><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                                             <ul class="nav-dropdown nav-submenu">
                                                 <li><a href="SearchCompaniesServlet">Company List</a></li>
                                             </ul>
@@ -116,8 +118,8 @@
 
                                         <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
                                             <ul class="nav-dropdown nav-submenu">
-                                                <li><a href="#">Create CV</a></li>
-                                                <li><a href="#">Manage CV</a></li>
+                                                <li><a href="CreateNewCV.jsp">Create CV</a></li>
+                                                <li><a href="resumeCandidate.jsp">Manage CV</a></li>
                                             </ul>
                                         </li>
 
@@ -173,20 +175,16 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
-
                             <h2 class="ipt-title">Find your Companies</h2>
                             <div class="breadcrumbs light">
-                                <nav aria-label="breadcrumb">
-
-                                </nav>
+                                <nav aria-label="breadcrumb"></nav>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- ============================ Page Title End ================================== -->
 
-            <!-- ============================ All List Wrap ================================== -->
+            <!-- Company List Section -->
             <section>
                 <div class="container">
                     <div class="row">
@@ -230,6 +228,7 @@
                                 </div>
                             </div>							
                         </div>
+
                         <!-- Sidebar End -->
 
                         <!-- Job List Wrap -->
@@ -238,26 +237,37 @@
                             <!-- Shorting Box -->
                             <div class="row justify-content-center mb-4">
                                 <div class="col-lg-12 col-md-12">
-                                    <div class="item-shorting-box">                                       
-                                        <div class="item-shorting-box-right">                                           
+                                    <div class="item-shorting-box">
+                                        <!-- Left part: Title -->
+                                        <div class="item-shorting clearfix">
+                                            <div class="left-column">
+                                                <h4 class="m-sm-0 mb-2">
+                                                    Showing ${companyList.size()} of ${totalCompanies} Results
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <!-- Right part: Control số item trên 1 trang -->
+                                        <div class="item-shorting-box-right">
+                                            <div class="shorting-by me-2 small">
+                                                <select name="companiesPerPage"                                  
+                                                        onchange="location.href = 'SearchCompaniesServlet?keyword=${param.keyword}&companiesPerPage=' + this.value"  tabindex="0">
+                                                    <option  value="9"  ${companiesPerPage == 9  ? 'selected' : ''}> 9 Per Page</option>
+                                                    <option  value="18" ${companiesPerPage == 18 ? 'selected' : ''}>18 Per Page</option>
+                                                    <option  value="36" ${companiesPerPage == 36 ? 'selected' : ''}>36 Per Page</option>
+                                                </select>                                               
+                                            </div>
                                             <div class="shorting-by small">
-                                                <select name="companiesPerPage" 
-                                                        onchange="location.href = 'SearchCompaniesServlet?keyword=${param.keyword}&companiesPerPage=' + this.value">
-                                                    <option value="9" ${companiesPerPage == 9 ? 'selected' : ''}>9 Per Page</option>
-                                                    <option value="18" ${companiesPerPage == 18 ? 'selected' : ''}>18 Per Page</option>
-                                                    <option value="36" ${companiesPerPage == 36 ? 'selected' : ''}>36 Per Page</option>
-                                                </select>
+                                                <a href="SearchCompaniesServlet" class="btn btn-primary w-100 h-10">Restart the page</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Shorting Wrap End -->
 
                             <!-- Start All List -->
                             <div class="row justify-content-start gx-3 gy-4">
-
-
                                 <c:choose>
                                     <c:when test="${not empty companies}">
                                         <c:forEach var="company" items="${companies}">
@@ -294,167 +304,174 @@
                                         <p>No companies found.</p>
                                     </c:otherwise>
                                 </c:choose>
+                            </div>
 
+                            <!-- Pagination -->
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <c:if test="${currentPage > 1}">
+                                                <li class="page-item">
+                                                    <a class="page-link"
+                                                       href="SearchCompaniesServlet?page=${currentPage - 1}&companiesPerPage=${companiesPerPage}&keyword=${keyword}">
+                                                        &laquo;
+                                                    </a>
+                                                </li>
+                                            </c:if>
 
-                            </div>	
-                        </div>
+                                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link"
+                                                       href="SearchCompaniesServlet?page=${i}&companiesPerPage=${companiesPerPage}&keyword=${keyword}">
+                                                        ${i}
+                                                    </a>
+                                                </li>
+                                            </c:forEach>
 
-                    </div>
-                    <!-- End All Job List -->
-
-                    <!-- Pagination -->
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <c:if test="${currentPage > 1}">
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                               href="SearchCompaniesServlet?page=${currentPage - 1}&companiesPerPage=${companiesPerPage}&keyword=${keyword}">
-                                                &laquo;
-                                            </a>
-                                        </li>
-                                    </c:if>
-
-                                    <c:forEach var="i" begin="1" end="${totalPages}">
-                                        <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                            <a class="page-link"
-                                               href="SearchCompaniesServlet?page=${i}&companiesPerPage=${companiesPerPage}&keyword=${keyword}">
-                                                ${i}
-                                            </a>
-                                        </li>
-                                    </c:forEach>
-
-                                    <c:if test="${currentPage < totalPages}">
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                               href="SearchCompaniesServlet?page=${currentPage + 1}&companiesPerPage=${companiesPerPage}&keyword=${keyword}">
-                                                &raquo;
-                                            </a>
-                                        </li>
-                                    </c:if>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- Job List Wrap End-->
-
-        </div>
-    </div>		
-</section>
-<!-- ============================ All List Wrap ================================== -->
-
-
-<!-- ============================ Footer End ================================== -->
-
-<!-- Log In Modal -->
-<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginmodal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
-        <div class="modal-content" id="loginmodal">
-            <span class="mod-close" data-bs-dismiss="modal" aria-hidden="true"><i class="fas fa-close"></i></span>
-            <div class="modal-header">
-                <div class="mdl-thumb"><img src="assets/img/ico.png" class="img-fluid" width="70" alt=""></div>
-                <div class="mdl-title"><h4 class="modal-header-title">Hello, Again</h4></div>
-            </div>
-            <div class="modal-body">
-                <div class="modal-login-form">
-                    <form>
-
-                        <div class="form-floating mb-4">
-                            <input type="email" class="form-control" placeholder="name@example.com">
-                            <label>User Name</label>
-                        </div>
-
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" placeholder="Password">
-                            <label>Password</label>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary full-width font--bold btn-lg">Log In</button>
-                        </div>
-
-                        <div class="modal-flex-item mb-3">
-                            <div class="modal-flex-first">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="savepassword" value="option1">
-                                    <label class="form-check-label" for="savepassword">Save Password</label>
+                                            <c:if test="${currentPage < totalPages}">
+                                                <li class="page-item">
+                                                    <a class="page-link"
+                                                       href="SearchCompaniesServlet?page=${currentPage + 1}&companiesPerPage=${companiesPerPage}&keyword=${keyword}">
+                                                        &raquo;
+                                                    </a>
+                                                </li>
+                                            </c:if>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
-                            <div class="modal-flex-last">
-                                <a href="JavaScript:Void(0);">Forget Password?</a>
+                        </div> <!-- /.col-lg-8 -->
+
+                    </div> <!-- /.row -->
+                </div> <!-- /.container -->
+            </section> <!-- End Section -->
+
+            <!-- ============================ All List Wrap ================================== -->
+
+
+            <!-- ============================ Footer End ================================== -->
+
+            <!-- Log In Modal -->
+            <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginmodal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+                    <div class="modal-content" id="loginmodal">
+                        <span class="mod-close" data-bs-dismiss="modal" aria-hidden="true"><i class="fas fa-close"></i></span>
+                        <div class="modal-header">
+                            <div class="mdl-thumb">
+                                <img src="${pageContext.request.contextPath}/assets/img/ico.png" class="img-fluid" width="70" alt="">
+                            </div>
+                            <div class="mdl-title">
+                                <h4 class="modal-header-title">Hello, Again</h4>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="social-login">
-                    <ul>
-                        <li><a href="JavaScript:Void(0);" class="btn connect-fb"><i class="fa-brands fa-facebook"></i>Facebook</a></li>
-                        <li><a href="JavaScript:Void(0);" class="btn connect-google"><i class="fa-brands fa-google"></i>Google+</a></li>
-                    </ul>
+                        <div class="modal-body">
+                            <% if (request.getAttribute("error") != null) {%>
+                            <div class="alert alert-danger">
+                                <%= request.getAttribute("error")%>
+                            </div>
+                            <% }%>
+                            <div class="modal-login-form">
+                                <form action="${pageContext.request.contextPath}/LoginServlet" method="POST">
+                                    <div class="form-floating mb-4">
+                                        <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="form-floating mb-4">
+                                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                        <label>Password</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary full-width font--bold btn-lg">Log In</button>
+                                    </div>
+                                    <div class="modal-flex-item mb-3">
+                                        <div class="modal-flex-first">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="rem" id="savepassword" value="on">
+                                                <label class="form-check-label" for="savepassword">Save Password</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-flex-last">
+                                            <a href="forgot-password.jsp">Forget Password?</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Social login with Google centered and styled -->
+                            <div class="social-login mt-3">
+                                <ul class="list-unstyled d-flex justify-content-center mb-0">
+                                    <li>
+                                        <a href="https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&access_type=online&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8080/JobSearchManagement/LoginGoogleHandler&client_id=662818990560-8t0tkh07kp0kktc2mk7177k5gj8dvkdn.apps.googleusercontent.com" class="btn connect-google">
+                                            <i class="fa-brands fa-google"></i> Login With Google
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <p>Don't have an account yet?
+                                <a href="${pageContext.request.contextPath}/SignupServlet" class="text-primary font--bold ms-1">Sign Up</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <p>Don't have an account yet?<a href="signup.html" class="text-primary font--bold ms-1">Sign Up</a></p>
+            <!-- End Modal -->
+
+
+
+
+            <a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Wrapper -->
+        <!-- ============================================================== -->
+
+        <!-- Color Switcher -->
+        <div class="style-switcher">
+            <div class="css-trigger shadow"><a href="#"><i class="fa-solid fa-paintbrush"></i></a></div>
+            <div>
+                <ul id="themecolors" class="m-t-20">
+                    <li><a href="javascript:void(0)" data-skin="green-theme" class="green-theme">1</a></li>
+                    <li><a href="javascript:void(0)" data-skin="red-theme" class="red-theme">2</a></li>
+                    <li><a href="javascript:void(0)" data-skin="blue-theme" class="blue-theme">3</a></li>
+                    <li><a href="javascript:void(0)" data-skin="yellow-theme" class="yellow-theme">4</a></li>
+                    <li><a href="javascript:void(0)" data-skin="purple-theme" class="purple-theme">5</a></li>
+                    <li><a href="javascript:void(0)" data-skin="orange-theme" class="orange-theme">6</a></li>
+                    <li><a href="javascript:void(0)" data-skin="brown-theme" class="brown-theme">7</a></li>
+                    <li><a href="javascript:void(0)" data-skin="cadmium-theme" class="cadmium-theme">8</a></li>			
+                </ul>
             </div>
         </div>
-    </div>
-</div>
-<!-- End Modal -->
+
+        <!-- ============================================================== -->
+        <!-- All Jquery -->
+        <!-- ============================================================== -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
+        <script src="assets/js/jquery.nice-select.min.js"></script>
 
 
-<a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/rangeslider.js"></script>
+        <script src="assets/js/slick.js"></script>
+        <script src="assets/js/counterup.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <script src="assets/js/autoscompletesearchc.js"></script>
+        <script src="assets/js/custom.js"></script>
+        <script src="assets/js/cl-switch.js"></script>
+        <!-- ============================================================== -->
+        <!-- This page plugins -->
+        <!-- ============================================================== -->
 
 
-</div>
-<!-- ============================================================== -->
-<!-- End Wrapper -->
-<!-- ============================================================== -->
+    </body>
 
-<!-- Color Switcher -->
-<div class="style-switcher">
-    <div class="css-trigger shadow"><a href="#"><i class="fa-solid fa-paintbrush"></i></a></div>
-    <div>
-        <ul id="themecolors" class="m-t-20">
-            <li><a href="javascript:void(0)" data-skin="green-theme" class="green-theme">1</a></li>
-            <li><a href="javascript:void(0)" data-skin="red-theme" class="red-theme">2</a></li>
-            <li><a href="javascript:void(0)" data-skin="blue-theme" class="blue-theme">3</a></li>
-            <li><a href="javascript:void(0)" data-skin="yellow-theme" class="yellow-theme">4</a></li>
-            <li><a href="javascript:void(0)" data-skin="purple-theme" class="purple-theme">5</a></li>
-            <li><a href="javascript:void(0)" data-skin="orange-theme" class="orange-theme">6</a></li>
-            <li><a href="javascript:void(0)" data-skin="brown-theme" class="brown-theme">7</a></li>
-            <li><a href="javascript:void(0)" data-skin="cadmium-theme" class="cadmium-theme">8</a></li>			
-        </ul>
-    </div>
-</div>
-
-<!-- ============================================================== -->
-<!-- All Jquery -->
-<!-- ============================================================== -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/popper.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/rangeslider.js"></script>
-<script src="assets/js/jquery.nice-select.min.js"></script>
-<script src="assets/js/slick.js"></script>
-<script src="assets/js/counterup.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="assets/js/autoscompletesearchc.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<script src="assets/js/custom.js"></script><script src="assets/js/cl-switch.js"></script>
-<!-- ============================================================== -->
-<!-- This page plugins -->
-<!-- ============================================================== -->
-
-
-</body>
-
-<!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/employer-grid-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:59:19 GMT -->
+    <!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/employer-grid-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:59:19 GMT -->
 </html>

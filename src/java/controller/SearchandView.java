@@ -53,7 +53,7 @@ public class SearchandView extends HttpServlet {
             List<String> des = dao.getAllJobCategoriesDes();
             List<String> cities = dao.getAllCities();
             List<String> categories = dao.getAllCategories();
-            
+
             boolean noFilters = (keyword == null || keyword.isBlank())
                     && (description == null || description.isBlank())
                     && (city == null || city.isBlank())
@@ -98,8 +98,6 @@ public class SearchandView extends HttpServlet {
             request.setAttribute("papersPerPage", papersPerPage);
             request.setAttribute("sortBy", sortBy);
             request.setAttribute("param", request.getParameterMap());
-
-            
             request.setAttribute("categories", categories);
             request.setAttribute("des", des);
             request.setAttribute("cities", cities);
@@ -118,19 +116,21 @@ public class SearchandView extends HttpServlet {
         String[] placeOfWork = request.getParameterValues("place_of_work");
         String[] contractTypes = request.getParameterValues("contract_type");
         String[] employmentTypes = request.getParameterValues("employment_type");
-        String salaryRange = request.getParameter("salary_range");
-        String[] categories = request.getParameterValues("category");
+        String salaryMinStr = request.getParameter("salary_min");
+        String salaryMaxStr = request.getParameter("salary_max");
+        String[] jobtype = request.getParameterValues("categories"); // name đã đồng bộ
         String keyword = request.getParameter("keyword");
         String sortBy = request.getParameter("sortBy");
 
-        // Lấy page & papersPerPage
+        Double salaryMin = null;
+        Double salaryMax = null;
         int currentPage = 1;
         String pageParam = request.getParameter("page");
         if (pageParam != null && pageParam.matches("\\d+")) {
             currentPage = Integer.parseInt(pageParam);
         }
 
-        int papersPerPage = 10;
+        int papersPerPage = 8;
         String perPageParam = request.getParameter("papersPerPage");
         if (perPageParam != null && perPageParam.matches("\\d+")) {
             papersPerPage = Integer.parseInt(perPageParam);
@@ -138,21 +138,29 @@ public class SearchandView extends HttpServlet {
 
         try (Connection conn = new DBContext().getConnection()) {
 
+            try {
+                if (salaryMinStr != null && !salaryMinStr.isBlank()) {
+                    salaryMin = Double.parseDouble(salaryMinStr);
+                }
+                if (salaryMaxStr != null && !salaryMaxStr.isBlank()) {
+                    salaryMax = Double.parseDouble(salaryMaxStr);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
             JobPostingDAO dao = new JobPostingDAO();
             List<JobPosting> allJobs = dao.filterJobs(
-                    placeOfWork, contractTypes, employmentTypes, salaryRange, categories, keyword
+                    placeOfWork, contractTypes, employmentTypes,
+                    salaryMin, salaryMax, jobtype, keyword
             );
 
-            // Sort theo jobType nếu có sortBy
-            if ((employmentTypes == null || employmentTypes.length == 0)
-                    && sortBy != null && !"default".equals(sortBy)) {
+            if (sortBy != null && !"default".equals(sortBy)) {
                 final String finalSortBy = sortBy;
                 allJobs = allJobs.stream()
                         .filter(j -> finalSortBy.equalsIgnoreCase(j.getJobType()))
                         .collect(Collectors.toList());
             }
 
-            // Tính tổng & phân trang
             int totalJobs = allJobs.size();
             int totalPages = (int) Math.ceil((double) totalJobs / papersPerPage);
 
@@ -167,9 +175,18 @@ public class SearchandView extends HttpServlet {
                 jobList = allJobs.subList(start, end);
             }
 
+            JobPostingSkillDAO skillDAO = new JobPostingSkillDAO();
+            Map<Integer, List<Skill>> skillsMap = new HashMap<>();
+            for (JobPosting job : jobList) {
+                skillsMap.put(job.getId(), skillDAO.getSkillsByJobId(job.getId()));
+            }
+            request.setAttribute("skillsMap", skillsMap);
+
             request.setAttribute("jobs", jobList);
             request.setAttribute("categories", dao.getAllCategories());
-            request.setAttribute("param", request.getParameterMap());
+            request.setAttribute("des", dao.getAllJobCategoriesDes());
+            request.setAttribute("cities", dao.getAllCities());
+
             request.setAttribute("sortBy", sortBy);
             request.setAttribute("currentPage", currentPage);
             request.setAttribute("papersPerPage", papersPerPage);
@@ -182,4 +199,5 @@ public class SearchandView extends HttpServlet {
             response.sendRedirect("error.jsp");
         }
     }
+
 }

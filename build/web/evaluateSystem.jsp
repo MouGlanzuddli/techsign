@@ -1,3 +1,7 @@
+<%
+    String success = request.getParameter("success");
+    String error = request.getParameter("error");
+%>
 <!doctype html>
 <html lang="en">
 
@@ -50,7 +54,7 @@
                         </div>
                         <div class="nav-menus-wrapper">
                             <ul class="nav-menu">
-                                <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                                <li><a href="candidateHome.jsp">Home<span class="submenu-indicator"></span></a></li>
                                 <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                                     <ul class="nav-dropdown nav-submenu">
                                         <li><a href="SearchandView">Job List</a></li>
@@ -65,13 +69,13 @@
                                 </li>
                                 <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
                                     <ul class="nav-dropdown nav-submenu">
-                                        <li><a>Create CV</a></li>
-                                        <li><a>Manage CV</a></li>
+                                        <li><a  href="CreateNewCV.jsp">Create CV</a></li>
+                                        <li><a href="resumeCandidate.jsp">Manage CV</a></li>
 
                                     </ul>
                                 </li>
 
-                                <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
+                                <li class="active"><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
                                     <ul class="nav-dropdown nav-submenu">
                                         <li><a href="about-us.html">About Us</a></li> 
 
@@ -154,18 +158,35 @@
                                     <div class="col-lg-12 col-md-12">
                                         <div class="form-group">
                                             <label>Message</label>
+
+                                            <% if ("true".equals(success)) { %>
+                                            <textarea class="form-control simple" name="feedback" readonly>Thank you for your feedback!</textarea>
+                                            <% } else { %>
                                             <textarea class="form-control simple" name="feedback" required></textarea>
+                                            <% } %>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-12 col-md-12">
                                         <div class="form-group">
+                                            <% if ("true".equals(success)) { %>
+                                            <div class="btn btn-success">Submit Success</div>
+                                            <a href="evaluateSystem.jsp" class="btn btn-primary">Continues if you want feedback</a>
+                                            <% } else if ("true".equals(error)) { %>
+                                            <div class="btn btn-danger">Submit Failed. Please try again.</div>
+                                            <a href="evaluateSystem.jsp" class="btn btn-primary">Back</a>
+                                            <% } else { %>
                                             <button class="btn btn-primary" type="submit">Submit</button>
+                                            <% }%>
                                         </div>
                                     </div>
                                 </div>				
                             </div>		
                         </div>
                     </form>
+
+
+
                     <!-- /row -->
 
                     <!-- row Start -->

@@ -177,73 +177,47 @@
                                 <div class="mb-3">
                                     <label>Profile Title</label>
                                     <input type="text" name="jobtitle" id="jobtitle" class="form-control" value="<%= cv.getString("jobtitle")%>" oninput="updatePreview()" required>
-                                    <span class="text-danger" id="error-jobtitle"></span>
-                                    <a onclick="clearField('jobtitle')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-jobtitle"></span>                                   
                                 </div>
                                 <div class="mb-3">
                                     <label>Full name</label>
                                     <input type="text" name="fullname" id="fullname" class="form-control" value="<%= cv.getString("fullname")%>" oninput="updatePreview()" required>
-                                    <span class="text-danger" id="error-fullname"></span>
-                                    <a onclick="clearField('fullname')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-fullname"></span>                                    
                                 </div>
                                 <div class="mb-3">
                                     <label>Email</label>
                                     <input type="email" name="email" id="email" class="form-control" value="<%= cv.getString("email")%>" oninput="updatePreview()" required>
-                                    <span class="text-danger" id="error-email"></span>
-                                    <a onclick="clearField('email')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-email"></span>                                   
                                 </div>
                                 <div class="mb-3">
                                     <label>Phone number</label>
                                     <input type="text" name="phone" id="phone" class="form-control" value="<%= cv.getString("phone")%>" oninput="updatePreview()" required>
-                                    <span class="text-danger" id="error-phone"></span>
-                                    <a onclick="clearField('phone')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-phone"></span>                                  
                                 </div>
                                 <div class="mb-3">
                                     <label>Date of birth</label>
                                     <input type="text" name="dob" id="dob" class="form-control" value="<%= cv.getString("dob")%>" oninput="updatePreview()">
-                                    <span class="text-danger" id="error-dob"></span>
-                                    <a onclick="clearField('dob')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-dob"></span>                                   
                                 </div>
                                 <div class="mb-3">
                                     <label>Address</label>
                                     <input type="text" name="address" id="address" class="form-control" value="<%= cv.getString("address")%>" oninput="updatePreview()">
-                                    <span class="text-danger" id="error-address"></span>
-                                    <a onclick="clearField('address')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-address"></span>                                   
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label>Avatar</label>
                                     <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*" onchange="previewAvatar()">
-                                    <span class="text-danger" id="error-avatar"></span>
-                                    <a onclick="clearField('avatar')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <span class="text-danger" id="error-avatar"></span>                                 
                                 </div>
                                 <div class="mb-3">
                                     <label>Career Goal</label>
-                                    <textarea name="objective" id="objective" class="form-control" oninput="updatePreview()"><%= cv.getString("objective")%></textarea>
-                                    <a onclick="clearField('objective')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    <textarea name="objective" id="objective" class="form-control" oninput="updatePreview()"><%= cv.getString("objective")%></textarea>                                   
                                 </div>
                                 <div class="mb-3">
                                     <label>Skills (1 skill per line)</label>
                                     <textarea name="skills" id="skills" class="form-control" oninput="updatePreview()"><%= cv.getString("skills")%></textarea>
-                                    <a onclick="clearField('skills')" class="btn btn-md btn-light-danger ">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
+                                    
                                 </div>
 
                                 <h5 class="mt-4">Work Experience</h5>
