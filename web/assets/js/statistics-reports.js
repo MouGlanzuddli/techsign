@@ -235,11 +235,14 @@ function initializeAccountStatsWithRealData() {
 
 // ✅ 2. ACCESS STATISTICS with Real Data
 function initializeAccessStatsWithRealData() {
-  setupAccessRangeSelector()
-  loadAccessChartData(currentAccessRange)
-  updateAccessStatsWithRealData()
-  updateLastUpdateTime()
-  addFadeInAnimations()
+  // Đảm bảo DOM đã sẵn sàng trước khi khởi tạo
+  setTimeout(() => {
+    setupAccessRangeSelector()
+    // Không tạo chart khi vào section, chỉ hiển thị data hiện có
+    updateAccessStatsWithRealData()
+    updateLastUpdateTime()
+    addFadeInAnimations()
+  }, 100)
 }
 
 function updateAccessStatsWithRealData() {
@@ -618,11 +621,20 @@ function createMainChart() {
 
 // ✅ Additional chart functions for other sections
 function createAccessChart() {
-  const ctx = document.getElementById("accessChart").getContext("2d")
-  if (!ctx) return
-
+  const canvas = document.getElementById("accessBarChart")
+  if (!canvas) {
+    return
+  }
+  
+  // Destroy existing chart first
   if (charts.accessChart) {
     charts.accessChart.destroy()
+    charts.accessChart = null
+  }
+  
+  const ctx = canvas.getContext("2d")
+  if (!ctx) {
+    return
   }
 
   const visitsData = realData.accessStats.visitsChartData || {};
@@ -800,7 +812,10 @@ function refreshAccountStats() {
 function refreshAccessStats() {
   console.log("🔄 Refreshing access statistics...")
   loadAllRealData().then(() => {
-    initializeAccessStatsWithRealData()
+    // Thêm delay để đảm bảo DOM đã sẵn sàng
+    setTimeout(() => {
+      initializeAccessStatsWithRealData()
+    }, 100)
   })
 }
 
@@ -988,6 +1003,8 @@ function loadAccessChartData(range) {
       // Lưu dữ liệu visitsChartData vào realData
       realData.accessStats.visitsChartData = data.visitsChartData || {};
       // Cập nhật các chỉ số khác nếu muốn (tùy chọn)
+      
+      // Tạo chart với data mới
       createAccessChart();
     })
     .catch((error) => {
@@ -1513,10 +1530,15 @@ function fetchAccessBarChartData(startDate, endDate) {
 function drawAccessBarChartWithData(labels, values) {
   const ctx = document.getElementById("accessBarChart");
   if (!ctx) return;
-  if (window.charts && window.charts.accessBarChart) window.charts.accessBarChart.destroy();
-  if (!window.charts) window.charts = {};
+  
+  // Destroy existing chart first (use same chart object as createAccessChart)
+  if (charts.accessChart) {
+    charts.accessChart.destroy()
+    charts.accessChart = null
+  }
+  
   document.getElementById("accessBarNoDataMsg").style.display = "none";
-  window.charts.accessBarChart = new Chart(ctx, {
+  charts.accessChart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
@@ -1551,7 +1573,10 @@ function drawAccessBarChartWithData(labels, values) {
 
 function showNoAccessBarDataMessage() {
   const ctx = document.getElementById("accessBarChart");
-  if (window.charts && window.charts.accessBarChart) window.charts.accessBarChart.destroy();
+  if (charts.accessChart) {
+    charts.accessChart.destroy()
+    charts.accessChart = null
+  }
   document.getElementById("accessBarNoDataMsg").style.display = "block";
 }
 
@@ -1565,3 +1590,13 @@ function handleAccessBarRangeClick() {
   fetchAccessBarChartData(start, end);
 }
 window.handleAccessBarRangeClick = handleAccessBarRangeClick;
+
+// Expose refresh functions to window for section-loader.js
+window.refreshAccessStats = refreshAccessStats;
+window.refreshAccountStats = refreshAccountStats;
+window.refreshActivityReports = refreshActivityReports;
+window.refreshApplicationAnalysis = refreshApplicationAnalysis;
+window.refreshJobReport = refreshJobReport;
+
+// Expose initialization functions to window for section-loader.js
+window.initializeAccessStatsWithRealData = initializeAccessStatsWithRealData;

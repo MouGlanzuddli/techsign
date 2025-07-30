@@ -8,13 +8,9 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- In your <head> section -->
-<link href="${pageContext.request.contextPath}/assets/css/plugins/admin.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/assets/css/plugins/chatbox.css" rel="stylesheet"> 
-<link href="${pageContext.request.contextPath}/assets/css/plugins/ui-common.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/assets/css/plugins/content.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/assets/css/plugins/job-postings.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/assets/css/statistics-reports.css" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/statistics-reports.css">
+        <link href="<c:url value='assets/css/plugins/admin.css'/>" rel="stylesheet" />
+        <link href="<c:url value='assets/css/plugins/chatbox.css'/>" rel="stylesheet" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/statistics-reports.css">
 
 
 

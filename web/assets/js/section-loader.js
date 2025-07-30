@@ -111,7 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
                     break;
                 case 'access-stats':
-                    if (typeof window.refreshAccessStats === 'function') window.refreshAccessStats();
+                    // Khởi tạo section với data hiện có, không load chart
+                    setTimeout(() => {
+                        if (typeof window.initializeAccessStatsWithRealData === 'function') window.initializeAccessStatsWithRealData();
+                    }, 100);
                     break;
                 case 'activity-reports':
                     if (typeof window.refreshActivityReports === 'function') window.refreshActivityReports();
@@ -186,7 +189,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
                                 break;
                             case 'access-stats':
-                                if (typeof window.refreshAccessStats === 'function') window.refreshAccessStats();
+                                // Khởi tạo section với data hiện có, không load chart
+                                setTimeout(() => {
+                                    if (typeof window.initializeAccessStatsWithRealData === 'function') window.initializeAccessStatsWithRealData();
+                                }, 100);
                                 break;
                             case 'activity-reports':
                                 if (typeof window.refreshActivityReports === 'function') window.refreshActivityReports();

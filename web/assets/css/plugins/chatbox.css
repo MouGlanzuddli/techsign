@@ -234,4 +234,4 @@
 .status-open { background-color: #fefcbf; color: #a16207; } /* Yellow */
 .status-in-progress { background-color: #bfdbfe; color: #1e40af; } /* Blue */
 .status-closed { background-color: #a7f3d0; color: #065f46; } /* Green */
-.status-pending-user { background-color: #fca5a5; color: #dc2626; } /* Red */
+.status-pending-user { background-color: #fca5a5; color: #dc2626; } /* Red */ 
