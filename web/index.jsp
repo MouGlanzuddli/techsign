@@ -1282,6 +1282,9 @@
         <!-- This page plugins -->
         <!-- ============================================================== -->		
 
+        <!-- TechSign AI Chatbot -->
+        <jsp:include page="views/components/techsign-ai-chatbot.jsp" />
+
     </body>
 
     <!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:58:22 GMT -->

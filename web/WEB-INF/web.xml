@@ -102,11 +102,17 @@
 <servlet-name>AuditLogServlet</servlet-name>
 <servlet-class>controller.AuditLogServlet</servlet-class>
 </servlet>
-<servlet>
-<servlet-name>ActivityReportServlet</servlet-name>
-<servlet-class>controller.ActivityReportServlet</servlet-class>
-</servlet>
-<!--  Servlet Mappings  -->
+  <servlet>
+  <servlet-name>ActivityReportServlet</servlet-name>
+  <servlet-class>controller.ActivityReportServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+  <servlet-name>TechSignAIChatbotServlet</servlet-name>
+  <servlet-class>controller.TechSignAIChatbotServlet</servlet-class>
+  </servlet>
+
+  <!--  Servlet Mappings  -->
 
 <servlet-mapping>
 <servlet-name>AdminDashboardServlet</servlet-name>
@@ -217,8 +223,14 @@
 <servlet-name>AuditLogServlet</servlet-name>
 <url-pattern>/AuditLogServlet</url-pattern>
 </servlet-mapping>
-<servlet-mapping>
-<servlet-name>ActivityReportServlet</servlet-name>
-<url-pattern>/activityReport</url-pattern>
-</servlet-mapping>
+  <servlet-mapping>
+  <servlet-name>ActivityReportServlet</servlet-name>
+  <url-pattern>/activityReport</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+  <servlet-name>TechSignAIChatbotServlet</servlet-name>
+  <url-pattern>/techsign-ai-chatbot</url-pattern>
+  </servlet-mapping>
+
 </web-app>

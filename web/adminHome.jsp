@@ -229,6 +229,8 @@
 
         </script>
 
+        <!-- TechSign AI Chatbot -->
+        <jsp:include page="views/components/techsign-ai-chatbot.jsp" />
 
     </body>
 </html>
