@@ -71,63 +71,127 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        const basePath = getBasePath();
-        const jspUrl = `${basePath}views/sections/${file}?t=${new Date().getTime()}`;
+        // Cập nhật breadcrumb
+        if (breadcrumbText && breadcrumb) {
+            breadcrumbText.textContent = breadcrumb;
+        }
         
-        fetch(jspUrl, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Lỗi HTTP ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const section = doc.querySelector(`#${sectionId}`);
-            
-            if (section) {
-                sectionContent.innerHTML = section.innerHTML;
+        // Cập nhật URL
+        window.history.pushState(null, '', `#${sectionId}`);
+        
+        // Xác định file JSP cần load dựa trên loại section
+        const basePath = getBasePath();
+        let jspUrl;
+        
+        // Các section reporting đều load từ statistics-reports.jsp
+        const reportingSections = ['account-stats', 'access-stats', 'activity-reports', 'job-posting-reports', 'application-analysis'];
+        if (reportingSections.includes(sectionId)) {
+            jspUrl = basePath + 'views/sections/statistics-reports.jsp';
+        } else {
+            // Các section khác load từ file JSP riêng
+            jspUrl = basePath + 'views/sections/' + file;
+        }
+        
+        fetch(jspUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(html => {
+                sectionContent.innerHTML = html;
                 
-                // Thực thi các script trong nội dung tải về
-                const scripts = section.getElementsByTagName('script');
-                for (const script of scripts) {
-                    const newScript = document.createElement('script');
-                    newScript.text = script.text;
-                    sectionContent.appendChild(newScript);
+                // Đối với các section reporting, cần hiển thị section đúng
+                if (reportingSections.includes(sectionId)) {
+                    // Setup navigation cho các tab
+                    if (typeof window.setupNavigation === 'function') {
+                        window.setupNavigation();
+                    }
+                    
+                    // Ẩn tất cả các section
+                    const allSections = document.querySelectorAll('.report-section');
+                    allSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Hiển thị section được chọn
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    
+                    // Cập nhật active tab
+                    const allTabs = document.querySelectorAll('.nav-tab');
+                    allTabs.forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    const activeTab = document.querySelector(`[data-section="${sectionId}"]`);
+                    if (activeTab) {
+                        activeTab.classList.add('active');
+                    }
                 }
                 
-                // Khởi tạo chức năng cụ thể cho từng section
-                if (sectionId === 'content-section' && typeof window.loadPosts === 'function') {
-                    window.loadPosts();
-                } else if (sectionId === 'system-notifications' && typeof window.initSystemNotifications === 'function') {
-                    window.initSystemNotifications();
-                } else if (sectionId === 'company-jobs' && typeof window.loadCompanies === 'function') {
-                    window.loadCompanies();
+                // Sau khi load HTML xong, gọi hàm refresh tương ứng
+                switch (sectionId) {
+                    case 'account-stats':
+                        if (typeof window.loadAllRealData === 'function') {
+                            window.loadAllRealData().then(() => {
+                                if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
+                            });
+                        } else if (typeof window.refreshAccountStats === 'function') {
+                            window.refreshAccountStats();
+                        }
+                        break;
+                    case 'access-stats':
+                        if (typeof window.loadAllRealData === 'function') {
+                            window.loadAllRealData().then(() => {
+                                if (typeof window.refreshAccessStats === 'function') window.refreshAccessStats();
+                            });
+                        } else if (typeof window.refreshAccessStats === 'function') {
+                            window.refreshAccessStats();
+                        }
+                        break;
+                    case 'activity-reports':
+                        if (typeof window.loadAllRealData === 'function') {
+                            window.loadAllRealData().then(() => {
+                                if (typeof window.refreshActivityReports === 'function') window.refreshActivityReports();
+                            });
+                        } else if (typeof window.refreshActivityReports === 'function') {
+                            window.refreshActivityReports();
+                        }
+                        break;
+                    case 'job-posting-reports':
+                        if (typeof window.refreshJobReport === 'function') window.refreshJobReport();
+                        break;
+                    case 'application-analysis':
+                        if (typeof window.loadAllRealData === 'function') {
+                            window.loadAllRealData().then(() => {
+                                if (typeof window.refreshApplicationAnalysis === 'function') window.refreshApplicationAnalysis();
+                            });
+                        } else if (typeof window.refreshApplicationAnalysis === 'function') {
+                            window.refreshApplicationAnalysis();
+                        }
+                        break;
+                    case 'content-section':
+                        if (typeof window.loadPosts === 'function') window.loadPosts();
+                        break;
+                    case 'system-notifications':
+                        if (typeof window.initSystemNotifications === 'function') window.initSystemNotifications();
+                        break;
+                    case 'company-jobs':
+                        if (typeof window.loadCompanies === 'function') window.loadCompanies();
+                        break;
+                    default:
+                        console.log(`Section ${sectionId} - No specific refresh function found`);
+                        break;
                 }
-            } else {
-                showError('Không tìm thấy nội dung');
-            }
-            
-            // Cập nhật breadcrumb
-            if (breadcrumbText && breadcrumb) {
-                breadcrumbText.textContent = breadcrumb;
-            }
-            
-            // Cập nhật URL
-            window.history.pushState(null, '', `#${sectionId}`);
-        })
-        .catch(error => {
-            console.error('Lỗi khi tải section:', error);
-            showError('Đã xảy ra lỗi khi tải nội dung. Vui lòng thử lại.');
-        });
+            })
+            .catch(error => {
+                console.error('Error loading section:', error);
+                showError('Không thể tải dữ liệu section');
+            });
     }
 
     /**
