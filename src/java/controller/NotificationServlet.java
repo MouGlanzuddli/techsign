@@ -19,8 +19,11 @@ public class NotificationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("[DEBUG] NotificationServlet - doGet called");
         String action = req.getParameter("action");
+        System.out.println("[DEBUG] Action parameter: " + action);
         if ("ajax".equals(action)) {
+            System.out.println("[DEBUG] Handling AJAX request");
             try (Connection conn = DBConnection.getConnection()) {
                 NotificationDAO notificationDAO = new NotificationDAO();
                 List<Notification> pinned = notificationDAO.getPinned();
@@ -33,7 +36,9 @@ public class NotificationServlet extends HttpServlet {
                 result.put("pinnedNotifications", pinned);
                 result.put("notifications", notifications);
                 result.put("stats", stats);
-                resp.getWriter().write(gson.toJson(result));
+                String jsonResponse = gson.toJson(result);
+                System.out.println("[DEBUG] Sending JSON response: " + jsonResponse);
+                resp.getWriter().write(jsonResponse);
             } catch (Exception e) {
                 e.printStackTrace();
                 resp.getWriter().write("{\"error\":\"Failed to fetch notifications\"}");

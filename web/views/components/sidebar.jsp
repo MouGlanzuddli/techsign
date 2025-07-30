@@ -4,7 +4,7 @@
     <h3>System Management</h3>
     <ul>
         <li>
-            <a href="#user-accounts" class="menu-link" data-file="user-account.jsp" data-section="user-accounts"><i class="fas fa-users-cog"></i> Quản lý tài khoản</a>
+            <a href="#" class="menu-link" data-file="user-account.jsp" data-section="user-accounts"><i class="fas fa-users-cog"></i> Quản lý tài khoản</a>
         </li>
 <!--        <li>
             <a href="#" class="menu-link" data-file="user-management.jsp" data-section="permissions"><i class="fas fa-user-shield"></i> Gán quyền tài khoản</a>

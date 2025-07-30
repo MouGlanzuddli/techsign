@@ -133,9 +133,12 @@ class SectionLoader {
                 // Then load data for the section
                 this.loadDataForSection(sectionId);
                 
-                // Explicitly trigger loadPosts() after section is added to DOM for content-section
+                // Initialize section-specific functionality
                 if (sectionId === 'content-section' && typeof window.loadPosts === 'function') {
                     window.loadPosts();
+                } else if (sectionId === 'system-notifications' && typeof window.initSystemNotifications === 'function') {
+                    console.log('[SectionLoader] Initializing system notifications...');
+                    window.initSystemNotifications();
                 }
             })
             .catch(error => {

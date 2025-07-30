@@ -9,6 +9,7 @@ import util.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import dao.UserDao;
 import model.Category;
 
 import jakarta.servlet.ServletException;
@@ -23,10 +24,13 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import model.User;
+import util.EmailUtil;
 
 public class JobPostingServlet extends HttpServlet {
     private JobPostingDAO jobPostingDAO;
     private CompanyProfileDAO companyProfileDAO;
+    private UserDao userDAO;
     
     // Static Gson instance with proper LocalDateTime handling
     private static final Gson gson = new GsonBuilder()
@@ -40,6 +44,7 @@ public class JobPostingServlet extends HttpServlet {
             try (Connection conn = DBConnection.getConnection()) {
                 jobPostingDAO = new JobPostingDAO(conn);
                 companyProfileDAO = new CompanyProfileDAO();
+                userDAO = new UserDao(conn);
             }
         } catch (Exception e) {
             throw new ServletException("Error initializing JobPostingServlet", e);
@@ -86,6 +91,8 @@ public class JobPostingServlet extends HttpServlet {
                             jsonResponse.addProperty("success", true);
                             jsonResponse.add("data", gson.toJsonTree(jobPosting));
                             jsonResponse.addProperty("message", "Lấy thông tin bài đăng thành công");
+                        } else if ("rejectWithReason".equals(action)) {
+                            handleRejectionWithReason(req, jsonResponse, conn);
                         } else {
                             jsonResponse.addProperty("success", false);
                             jsonResponse.addProperty("message", "Không tìm thấy bài đăng");
@@ -283,4 +290,73 @@ public class JobPostingServlet extends HttpServlet {
         // Handle DELETE requests if needed
         response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
+    
+    private void handleStatusUpdate(HttpServletRequest req, JsonObject jsonResponse, Connection conn) 
+            throws Exception {
+        String idParam = req.getParameter("postId");
+        String status = req.getParameter("status");
+        
+        if (idParam == null || status == null || idParam.trim().isEmpty() || status.trim().isEmpty()) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Thông tin không hợp lệ");
+            return;
+        }
+        
+        int id = Integer.parseInt(idParam);
+        boolean success = jobPostingDAO.updateJobPostingStatus(id, status);
+        
+        if (success) {
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Cập nhật trạng thái thành công");
+            
+            // If approving, send approval notification
+            if ("approved".equals(status)) {
+                sendStatusNotification(id, "approved", null);
+            }
+        } else {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Không thể cập nhật trạng thái");
+        }
+    }
+
+    private void handleRejectionWithReason(HttpServletRequest req, JsonObject jsonResponse, Connection conn) 
+            throws Exception {
+        String idParam = req.getParameter("postId");
+        String reason = req.getParameter("reason");
+        
+        if (idParam == null || reason == null || idParam.trim().isEmpty() || reason.trim().isEmpty()) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Vui lòng nhập lý do từ chối");
+            return;
+        }
+        
+        int id = Integer.parseInt(idParam);
+        sendStatusNotification(id, "rejected", reason);
+        
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("message", "Thông báo từ chối đã được gửi");
+    }
+
+    private void sendStatusNotification(int postId, String status, String reason) throws Exception {
+    JobPosting post = jobPostingDAO.getJobPostingById(postId);
+    CompanyProfile company = companyProfileDAO.getById(post.getCompanyProfileId());
+    
+    // Use the instance userDAO instead of static call
+    User user = userDAO.getUserById(company.getUserId());
+    
+    if ("approved".equals(status)) {
+        EmailUtil.sendPostApprovalEmail(
+            user.getEmail(),
+            post.getTitle(),
+            "https://yourdomain.com/jobs/" + postId
+        );
+    } else if ("rejected".equals(status)) {
+        EmailUtil.sendPostRejectionEmail(
+            user.getEmail(),
+            post.getTitle(),
+            reason,
+            "https://yourdomain.com/jobs/" + postId + "/edit"
+        );
+    }
+}
 }

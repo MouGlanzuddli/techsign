@@ -5,10 +5,73 @@
   <meta charset="UTF-8">
   <title>Quản lý Thông báo</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/ui-common.css">
+  <style>
+    /* Reset Bootstrap tab styles that might be hiding content */
+    .tab-content > .tab-pane {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      height: auto !important;
+      position: static !important;
+    }
+    
+    /* Ensure the notification container is visible */
+    #notificationListContainer {
+      min-height: 300px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border: 3px dashed red; /* Make it very visible */
+      border-radius: 8px;
+      margin: 15px 0;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative; /* For absolute positioning of children */
+      overflow: visible; /* Ensure content isn't clipped */
+    }
+    
+    /* Force the tab content to be visible */
+    #tab-history {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      height: auto !important;
+      position: relative !important;
+      overflow: visible !important;
+    }
+    
+    /* Make sure the tab panel is visible */
+    .tab-pane {
+      display: block !important;
+      height: auto !important;
+      min-height: 50px; /* Ensure it takes up space */
+    }
+    /* Style for notification cards */
+    .notification-card {
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .notification-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    /* Make sure the tab content is visible */
+    .tab-content > .tab-pane {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      height: 0;
+      overflow: hidden;
+    }
+    .tab-content > .active {
+      height: auto;
+      overflow: visible;
+    }
+  </style>
 </head>
-<body data-context-path="${pageContext.request.contextPath}">
+<body>
   <section id="system-notifications">
     <div class="container-fluid py-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -85,6 +148,12 @@
               <i class="fas fa-sync"></i> Tải lại
             </button>
           </div>
+          <!-- Notification List Container -->
+          <div id="notificationListContainer" class="mt-3">
+            <div class="text-center text-muted">
+              <i class="fas fa-spinner fa-spin me-2"></i> Đang tải thông báo...
+            </div>
+          </div>
           <h4 class="notification-list-title mb-3"><i class="fas fa-list"></i> Danh Sách Thông Báo</h4>
           <div id="notificationListContainer"></div>
         </div>
@@ -156,10 +225,6 @@ if (reloadBtn) {
   });
 }
 </script>
-<script src="${pageContext.request.contextPath}/assets/js/system-notifications.js"></script>
+<script src="${pageContext.request.contextPath}/js/system-notifications.js"></script>
 </body>
 </html>
-
-
-
-

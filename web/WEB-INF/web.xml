@@ -61,6 +61,7 @@
 <servlet-name>NotificationServlet</servlet-name>
 <servlet-class>controller.NotificationServlet</servlet-class>
 </servlet>
+
 <servlet>
 <servlet-name>LogoutServlet</servlet-name>
 <servlet-class>controller.LogoutServlet</servlet-class>
@@ -163,9 +164,10 @@
 <servlet-name>SendMessageServlet</servlet-name>
 <url-pattern>/SendMessageServlet</url-pattern>
 </servlet-mapping>
+<!-- Single mapping for NotificationServlet -->
 <servlet-mapping>
 <servlet-name>NotificationServlet</servlet-name>
-<url-pattern>/notifications</url-pattern>
+<url-pattern>/notifications/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
 <servlet-name>LogoutServlet</servlet-name>
@@ -202,6 +204,10 @@
 <servlet-mapping>
 <servlet-name>ChatHistoryServlet</servlet-name>
 <url-pattern>/ChatHistoryServlet</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>NotificationServlet</servlet-name>
+<url-pattern>/notifications</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
 <servlet-name>CategoryServlet</servlet-name>

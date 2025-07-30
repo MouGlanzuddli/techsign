@@ -9,6 +9,7 @@ public class NotificationDAO {
     public List<Notification> getAll() throws SQLException, ClassNotFoundException {
         List<Notification> list = new ArrayList<>();
         String sql = "SELECT * FROM notifications WHERE is_pinned = 0 ORDER BY created_at DESC";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -22,6 +23,7 @@ public class NotificationDAO {
     public List<Notification> getPinned() throws SQLException, ClassNotFoundException {
         List<Notification> list = new ArrayList<>();
         String sql = "SELECT * FROM notifications WHERE is_pinned = 1 ORDER BY created_at DESC";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -34,6 +36,7 @@ public class NotificationDAO {
 
     public boolean insert(Notification n) throws SQLException, ClassNotFoundException {
         String sql = "INSERT INTO notifications (title, message, type, is_pinned, is_important, auto_dismiss, duration_ms, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, n.getTitle());
             ps.setString(2, n.getMessage());
@@ -51,6 +54,7 @@ public class NotificationDAO {
 
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM notifications WHERE id = ?";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -62,6 +66,7 @@ public class NotificationDAO {
 
     public boolean update(Notification n) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE notifications SET title = ?, message = ?, type = ?, auto_dismiss = ?, duration_ms = ?, is_pinned = ? WHERE id = ?";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, n.getTitle());
             ps.setString(2, n.getMessage());
@@ -79,6 +84,7 @@ public class NotificationDAO {
 
     public void pinNotification(int id) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE notifications SET is_pinned = 1 WHERE id = ?";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
@@ -89,6 +95,7 @@ public class NotificationDAO {
 
     public void unpinNotification(int id) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE notifications SET is_pinned = 0 WHERE id = ?";
+        System.out.println("[DEBUG] Executing SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ps.executeUpdate();
@@ -104,6 +111,7 @@ public class NotificationDAO {
                 "SUM(CASE WHEN created_at >= GETDATE() - 1 THEN 1 ELSE 0 END) AS new, " +
                 "SUM(CASE WHEN is_pinned = 1 THEN 1 ELSE 0 END) AS pinned " +
                 "FROM notifications";
+        System.out.println("[DEBUG] Getting notification stats with SQL: " + sql);
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 stats.put("total", rs.getInt("total"));

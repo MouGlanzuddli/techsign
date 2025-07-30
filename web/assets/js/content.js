@@ -192,9 +192,6 @@ function approvePost(postId) {
     updatePostStatus(postId, 'approved', 'Phê duyệt');
 }
 
-function rejectPost(postId) {
-    updatePostStatus(postId, 'rejected', 'Từ chối');
-}
 
 function updatePostStatus(postId, status, actionName) {
     const basePath = getBasePath();
@@ -324,11 +321,33 @@ window.onclick = function(event) {
     if (event.target === modal) {
         closePostModal();
     }
-}
+}   
 
 // Add a stub for flagPost if not present
 if (typeof window.flagPost !== 'function') {
     window.flagPost = function(postId) {
         alert('Flag post ' + postId);
     };
+}
+
+function rejectPost(postId, postTitle) {
+    const reason = prompt(`Vui lòng nhập lý do từ chối bài đăng "${postTitle}":`);
+    if (!reason) return;
+    
+    fetch('/jobposting', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=rejectWithReason&postId=${postId}&reason=${encodeURIComponent(reason)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccessMessage('Thông báo từ chối đã được gửi tới công ty');
+        } else {
+            showErrorMessage('Lỗi: ' + data.message);
+        }
+    });
+    updatePostStatus(postId, 'rejected', 'Từ chối');
 }

@@ -189,15 +189,15 @@
 
 <!-- Before closing </body> -->
 <script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/admin-2.js"></script> <!-- Fixed filename -->
+<script src="${pageContext.request.contextPath}/assets/js/admin-2.js"></script>  Fixed filename 
 <script src="${pageContext.request.contextPath}/assets/js/chatbox.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/job-postings.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/section-loader.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/alert.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/job-postings.js"></script><!--
+--><script src="${pageContext.request.contextPath}/assets/js/section-loader.js"></script><!--
+--><script src="${pageContext.request.contextPath}/assets/js/alert.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/content.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/category.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/system-notifications.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/settings.js"></script>
+<!--<script src="${pageContext.request.contextPath}/assets/js/settings.js"></script>-->
 
  <%-- Link to chatbox.js --%>
 
