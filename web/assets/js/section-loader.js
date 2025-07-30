@@ -79,18 +79,68 @@ document.addEventListener('DOMContentLoaded', function() {
         // Cập nhật URL
         window.history.pushState(null, '', `#${sectionId}`);
         
-        // Xác định file JSP cần load dựa trên loại section
-        const basePath = getBasePath();
-        let jspUrl;
-        
-        // Các section reporting đều load từ statistics-reports.jsp
+        // Xử lý tất cả các section reporting giống nhau
         const reportingSections = ['account-stats', 'access-stats', 'activity-reports', 'job-posting-reports', 'application-analysis'];
+        
         if (reportingSections.includes(sectionId)) {
-            jspUrl = basePath + 'views/sections/statistics-reports.jsp';
+            // HTML đã có sẵn, chỉ cần chuyển đổi section
+            const allSections = document.querySelectorAll('.report-section');
+            allSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Cập nhật active tab
+            const allTabs = document.querySelectorAll('.nav-tab');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            const activeTab = document.querySelector(`[data-section="${sectionId}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+            
+            // Gọi refresh function tương ứng
+            switch (sectionId) {
+                case 'account-stats':
+                    if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
+                    break;
+                case 'access-stats':
+                    if (typeof window.refreshAccessStats === 'function') window.refreshAccessStats();
+                    break;
+                case 'activity-reports':
+                    if (typeof window.refreshActivityReports === 'function') window.refreshActivityReports();
+                    break;
+                case 'job-posting-reports':
+                    // Đảm bảo HTML được render hoàn toàn trước khi gọi refreshJobReport
+                    setTimeout(() => {
+                        if (typeof window.refreshJobReport === 'function') window.refreshJobReport();
+                    }, 100);
+                    break;
+                case 'application-analysis':
+                    if (typeof window.refreshApplicationAnalysis === 'function') window.refreshApplicationAnalysis();
+                    break;
+            }
         } else {
-            // Các section khác load từ file JSP riêng
-            jspUrl = basePath + 'views/sections/' + file;
+            // Các section khác (không phải reporting)
+            console.log('Section không được hỗ trợ:', sectionId);
         }
+    }
+
+    /**
+     * Tải section ban đầu dựa trên URL hash
+     */
+    function loadInitialSection() {
+        const hash = window.location.hash.substring(1);
+        
+        // Load tất cả HTML của statistics-reports.jsp ngay khi vào trang
+        const basePath = getBasePath();
+        const jspUrl = basePath + 'views/sections/statistics-reports.jsp';
         
         fetch(jspUrl)
             .then(response => {
@@ -100,25 +150,68 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.text();
             })
             .then(html => {
-                sectionContent.innerHTML = html;
+                if (sectionContent) {
+                    sectionContent.innerHTML = html;
+                }
                 
-                // Đối với các section reporting, cần hiển thị section đúng
-                if (reportingSections.includes(sectionId)) {
-                    // Setup navigation cho các tab
-                    if (typeof window.setupNavigation === 'function') {
-                        window.setupNavigation();
+                // Nếu có hash, hiển thị section tương ứng
+                if (hash) {
+                    const menuLink = document.querySelector(`.menu-link[data-section="${hash}"]`);
+                    if (menuLink) {
+                        // Hiển thị section được chọn
+                        const allSections = document.querySelectorAll('.report-section');
+                        allSections.forEach(section => {
+                            section.classList.remove('active');
+                        });
+                        
+                        const targetSection = document.getElementById(hash);
+                        if (targetSection) {
+                            targetSection.classList.add('active');
+                        }
+                        
+                        // Cập nhật active tab
+                        const allTabs = document.querySelectorAll('.nav-tab');
+                        allTabs.forEach(tab => {
+                            tab.classList.remove('active');
+                        });
+                        
+                        const activeTab = document.querySelector(`[data-section="${hash}"]`);
+                        if (activeTab) {
+                            activeTab.classList.add('active');
+                        }
+                        
+                        // Gọi refresh function tương ứng
+                        switch (hash) {
+                            case 'account-stats':
+                                if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
+                                break;
+                            case 'access-stats':
+                                if (typeof window.refreshAccessStats === 'function') window.refreshAccessStats();
+                                break;
+                            case 'activity-reports':
+                                if (typeof window.refreshActivityReports === 'function') window.refreshActivityReports();
+                                break;
+                            case 'job-posting-reports':
+                                // Đảm bảo HTML được render hoàn toàn trước khi gọi refreshJobReport
+                                setTimeout(() => {
+                                    if (typeof window.refreshJobReport === 'function') window.refreshJobReport();
+                                }, 100);
+                                break;
+                            case 'application-analysis':
+                                if (typeof window.refreshApplicationAnalysis === 'function') window.refreshApplicationAnalysis();
+                                break;
+                        }
                     }
-                    
-                    // Ẩn tất cả các section
+                } else {
+                    // Mặc định hiển thị account-stats và load dữ liệu
                     const allSections = document.querySelectorAll('.report-section');
                     allSections.forEach(section => {
                         section.classList.remove('active');
                     });
                     
-                    // Hiển thị section được chọn
-                    const targetSection = document.getElementById(sectionId);
-                    if (targetSection) {
-                        targetSection.classList.add('active');
+                    const defaultSection = document.getElementById('account-stats');
+                    if (defaultSection) {
+                        defaultSection.classList.add('active');
                     }
                     
                     // Cập nhật active tab
@@ -127,93 +220,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         tab.classList.remove('active');
                     });
                     
-                    const activeTab = document.querySelector(`[data-section="${sectionId}"]`);
-                    if (activeTab) {
-                        activeTab.classList.add('active');
+                    const defaultTab = document.querySelector('[data-section="account-stats"]');
+                    if (defaultTab) {
+                        defaultTab.classList.add('active');
                     }
-                }
-                
-                // Sau khi load HTML xong, gọi hàm refresh tương ứng
-                switch (sectionId) {
-                    case 'account-stats':
-                        if (typeof window.loadAllRealData === 'function') {
-                            window.loadAllRealData().then(() => {
-                                if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
-                            });
-                        } else if (typeof window.refreshAccountStats === 'function') {
-                            window.refreshAccountStats();
-                        }
-                        break;
-                    case 'access-stats':
-                        if (typeof window.loadAllRealData === 'function') {
-                            window.loadAllRealData().then(() => {
-                                if (typeof window.refreshAccessStats === 'function') window.refreshAccessStats();
-                            });
-                        } else if (typeof window.refreshAccessStats === 'function') {
-                            window.refreshAccessStats();
-                        }
-                        break;
-                    case 'activity-reports':
-                        if (typeof window.loadAllRealData === 'function') {
-                            window.loadAllRealData().then(() => {
-                                if (typeof window.refreshActivityReports === 'function') window.refreshActivityReports();
-                            });
-                        } else if (typeof window.refreshActivityReports === 'function') {
-                            window.refreshActivityReports();
-                        }
-                        break;
-                    case 'job-posting-reports':
-                        if (typeof window.refreshJobReport === 'function') window.refreshJobReport();
-                        break;
-                    case 'application-analysis':
-                        if (typeof window.loadAllRealData === 'function') {
-                            window.loadAllRealData().then(() => {
-                                if (typeof window.refreshApplicationAnalysis === 'function') window.refreshApplicationAnalysis();
-                            });
-                        } else if (typeof window.refreshApplicationAnalysis === 'function') {
-                            window.refreshApplicationAnalysis();
-                        }
-                        break;
-                    case 'content-section':
-                        if (typeof window.loadPosts === 'function') window.loadPosts();
-                        break;
-                    case 'system-notifications':
-                        if (typeof window.initSystemNotifications === 'function') window.initSystemNotifications();
-                        break;
-                    case 'company-jobs':
-                        if (typeof window.loadCompanies === 'function') window.loadCompanies();
-                        break;
-                    default:
-                        console.log(`Section ${sectionId} - No specific refresh function found`);
-                        break;
+                    
+                    // Load dữ liệu mặc định
+                    if (typeof window.refreshAccountStats === 'function') window.refreshAccountStats();
                 }
             })
             .catch(error => {
-                console.error('Error loading section:', error);
-                showError('Không thể tải dữ liệu section');
+                console.error('Error loading initial section:', error);
+                if (breadcrumbText) {
+                    breadcrumbText.textContent = 'Dashboard Tổng Quan';
+                }
             });
-    }
-
-    /**
-     * Tải section ban đầu dựa trên URL hash
-     */
-    function loadInitialSection() {
-        const hash = window.location.hash.substring(1);
-        if (hash) {
-            const menuLink = document.querySelector(`.menu-link[data-section="${hash}"]`);
-            if (menuLink) {
-                menuLink.click();
-                return;
-            }
-        }
-        
-        // Mặc định tải section đầu tiên nếu không có hash
-        const firstMenuItem = document.querySelector('.menu-link');
-        if (firstMenuItem) {
-            firstMenuItem.click();
-        } else if (breadcrumbText) {
-            breadcrumbText.textContent = 'Dashboard Tổng Quan';
-        }
     }
 
     // Thêm sự kiện click cho các link trong menu
