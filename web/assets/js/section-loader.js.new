@@ -1,5 +1,5 @@
 /**
- * Section Loader - Đơn giản hóa việc tải các section trong admin panel
+ * Section Loader - Simplified section loading for admin panel
  */
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const breadcrumbText = document.getElementById('breadcrumb-text');
 
     /**
-     * Hiển thị loading spinner
+     * Show loading spinner
      */
     function showLoading() {
         if (sectionContent) {
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Hiển thị thông báo lỗi
-     * @param {string} message - Nội dung thông báo lỗi
+     * Show error message
+     * @param {string} message - Error message to display
      */
     function showError(message) {
         if (sectionContent) {
@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Lấy đường dẫn gốc của ứng dụng
-     * @returns {string} Đường dẫn gốc
+     * Get base path of the application
+     * @returns {string} Base path
      */
     function getBasePath() {
         const path = window.location.pathname;
@@ -49,10 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Tải một section dựa trên file và section ID
-     * @param {string} file - File JSP cần tải
-     * @param {string} sectionId - ID của section cần lấy
-     * @param {string} breadcrumb - Tiêu đề hiển thị trên breadcrumb
+     * Load a section by file and section ID
+     * @param {string} file - JSP file to load
+     * @param {string} sectionId - ID of the section to extract
+     * @param {string} breadcrumb - Breadcrumb text to display
      */
     function loadSection(file, sectionId, breadcrumb) {
         if (!sectionContent) {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         showLoading();
         
-        // Cập nhật active menu
+        // Update active menu
         menuLinks.forEach(link => {
             const parent = link.parentElement;
             if (parent) {
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Lỗi HTTP ${response.status}`);
+                throw new Error(`HTTP error ${response.status}`);
             }
             return response.text();
         })
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (section) {
                 sectionContent.innerHTML = section.innerHTML;
                 
-                // Thực thi các script trong nội dung tải về
+                // Execute scripts in the loaded content
                 const scripts = section.getElementsByTagName('script');
                 for (const script of scripts) {
                     const newScript = document.createElement('script');
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     sectionContent.appendChild(newScript);
                 }
                 
-                // Khởi tạo chức năng cụ thể cho từng section
+                // Initialize section-specific functionality
                 if (sectionId === 'content-section' && typeof window.loadPosts === 'function') {
                     window.loadPosts();
                 } else if (sectionId === 'system-notifications' && typeof window.initSystemNotifications === 'function') {
@@ -116,12 +116,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError('Không tìm thấy nội dung');
             }
             
-            // Cập nhật breadcrumb
+            // Update breadcrumb
             if (breadcrumbText && breadcrumb) {
                 breadcrumbText.textContent = breadcrumb;
             }
             
-            // Cập nhật URL
+            // Update URL
             window.history.pushState(null, '', `#${sectionId}`);
         })
         .catch(error => {
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Tải section ban đầu dựa trên URL hash
+     * Load initial section based on URL hash
      */
     function loadInitialSection() {
         const hash = window.location.hash.substring(1);
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Mặc định tải section đầu tiên nếu không có hash
+        // Load first section by default if no hash
         const firstMenuItem = document.querySelector('.menu-link');
         if (firstMenuItem) {
             firstMenuItem.click();
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Thêm sự kiện click cho các link trong menu
+    // Add click event listeners to menu links
     menuLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Xử lý sự kiện back/forward của trình duyệt
+    // Handle browser back/forward navigation
     window.addEventListener('popstate', function() {
         const hash = window.location.hash.substring(1);
         if (hash) {
@@ -177,11 +177,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Khởi tạo
+    // Initialize
     loadInitialSection();
     
-    // Khai báo biến toàn cục để có thể gọi từ bên ngoài
+    // Make loadSection globally available
     window.loadSection = loadSection;
     
-    console.log('Section loader đã được khởi tạo');
+    console.log('Section loader initialized');
 });
