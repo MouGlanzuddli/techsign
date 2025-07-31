@@ -17,6 +17,7 @@
     <form id="editUserForm" action="UserServlet?action=update" method="post">
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="id" value="<%= user.getId() %>">
+        <input type="hidden" name="csrfToken" value="${csrfToken}">
         
         <div class="mb-3">
             <label for="fullName" class="form-label">Họ và tên</label>
@@ -34,16 +35,8 @@
                 <button type="button" class="btn btn-sm btn-outline-primary" id="btnShowPasswordChange" onclick="showPasswordChange()">Đổi mật khẩu</button>
                 <div id="passwordChangeFields" style="display:none; margin-top:10px;">
                     <div class="mb-2">
-                        <label class="form-label">Câu hỏi bảo mật:</label>
-                        <input type="text" class="form-control" value="<%= user.getSecurityQuestion() != null ? user.getSecurityQuestion() : "Chưa thiết lập" %>" readonly />
-                    </div>
-                    <div class="mb-2">
-                        <label for="securityAnswer" class="form-label">Câu trả lời:</label>
-                        <input type="text" id="securityAnswer" name="securityAnswer" class="form-control" placeholder="Nhập câu trả lời bảo mật" oninput="enablePasswordField()" />
-                    </div>
-                    <div class="mb-2">
                         <label for="password" class="form-label">Mật khẩu mới</label>
-                        <input type="password" id="password" name="password" class="form-control" disabled />
+                        <input type="password" id="password" name="password" class="form-control" />
                         <div class="form-text">Chỉ điền nếu muốn thay đổi mật khẩu</div>
                     </div>
                 </div>
@@ -90,11 +83,6 @@ function showPasswordChange() {
     document.getElementById('btnShowPasswordChange').style.display = 'none';
 }
 
-function enablePasswordField() {
-    var answer = document.getElementById('securityAnswer').value;
-    document.getElementById('password').disabled = (answer.trim() === '');
-}
-
 // Set up form submission for the modal
 document.getElementById('editUserForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -123,12 +111,20 @@ document.getElementById('editUserForm').addEventListener('submit', function(e) {
                 loadUserDataWithFilters('', '');
             }
         } else {
-            alert(data.message || 'Lỗi khi cập nhật người dùng');
+            if (typeof showErrorMessage === 'function') {
+                showErrorMessage(data.message || 'Lỗi khi cập nhật người dùng');
+            } else {
+                alert(data.message || 'Lỗi khi cập nhật người dùng');
+            }
         }
     })
     .catch(error => {
-        console.error('Error updating user:', error);
-        alert('Lỗi khi cập nhật người dùng');
+        console.error('Error:', error);
+        if (typeof showErrorMessage === 'function') {
+            showErrorMessage('Lỗi kết nối mạng');
+        } else {
+            alert('Lỗi kết nối mạng');
+        }
     });
 });
 </script> 

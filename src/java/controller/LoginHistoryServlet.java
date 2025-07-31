@@ -5,16 +5,15 @@ import dao.LoginHistoryDAO;
 import model.LoginHistory;
 import service.LoginHistoryService;
 import dao.DBConnection;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException; // Import SQLException
 import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class LoginHistoryServlet extends HttpServlet {
 
@@ -43,6 +42,18 @@ public class LoginHistoryServlet extends HttpServlet {
         // If action is getData, return JSON response
         if ("getData".equals(action)) {
             handleGetData(req, resp);
+            return;
+        }
+        
+        // New action for search and filter
+        if ("searchAndFilter".equals(action)) {
+            handleSearchAndFilter(req, resp);
+            return;
+        }
+        
+        // New action for getting filter options
+        if ("getFilterOptions".equals(action)) {
+            handleGetFilterOptions(req, resp);
             return;
         }
 
@@ -139,6 +150,205 @@ public class LoginHistoryServlet extends HttpServlet {
             
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println("Database error occurred while fetching login history: " + e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"success\":false,\"message\":\"Database error occurred\"}");
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred in LoginHistoryServlet: " + e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"success\":false,\"message\":\"An unexpected error occurred\"}");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    System.err.println("Error closing database connection: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void handleSearchAndFilter(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            LoginHistoryDAO loginHistoryDAO = new LoginHistoryDAO(conn);
+
+            // Get filter parameters
+            String searchTerm = req.getParameter("searchTerm");
+            String userId = req.getParameter("userId");
+            String dateFrom = req.getParameter("dateFrom");
+            String dateTo = req.getParameter("dateTo");
+            String ipAddress = req.getParameter("ipAddress");
+            String deviceInfo = req.getParameter("deviceInfo");
+            
+            // Check if this is an export request
+            String export = req.getParameter("export");
+            if ("true".equals(export)) {
+                handleExport(req, resp, loginHistoryDAO, searchTerm, userId, dateFrom, dateTo, ipAddress, deviceInfo);
+                return;
+            }
+            
+            // Pagination parameters
+            int page = 1;
+            int pageSize = 50;
+            try {
+                page = Integer.parseInt(req.getParameter("page"));
+                pageSize = Integer.parseInt(req.getParameter("pageSize"));
+            } catch (NumberFormatException e) {
+                // Use defaults
+            }
+            
+            int offset = (page - 1) * pageSize;
+            
+            // Get filtered data
+            List<LoginHistory> history = loginHistoryDAO.searchAndFilter(
+                searchTerm, userId, dateFrom, dateTo, ipAddress, deviceInfo, pageSize, offset
+            );
+            
+            // Get total count for pagination
+            int totalCount = loginHistoryDAO.getTotalCount(
+                searchTerm, userId, dateFrom, dateTo, ipAddress, deviceInfo
+            );
+            
+            // Convert to JSON response
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            
+            StringBuilder json = new StringBuilder();
+            json.append("{\"success\":true,");
+            json.append("\"loginHistory\":[");
+            
+            for (int i = 0; i < history.size(); i++) {
+                LoginHistory lh = history.get(i);
+                json.append("{");
+                json.append("\"id\":").append(lh.getId()).append(",");
+                json.append("\"userId\":").append(lh.getUserId()).append(",");
+                json.append("\"userName\":\"").append(lh.getUserName() != null ? lh.getUserName() : "").append("\",");
+                json.append("\"userEmail\":\"").append(lh.getUserEmail() != null ? lh.getUserEmail() : "").append("\",");
+                json.append("\"loginTime\":\"").append(lh.getLoginTime()).append("\",");
+                json.append("\"ipAddress\":\"").append(lh.getIpAddress() != null ? lh.getIpAddress() : "").append("\",");
+                json.append("\"deviceInfo\":\"").append(lh.getDeviceInfo() != null ? lh.getDeviceInfo() : "").append("\"");
+                json.append("}");
+                if (i < history.size() - 1) {
+                    json.append(",");
+                }
+            }
+            
+            json.append("],");
+            json.append("\"totalCount\":").append(totalCount).append(",");
+            json.append("\"currentPage\":").append(page).append(",");
+            json.append("\"pageSize\":").append(pageSize).append(",");
+            json.append("\"totalPages\":").append((int) Math.ceil((double) totalCount / pageSize));
+            json.append("}");
+            
+            resp.getWriter().write(json.toString());
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("Database error occurred while searching login history: " + e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"success\":false,\"message\":\"Database error occurred\"}");
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred in LoginHistoryServlet: " + e.getMessage());
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"success\":false,\"message\":\"An unexpected error occurred\"}");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    System.err.println("Error closing database connection: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void handleExport(HttpServletRequest req, HttpServletResponse resp, 
+                             LoginHistoryDAO loginHistoryDAO, String searchTerm, String userId, 
+                             String dateFrom, String dateTo, String ipAddress, String deviceInfo) 
+            throws Exception {
+        
+        // Get all filtered data (no pagination for export)
+        List<LoginHistory> history = loginHistoryDAO.searchAndFilter(
+            searchTerm, userId, dateFrom, dateTo, ipAddress, deviceInfo, 0, 0
+        );
+        
+        // Set response headers for CSV download
+        resp.setContentType("text/csv;charset=UTF-8");
+        resp.setHeader("Content-Disposition", "attachment; filename=\"access_history.csv\"");
+        resp.setHeader("Content-Transfer-Encoding", "binary");
+        
+        // Write CSV header
+        resp.getWriter().write("ID,User ID,User Name,User Email,Login Time,IP Address,Device Info\n");
+        
+        // Write CSV data
+        for (LoginHistory lh : history) {
+            StringBuilder csvLine = new StringBuilder();
+            csvLine.append(lh.getId()).append(",");
+            csvLine.append(lh.getUserId()).append(",");
+            csvLine.append("\"").append(lh.getUserName() != null ? lh.getUserName().replace("\"", "\"\"") : "").append("\",");
+            csvLine.append("\"").append(lh.getUserEmail() != null ? lh.getUserEmail().replace("\"", "\"\"") : "").append("\",");
+            csvLine.append("\"").append(lh.getLoginTime()).append("\",");
+            csvLine.append("\"").append(lh.getIpAddress() != null ? lh.getIpAddress().replace("\"", "\"\"") : "").append("\",");
+            csvLine.append("\"").append(lh.getDeviceInfo() != null ? lh.getDeviceInfo().replace("\"", "\"\"") : "").append("\"");
+            csvLine.append("\n");
+            
+            resp.getWriter().write(csvLine.toString());
+        }
+        
+        resp.getWriter().flush();
+    }
+
+    private void handleGetFilterOptions(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            LoginHistoryDAO loginHistoryDAO = new LoginHistoryDAO(conn);
+
+            // Get filter options
+            List<String> users = loginHistoryDAO.getUniqueUsers();
+            List<String> ipAddresses = loginHistoryDAO.getUniqueIPAddresses();
+            
+            // Convert to JSON response
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            
+            StringBuilder json = new StringBuilder();
+            json.append("{\"success\":true,");
+            json.append("\"users\":[");
+            
+            for (int i = 0; i < users.size(); i++) {
+                json.append("\"").append(users.get(i).replace("\"", "\\\"")).append("\"");
+                if (i < users.size() - 1) {
+                    json.append(",");
+                }
+            }
+            
+            json.append("],");
+            json.append("\"ipAddresses\":[");
+            
+            for (int i = 0; i < ipAddresses.size(); i++) {
+                json.append("\"").append(ipAddresses.get(i).replace("\"", "\\\"")).append("\"");
+                if (i < ipAddresses.size() - 1) {
+                    json.append(",");
+                }
+            }
+            
+            json.append("]}");
+            
+            resp.getWriter().write(json.toString());
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("Database error occurred while getting filter options: " + e.getMessage());
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("{\"success\":false,\"message\":\"Database error occurred\"}");

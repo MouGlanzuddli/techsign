@@ -204,6 +204,24 @@ public class UserDao {
     return 0;
 }
     
+    public boolean hasRelatedData(int userId) throws SQLException {
+        // Check for related data in other tables
+        String[] tables = {"job_postings", "applications", "messages", "audit_logs", "system_logs", "login_history", "user_sessions", "user_notifications", "bookmarks", "user_follows"};
+        for (String table : tables) {
+            String sql = "SELECT 1 FROM " + table + " WHERE user_id = ? LIMIT 1";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setInt(1, userId);
+                if (stmt.executeQuery().next()) {
+                    return true;
+                }
+            } catch (SQLException e) {
+                // Table might not exist, continue to next table
+                System.err.println("Table " + table + " not found or error: " + e.getMessage());
+            }
+        }
+        return false;
+    }
+
     public boolean updateUserStatus(int userId, String status) {
         String sql = "UPDATE users SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

@@ -114,7 +114,11 @@
 
         <div class="test-section">
             <h3>🎯 Test Chatbot Component</h3>
+<<<<<<< HEAD
             <p>Nếu chatbot component hoạt động, bạn sẽ thấy nút 🤖 ở góc phải dưới màn hình.</p>
+=======
+            <p>Nếu chatbot component hoạt động, bạn sẽ thấy nút 💬 ở góc phải dưới màn hình.</p>
+>>>>>>> 0afdcb29c1f79bf1ecb57703469c15dacc5f22b5
             <button class="test-btn" onclick="window.location.href='index.jsp'">Mở trang chủ để test chatbot</button>
         </div>
 
@@ -153,7 +157,11 @@
             <ol>
                 <li>Click vào các nút test để kiểm tra servlet AI</li>
                 <li>Mở trang chủ để test chatbot component</li>
+<<<<<<< HEAD
                 <li>Click vào nút 🤖 để mở chatbot</li>
+=======
+                <li>Click vào nút 💬 để mở chatbot</li>
+>>>>>>> 0afdcb29c1f79bf1ecb57703469c15dacc5f22b5
                 <li>Thử gửi tin nhắn trong chatbot</li>
                 <li>Test các tính năng: tìm việc, hỏi lương, tư vấn...</li>
             </ol>

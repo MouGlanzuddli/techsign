@@ -17,7 +17,7 @@
         </li>
 
         <li>
-             <a href="notifications" class="menu-link" data-file="system-notifications.jsp" data-section="system-notifications"><i class="fas fa-bell"></i> System Notifications</a>
+             <a href="#" class="menu-link" data-file="system-notifications.jsp" data-section="system-notifications"><i class="fas fa-bell"></i> System Notifications</a>
         </li>
         <li>
             <a href="#" class="menu-link" data-file="job-postings.jsp" data-section="company-jobs"><i class="fas fa-briefcase"></i> Quản lý tuyển dụng</a>

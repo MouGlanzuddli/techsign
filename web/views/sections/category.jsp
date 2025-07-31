@@ -1,19 +1,4 @@
-<%-- 
-    Document   : category.jsp
-    Created on : Jun 29, 2025, 9:24:06 AM
-    Author     : Administrator
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-    <title>Quản lý Danh Mục</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>   
-
 
 <div id="categories" class="section-container">
     <div class="section-header d-flex justify-content-between align-items-center mb-4">
@@ -103,20 +88,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Empty State -->
-    <div id="emptyState" class="text-center py-5" style="display: none;">
-        <i class="fas fa-list fa-3x text-muted mb-3"></i>
-        <h5 class="text-muted">Chưa có danh mục nào</h5>
-        <p class="text-muted">Bắt đầu bằng cách thêm danh mục đầu tiên</p>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
-            <i class="fas fa-plus"></i> Thêm danh mục đầu tiên
-        </button>
-    </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/category.js"></script>
-
-
-</html>

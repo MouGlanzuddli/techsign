@@ -13,6 +13,8 @@ public class LoginHistory {
     private Date loginTime;
     private String ipAddress;
     private String deviceInfo;
+    private String userName;  // Added for search functionality
+    private String userEmail; // Added for search functionality
 
     // Getters and setters
     public int getId() { return id; }
@@ -29,4 +31,10 @@ public class LoginHistory {
 
     public String getDeviceInfo() { return deviceInfo; }
     public void setDeviceInfo(String deviceInfo) { this.deviceInfo = deviceInfo; }
+
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
+
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 }

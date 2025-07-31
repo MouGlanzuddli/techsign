@@ -100,23 +100,35 @@ function handleUserCreation(form) {
 // <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 // <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-// Use SweetAlert2 for notifications
 function showSuccessMessage(message) {
-    Swal.fire({
-        icon: 'success',
-        title: 'Thành công!',
-        text: message,
-        timer: 3000,
-        showConfirmButton: false
-    });
+    // Check if SweetAlert2 is available
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: message,
+            timer: 3000,
+            showConfirmButton: false
+        });
+    } else {
+        // Fallback to alert
+        alert('Thành công: ' + message);
+    }
 }
 
 function showErrorMessage(message) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Lỗi',
-        text: message || 'Đã xảy ra lỗi, vui lòng thử lại.'
-    });
+    // Check if SweetAlert2 is available
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: message,
+            confirmButtonText: 'Đóng'
+        });
+    } else {
+        // Fallback to alert
+        alert('Lỗi: ' + message);
+    }
 }
 
 function loadUserDataWithFilters(search, role) {
@@ -125,6 +137,12 @@ function loadUserDataWithFilters(search, role) {
     
     if (search) url += '&search=' + encodeURIComponent(search);
     if (role) url += '&role=' + encodeURIComponent(role);
+
+    // Show loading spinner
+    const loadingSpinner = document.querySelector('.loading-spinner');
+    const userTable = document.getElementById('userTable');
+    if (loadingSpinner) loadingSpinner.style.display = 'block';
+    if (userTable) userTable.style.display = 'none';
 
     fetch(url)
         .then(response => {
@@ -139,8 +157,8 @@ function loadUserDataWithFilters(search, role) {
             showErrorMessage('Lỗi khi tải dữ liệu người dùng');
             
             // Hide loading spinner on error
-            const loadingSpinner = document.querySelector('.loading-spinner');
             if (loadingSpinner) loadingSpinner.style.display = 'none';
+            if (userTable) userTable.style.display = 'table';
         });
 }
 
@@ -163,7 +181,7 @@ function populateUserTable(users) {
     let html = '';
     users.forEach(user => {
         html += `
-            <tr>
+            <tr data-user-id="${user.id}">
                 <td>${user.id}</td>
                 <td>${user.fullName}</td>
                 <td>${user.email}</td>
@@ -172,13 +190,12 @@ function populateUserTable(users) {
                 <td>${user.isPhoneVerified ? 'Đã xác thực' : 'Chưa xác thực'}</td>
                 <td>${getRoleText(user.roleId)}</td>
                 <td>
-                    <a href="#" class="btn-edit-user btn btn-sm btn-outline-primary me-1" data-user-id="${user.id}" title="Chỉnh sửa">
+                    <button class="btn-edit-user btn btn-sm btn-outline-primary me-1" data-user-id="${user.id}" title="Chỉnh sửa">
                         <i class="fas fa-edit"></i>
-                    </a>
-                    <a href="UserServlet?action=delete&id=${user.id}" class="btn btn-sm btn-outline-danger btn-delete" title="Xóa"
-                       onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">
+                    </button>
+                    <button class="btn-delete btn btn-sm btn-outline-danger" data-user-id="${user.id}" title="Xóa">
                         <i class="fas fa-trash"></i>
-                    </a>
+                    </button>
                 </td>
             </tr>
         `;
@@ -219,10 +236,63 @@ function getStatusText(user) {
 function attachDeleteListeners() {
     document.querySelectorAll('.btn-delete').forEach(btn => {
         btn.addEventListener('click', function(e) {
-            if (!confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
-                e.preventDefault();
+            e.preventDefault();
+            const userId = this.getAttribute('data-user-id');
+            
+            if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
+                deleteUser(userId);
             }
         });
+    });
+}
+
+function deleteUser(userId) {
+    const basePath = getBasePath();
+    
+    // Get CSRF token from the page
+    const csrfToken = document.querySelector('input[name="csrfToken"]')?.value || 
+                     document.querySelector('meta[name="csrf-token"]')?.content;
+    
+    // Show loading state
+    const btn = document.querySelector(`[data-user-id="${userId}"]`);
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', userId);
+    if (csrfToken) {
+        formData.append('csrfToken', csrfToken);
+    }
+
+    fetch(`${basePath}UserServlet`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccessMessage(data.message);
+            // Remove user from table
+            const userRow = document.querySelector(`tr[data-user-id="${userId}"]`);
+            if (userRow) {
+                userRow.remove();
+            }
+            // Update dashboard stats
+            updateDashboardStats(parseInt(document.querySelector('.stats-cards .card-box:first-child .number')?.textContent || '0') - 1);
+        } else {
+            showErrorMessage(data.message || 'Failed to delete user');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorMessage('Network error occurred');
+    })
+    .finally(() => {
+        // Reset button state
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     });
 }
 
@@ -257,13 +327,23 @@ function openEditUserModal(userId) {
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
 
-    fetch(`UserServlet?action=edit&id=${userId}`)
+    const basePath = getBasePath();
+    fetch(`${basePath}UserServlet?action=edit&id=${userId}`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return response.text();
         })
         .then(html => {
             modalContent.innerHTML = html;
+            
+            // Set up form submission for the modal
+            const editForm = modalContent.querySelector('#editUserForm');
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleEditUserSubmission(this, userId);
+                });
+            }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -280,6 +360,46 @@ function openEditUserModal(userId) {
                 </div>
             `;
         });
+}
+
+function handleEditUserSubmission(form, userId) {
+    const formData = new FormData(form);
+    const basePath = getBasePath();
+    
+    // Show loading state
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Đang cập nhật...';
+    submitBtn.disabled = true;
+
+    fetch(`${basePath}UserServlet`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccessMessage(data.message);
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+            if (modal) {
+                modal.hide();
+            }
+            // Reload user data
+            loadUserDataWithFilters('', '');
+        } else {
+            showErrorMessage(data.message || 'Failed to update user');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorMessage('Network error occurred');
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
 }
 
 function updateDashboardStats(totalUsers) {
@@ -301,9 +421,20 @@ function getBasePath() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Admin panel initialized');
     
-    // The section loader will handle all data loading
-    // We only need to set up specific event listeners here
-    // setupEventListeners(); 
+    // Set up search and filter functionality
+    setupSearchAndFilter();
+    
+    // Load initial user data
+    loadUserDataWithFilters('', '');
+    
+    // Set up event listeners for user management
+    const addUserBtn = document.getElementById('addUserBtn');
+    if (addUserBtn) {
+        addUserBtn.addEventListener('click', function() {
+            const modal = new bootstrap.Modal(document.getElementById('userAddModal'));
+            modal.show();
+        });
+    }
 });
 
 // Role Assignment Modal Functions
@@ -769,36 +900,6 @@ function populateCategoriesTable(categories) {
     tableBody.innerHTML = html;
 }
 
-function populateSearchVerifyTable(searchResults) {
-    const tableBody = document.getElementById('searchVerifyTableBody');
-    if (!tableBody) return;
-
-    if (!searchResults || searchResults.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Không có kết quả tìm kiếm nào.</td></tr>';
-        return;
-    }
-
-    let html = '';
-    searchResults.forEach(result => {
-        const verificationClass = result.verified ? 'status-active' : 'status-pending';
-        html += `
-            <tr>
-                <td>${result.id}</td>
-                <td>${result.name}</td>
-                <td>${result.type}</td>
-                <td class="${verificationClass}">${result.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
-                <td class="actions">
-                    <button onclick="verifyItem(${result.id})" class="btn-verify" title="Xác minh">
-                        <i class="fas fa-check"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
-
-    tableBody.innerHTML = html;
-}
-
 function populateSupportRequestsTable(requests) {
     const tableBody = document.getElementById('supportRequestsTableBody');
     if (!tableBody) return;
@@ -1050,26 +1151,6 @@ function populateApplicationAnalysis(analysis) {
 }
 
 // Utility functions for different sections
-function verifyItem(itemId) {
-    if (confirm('Bạn có chắc chắn muốn xác minh mục này?')) {
-        fetch(`SearchVerifyServlet?action=verify&id=${itemId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSuccessMessage('Xác minh thành công!');
-                    // Reload the search verify data
-                    loadDataForSection('search-verify');
-                } else {
-                    showErrorMessage(data.message || 'Lỗi khi xác minh');
-                }
-            })
-            .catch(error => {
-                console.error('Error verifying item:', error);
-                showErrorMessage('Lỗi khi xác minh');
-            });
-    }
-}
-
 function dismissAlert(alertId) {
     if (confirm('Bạn có chắc chắn muốn bỏ qua cảnh báo này?')) {
         fetch(`AlertServlet?action=dismiss&id=${alertId}`)

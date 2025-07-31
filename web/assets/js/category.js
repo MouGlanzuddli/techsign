@@ -138,7 +138,7 @@ function handleFormSubmit(e) {
     const basePath = getBasePath();
     fetch(basePath + 'category', {
         method: 'POST',
-        body: new URLSearchParams(formData)
+        body: formData
     })
     .then(response => {
         if (!response.ok) throw new Error('HTTP error ' + response.status);

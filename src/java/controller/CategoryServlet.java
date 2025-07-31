@@ -5,13 +5,10 @@ import model.Category;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import dao.DBConnection;
-import java.sql.Connection;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class CategoryServlet extends HttpServlet {
 
@@ -25,8 +22,7 @@ public class CategoryServlet extends HttpServlet {
         String action = request.getParameter("action");
         StringBuilder jsonResponse = new StringBuilder();
 
-        try (Connection conn = DBConnection.getConnection()) {
-            // TODO: Refactor CategoryDAO to support connection injection
+        try {
             CategoryDAO categoryDAO = new CategoryDAO();
             switch (action) {
                 case "getAll":
@@ -78,8 +74,7 @@ public class CategoryServlet extends HttpServlet {
         String action = request.getParameter("action");
         StringBuilder jsonResponse = new StringBuilder();
 
-        try (Connection conn = DBConnection.getConnection()) {
-            // TODO: Refactor CategoryDAO to support connection injection
+        try {
             CategoryDAO categoryDAO = new CategoryDAO();
             switch (action) {
                 case "add":
@@ -144,25 +139,6 @@ public class CategoryServlet extends HttpServlet {
                         jsonResponse.append("{\"success\":false,\"message\":\"Category ID is required\"}");
                     }
                     break;
-
-//                case "reorder":
-//                    String orderParam = request.getParameter("order");
-//                    if (orderParam != null && !orderParam.trim().isEmpty()) {
-//                        String[] idStrings = orderParam.split(",");
-//                        int[] ids = new int[idStrings.length];
-//                        for (int i = 0; i < idStrings.length; i++) {
-//                            ids[i] = Integer.parseInt(idStrings[i]);
-//                        }
-//                        boolean success = categoryDAO.reorderCategories(ids);
-//                        if (success) {
-//                            jsonResponse.append("{\"success\":true,\"message\":\"Order updated\"}");
-//                        } else {
-//                            jsonResponse.append("{\"success\":false,\"message\":\"Failed to update order\"}");
-//                        }
-//                    } else {
-//                        jsonResponse.append("{\"success\":false,\"message\":\"Order parameter is required\"}");
-//                    }
-//                    break;
 
                 default:
                     jsonResponse.append("{\"success\":false,\"message\":\"Invalid action\"}");
