@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
+import java.util.Set;
 
 public class TechSignAIChatbotServlet extends HttpServlet {
     private static final String API_KEY = "AIzaSyAl0qgyIdPRk-69Avt5iYps3Gm1YZdFY-A";
@@ -45,38 +46,46 @@ public class TechSignAIChatbotServlet extends HttpServlet {
             
             // Bước 2: Xử lý theo loại câu hỏi
             String reply = "";
-            
-            if (questionType.equals("OFF_TOPIC")) {
-                // Câu hỏi không liên quan - chuyển hướng về chủ đề việc làm
-                reply = "🤖 Xin lỗi, tôi là trợ lý AI chuyên về việc làm và nghề nghiệp IT. " +
-                       "Tôi không thể trả lời câu hỏi này vì nó không liên quan đến mục đích của TechSign. " +
-                       "Tôi có thể giúp bạn: tìm việc, tư vấn CV, phỏng vấn, hoặc thông tin về thị trường IT Việt Nam. " +
-                       "Bạn có câu hỏi gì về việc làm không? 💼";
+            // Danh sách các loại nghiệp vụ được phép trả lời
+            Set<String> allowedTypes = Set.of(
+                "JOB_SEARCH", "CV_ADVICE", "INTERVIEW", "TECHSIGN_HELP", "SYSTEM_STATS", "DATABASE_QUERY", "COMPANY_INFO"
+            );
+
+            if (!allowedTypes.contains(questionType)) {
+                reply = "🤖 Cảm ơn bạn đã đặt câu hỏi! Hiện tại, tôi chỉ hỗ trợ các nghiệp vụ liên quan đến:\n" +
+                        "- Tìm kiếm việc làm IT\n" +
+                        "- Tư vấn CV, phỏng vấn\n" +
+                        "- Thông tin về công ty, lương, thị trường IT\n" +
+                        "- Hướng dẫn sử dụng nền tảng TechSign\n\n" +
+                        "Nếu bạn cần hỗ trợ về các chủ đề trên, hãy đặt câu hỏi cụ thể nhé! 💼";
             } else if (questionType.equals("JOB_SEARCH")) {
-                // Câu hỏi về việc làm - tìm trong database
                 String keyword = extractKeyword(userMessage);
                 String jobInfo = getJobInfoFromDB(keyword, request);
-                
                 if (!jobInfo.contains("Chưa có việc làm") && !jobInfo.contains("nói rõ hơn")) {
                     reply = jobInfo;
                 } else {
-                    // Không tìm thấy việc làm cụ thể, đề xuất việc làm thông minh
                     String suggestedJobs = getSuggestedJobs(userRole, request);
                     String prompt = buildPrompt(userMessage, "Đề xuất việc làm: " + suggestedJobs, userName, userRole, questionType);
                     reply = generateAIResponse(prompt);
                 }
+            } else if (questionType.equals("CV_ADVICE")) {
+                String prompt = buildPrompt(userMessage, "", userName, userRole, questionType);
+                reply = generateAIResponse(prompt);
+            } else if (questionType.equals("INTERVIEW")) {
+                String prompt = buildPrompt(userMessage, "", userName, userRole, questionType);
+                reply = generateAIResponse(prompt);
+            } else if (questionType.equals("TECHSIGN_HELP")) {
+                String prompt = buildPrompt(userMessage, "", userName, userRole, questionType);
+                reply = generateAIResponse(prompt);
             } else if (questionType.equals("SYSTEM_STATS")) {
-                // Câu hỏi về thống kê hệ thống - truy vấn database thực tế
                 String systemStats = getSystemStatsFromDB(request);
                 String prompt = buildPrompt(userMessage, "Thống kê hệ thống: " + systemStats, userName, userRole, questionType);
                 reply = generateAIResponse(prompt);
             } else if (questionType.equals("DATABASE_QUERY")) {
-                // Câu hỏi về database - xử lý linh hoạt
                 String dbResult = processDatabaseQuery(userMessage, request);
                 String prompt = buildPrompt(userMessage, "Kết quả database: " + dbResult, userName, userRole, questionType);
                 reply = generateAIResponse(prompt);
-            } else {
-                // Các loại câu hỏi khác - gọi AI với context phù hợp
+            } else if (questionType.equals("COMPANY_INFO")) {
                 String prompt = buildPrompt(userMessage, "", userName, userRole, questionType);
                 reply = generateAIResponse(prompt);
             }
@@ -221,7 +230,12 @@ public class TechSignAIChatbotServlet extends HttpServlet {
     // Hàm trích keyword từ câu hỏi
     private String extractKeyword(String message) {
         message = message.toLowerCase();
-        
+        // Nhận diện các câu hỏi về việc làm mới
+        if (message.contains("việc làm mới") || message.contains("job mới") || message.contains("các việc mới") ||
+            message.contains("việc mới nhất") || message.contains("công việc mới") || message.contains("tuyển dụng mới") ||
+            message.contains("new job") || message.contains("latest job") || message.contains("latest jobs")) {
+            return "";
+        }
         // Keywords cho việc làm
         if (message.contains("java") || message.contains("lập trình java")) return "java";
         if (message.contains("python") || message.contains("lập trình python")) return "python";
@@ -249,45 +263,46 @@ public class TechSignAIChatbotServlet extends HttpServlet {
         if (message.contains("việc làm") || message.contains("job")) return "việc làm";
         if (message.contains("lương") || message.contains("salary")) return "lương";
         if (message.contains("công ty") || message.contains("company")) return "công ty";
-        
         return "";
     }
 
     // Hàm lấy thông tin việc làm từ database
     private String getJobInfoFromDB(String keyword, HttpServletRequest request) throws SQLException {
-        if (keyword.isEmpty()) {
-            return "💡 Hãy nói rõ hơn về việc làm bạn quan tâm. Ví dụ: 'Tìm việc Java', 'Việc làm React', 'Lương cao'...";
-        }
-
         StringBuilder sb = new StringBuilder();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
         try {
             conn = DBContext.getConnection();
-
-            String sql = "SELECT TOP 3 jp.title, jp.description, jp.location, jp.salary_min, jp.salary_max, " +
-                        "cp.company_name, jp.job_type, jp.posted_at " +
-                        "FROM job_postings jp " +
-                        "INNER JOIN company_profiles cp ON jp.company_profile_id = cp.id " +
-                        "WHERE jp.status = 'open' AND " +
-                        "(jp.title LIKE ? OR jp.description LIKE ? OR cp.company_name LIKE ? OR jp.location LIKE ?) " +
-                        "ORDER BY jp.posted_at DESC";
-            
-            ps = conn.prepareStatement(sql);
-            String likeKeyword = "%" + keyword + "%";
-            ps.setString(1, likeKeyword);
-            ps.setString(2, likeKeyword);
-            ps.setString(3, likeKeyword);
-            ps.setString(4, likeKeyword);
+            String sql;
+            if (keyword.isEmpty()) {
+                // Lấy TOP 3 việc làm mới nhất còn hạn và đã duyệt
+                sql = "SELECT TOP 3 jp.title, jp.description, jp.location, jp.salary_min, jp.salary_max, " +
+                      "cp.company_name, jp.job_type, jp.posted_at " +
+                      "FROM job_postings jp " +
+                      "INNER JOIN company_profiles cp ON jp.company_profile_id = cp.id " +
+                      "WHERE jp.status = 'approved' AND jp.expires_at >= GETDATE() " +
+                      "ORDER BY jp.posted_at DESC";
+                ps = conn.prepareStatement(sql);
+            } else {
+                sql = "SELECT TOP 3 jp.title, jp.description, jp.location, jp.salary_min, jp.salary_max, " +
+                      "cp.company_name, jp.job_type, jp.posted_at " +
+                      "FROM job_postings jp " +
+                      "INNER JOIN company_profiles cp ON jp.company_profile_id = cp.id " +
+                      "WHERE jp.status = 'approved' AND jp.expires_at >= GETDATE() AND " +
+                      "(jp.title LIKE ? OR jp.description LIKE ? OR cp.company_name LIKE ? OR jp.location LIKE ?) " +
+                      "ORDER BY jp.posted_at DESC";
+                ps = conn.prepareStatement(sql);
+                String likeKeyword = "%" + keyword + "%";
+                ps.setString(1, likeKeyword);
+                ps.setString(2, likeKeyword);
+                ps.setString(3, likeKeyword);
+                ps.setString(4, likeKeyword);
+            }
             rs = ps.executeQuery();
-
             boolean hasData = false;
             String contextPath = request.getContextPath();
-
             sb.append("🔍 <strong>Việc làm phù hợp:</strong><br><br>");
-
             while (rs.next()) {
                 hasData = true;
                 String title = rs.getString("title");
@@ -298,7 +313,6 @@ public class TechSignAIChatbotServlet extends HttpServlet {
                 String companyName = rs.getString("company_name");
                 String jobType = rs.getString("job_type");
                 Timestamp postedAt = rs.getTimestamp("posted_at");
-
                 // Format salary
                 String salaryText = "Thương lượng";
                 if (salaryMin != null && salaryMax != null) {
@@ -308,10 +322,8 @@ public class TechSignAIChatbotServlet extends HttpServlet {
                 } else if (salaryMax != null) {
                     salaryText = String.format("Đến %.0f triệu VNĐ", salaryMax);
                 }
-
                 // Format job type
                 String jobTypeText = jobType != null ? jobType : "Toàn thời gian";
-
                 sb.append(String.format(
                     "<div style='background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #28a745;'>" +
                     "<strong style='color: #28a745;'>%s</strong><br>" +
@@ -322,15 +334,11 @@ public class TechSignAIChatbotServlet extends HttpServlet {
                     description != null ? (description.length() > 100 ? description.substring(0, 100) + "..." : description) : "Không có mô tả"
                 ));
             }
-
             if (!hasData) {
                 return "😔 Chưa có việc làm phù hợp. Thử từ khóa khác hoặc đăng ký nhận thông báo nhé!";
             }
-
             sb.append("<br><small>💡 Click vào việc làm để xem chi tiết và ứng tuyển!</small>");
-
             return sb.toString();
-
         } finally {
             if (rs != null) try { rs.close(); } catch (Exception ignored) {}
             if (ps != null) try { ps.close(); } catch (Exception ignored) {}
@@ -369,7 +377,7 @@ public class TechSignAIChatbotServlet extends HttpServlet {
                            
                            "KIẾN THỨC TECHSIGN:\n" +
                            "- Nền tảng kết nối ứng viên và công ty công nghệ\n" +
-                           "- 3 loại tài khoản: Admin, Company, Candidate\n" +
+                           "- 2 loại tài khoản: Company (Nhà tuyển dụng), Candidate (Ứng viên)\n" +
                            "- Tính năng: đăng tin, tìm việc, quản lý hồ sơ, chat real-time\n" +
                            "- Tìm việc theo: công nghệ, địa điểm, lương, kinh nghiệm\n\n" +
                            
@@ -454,7 +462,7 @@ public class TechSignAIChatbotServlet extends HttpServlet {
                 
             case "SYSTEM_STATS":
                 return "CHUYÊN MÔN THỐNG KÊ HỆ THỐNG:\n" +
-                       "- Users: Admin, Company, Candidate accounts\n" +
+                       "- Users: Company (Nhà tuyển dụng), Candidate (Ứng viên) accounts\n" +
                        "- Job postings: Open/closed status, total count\n" +
                        "- Company profiles: Registered companies\n" +
                        "- Messages: Chat system usage\n" +
@@ -462,7 +470,7 @@ public class TechSignAIChatbotServlet extends HttpServlet {
                 
             case "DATABASE_QUERY":
                 return "CHUYÊN MÔN TRUY VẤN DATABASE:\n" +
-                       "- Users: Admin, Company, Candidate lists\n" +
+                       "- Users: Company (Nhà tuyển dụng), Candidate (Ứng viên) lists\n" +
                        "- Jobs: Recent postings, status, salary info\n" +
                        "- Companies: Industry, location, job count\n" +
                        "- Messages: Recent chat history\n" +
@@ -629,9 +637,7 @@ public class TechSignAIChatbotServlet extends HttpServlet {
             String message = userMessage.toLowerCase();
             
             // Xử lý các loại query khác nhau
-            if (message.contains("admin") || message.contains("quản trị")) {
-                result.append(getAdminUsers(conn));
-            } else if (message.contains("company") || message.contains("công ty")) {
+            if (message.contains("company") || message.contains("công ty")) {
                 result.append(getCompanyList(conn));
             } else if (message.contains("candidate") || message.contains("ứng viên")) {
                 result.append(getCandidateList(conn));
@@ -656,25 +662,7 @@ public class TechSignAIChatbotServlet extends HttpServlet {
         }
     }
     
-    // Lấy danh sách admin users
-    private String getAdminUsers(Connection conn) throws SQLException {
-        StringBuilder sb = new StringBuilder();
-        String sql = "SELECT TOP 10 id, full_name, email, created_at FROM users WHERE role_name = 'Admin' ORDER BY created_at DESC";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        
-        sb.append("👨‍💼 <strong>Danh sách Admin:</strong><br>");
-        while (rs.next()) {
-            String name = rs.getString("full_name");
-            String email = rs.getString("email");
-            Timestamp createdAt = rs.getTimestamp("created_at");
-            sb.append(String.format("• %s (%s) - Tạo: %s<br>", name, email, createdAt));
-        }
-        
-        rs.close();
-        ps.close();
-        return sb.toString();
-    }
+
     
     // Lấy danh sách công ty
     private String getCompanyList(Connection conn) throws SQLException {

@@ -45,7 +45,7 @@ public class JobPostDao {
 
     // Số tin hoạt động trong tháng
     public int getActiveJobPosts(int monthOffset) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE()) AND " + getMonthFilter("posted_at", monthOffset);
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'approved' AND (expires_at IS NULL OR expires_at > GETDATE()) AND " + getMonthFilter("posted_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -56,7 +56,7 @@ public class JobPostDao {
 
     // Số tin hết hạn trong tháng
     public int getExpiredJobPosts(int monthOffset) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE (status = 'closed' OR expires_at < GETDATE()) AND " + getMonthFilter("posted_at", monthOffset);
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE (status = 'rejected' OR expires_at < GETDATE()) AND " + getMonthFilter("posted_at", monthOffset);
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -93,7 +93,7 @@ public class JobPostDao {
 
     // Số tin hoạt động tổng (không lọc theo tháng)
     public int getActiveJobPostsTotal() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE())";
+        String sql = "SELECT COUNT(*) FROM job_postings WHERE status = 'approved' AND (expires_at IS NULL OR expires_at > GETDATE())";
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
                 return rs.getInt(1);
@@ -167,7 +167,7 @@ public class JobPostDao {
     // Top 10 tin hoạt động trong tháng có lượt xem nhiều nhất
     public List<JobPost> getTop10MostViewedActivePostsThisMonth() throws SQLException {
         String sql = "SELECT TOP 10 id, title, views FROM job_postings " +
-                "WHERE status = 'active' AND (expires_at IS NULL OR expires_at > GETDATE()) " +
+                "WHERE status = 'approved' AND (expires_at IS NULL OR expires_at > GETDATE()) " +
                 "AND MONTH(posted_at) = MONTH(GETDATE()) AND YEAR(posted_at) = YEAR(GETDATE()) " +
                 "ORDER BY views DESC, id ASC";
         List<JobPost> list = new ArrayList<>();
@@ -189,7 +189,7 @@ public class JobPostDao {
         String sql = "SELECT TOP 10 jp.id, jp.title, jp.views, COUNT(a.id) AS apply_count " +
                 "FROM job_postings jp " +
                 "LEFT JOIN applications a ON a.job_posting_id = jp.id " +
-                "WHERE jp.status = 'active' AND (jp.expires_at IS NULL OR jp.expires_at > GETDATE()) " +
+                "WHERE jp.status = 'approved' AND (jp.expires_at IS NULL OR jp.expires_at > GETDATE()) " +
                 "AND MONTH(jp.posted_at) = MONTH(GETDATE()) AND YEAR(jp.posted_at) = YEAR(GETDATE()) " +
                 "GROUP BY jp.id, jp.title, jp.views " +
                 "ORDER BY apply_count DESC, jp.id ASC";
@@ -206,5 +206,6 @@ public class JobPostDao {
         }
         return list;
     }
+
 }
 

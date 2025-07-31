@@ -118,9 +118,7 @@ public class JobPostingDAO {
             "jp.expires_at, " +
             "cp.company_name " +
             "ORDER BY jp.posted_at DESC";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
             stmt.setString(1, status);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -131,7 +129,6 @@ public class JobPostingDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return jobPostings;
     }
 
