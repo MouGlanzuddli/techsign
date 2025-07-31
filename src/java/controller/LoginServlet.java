@@ -25,7 +25,7 @@ import org.mindrot.jbcrypt.BCrypt;
  *
  * @author Admin
  */
-@WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet"})
+@WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet", "/login"})
 public class LoginServlet extends HttpServlet {
    
     /** 

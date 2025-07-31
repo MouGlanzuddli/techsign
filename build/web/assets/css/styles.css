@@ -2345,7 +2345,6 @@ opacity: 1;
     top: 50%;
 }
 .nice-select .option {
-    line-height: 50px;
 }
 .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
     background-color: #00af70;
@@ -4400,20 +4399,20 @@ ul.shorting-list li a:hover, ul.shorting-list li a:focus, ul.shorting-list li a.
     font-weight: 500;
 }
 .full-time {
-	background:rgba(3, 165, 4,0.1);
-	color:#03a504;
+  background: rgba(3,165,4,0.1);
+  color: #03a504;
 }
 .part-time {
-    background: rgb(90 84 255 / 11%);
-    color: #5a54ff;
+  background: rgba(90,84,255,0.1);
+  color: #5a54ff;
 }
-.enternship {
-	background:rgba(210, 0, 1,0.1);
-	color:#d20001;
+.internship {
+  background: rgba(210,0,1,0.1);
+  color: #d20001;
 }
-.freelanc {
-	background:rgba(38, 169, 225,0.1);
-	color:#26a9e1;
+.freelancer {
+  background: rgba(38,169,225,0.1);
+  color: #26a9e1;
 }
 .job-instructor-thumb {
     display: table;
@@ -10828,6 +10827,104 @@ a.purple-theme{background:#9237cb!important;}
 a.orange-theme{background:#E55807!important;}
 a.brown-theme{background:#bc3306!important;}
 a.cadmium-theme{background:#5F8D4E!important;}
+/* 1. Đảm bảo mỗi box CV đều cao tối thiểu như nhau */
+.cd-resume-wraps {
+    min-height: 180px;  /* Bạn điều chỉnh số này cho phù hợp */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 2. Đảm bảo phần caption đẩy icon xuống dưới */
+.cd-resume-caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+/* 3. Chặn text tên file quá dài làm vỡ box */
+.cd-resume-content p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.cv-left {
+    background: #1A4D5C;
+    color: #fff;
+}
+.cv-left ul li {
+    list-style: disc;
+    margin-left: 20px;
+}
+.cv-right ul li {
+    list-style: disc;
+    margin-left: 20px;
+}
+.cv-left {
+    background: #1A4D5C;
+    color: #fff;
+}
+
+.cv-left h2, .cv-left h5, .cv-left h6, .cv-left p, .cv-left li, .cv-left span {
+    color: #fff;
+}
+.cv-card {
+    display: flex;
+    border: 1px solid #ddd;
+    min-height: 600px;
+}
+
+.cv-left {
+    background: #1A4D5C;
+    color: #fff;
+    width: 35%;
+    padding: 30px;
+}
+
+.cv-right {
+    background: #fff;
+    width: 65%;
+    padding: 30px;
+}
+
+.cv-left img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.cv-left h2, .cv-left h5, .cv-left h6, .cv-left p, .cv-left li, .cv-left span {
+    color: #fff;
+}
+
+.cv-skill-list, .cv-exp-list ul {
+    padding-left: 20px;
+}
+
+.cv-skill-list li, .cv-exp-list li {
+    list-style: disc;
+    margin-bottom: 5px;
+}
+.disabled-block {
+    opacity: 0.5; /* Làm mờ */
+    pointer-events: none; /* Không cho thao tác */
+}
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+.ui-autocomplete {
+    position: absolute;
+    z-index: 9999 !important; 
+    background: #fff;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 
 
  

@@ -145,10 +145,7 @@
                                                             <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
                                                             <label>Email</label>
                                                         </div>
-                                                     <div class="form-floating mb-4">
-                                                            <input type="text" class="form-control" name="userid" placeholder="example123" required>
-                                                            <label>User ID</label>
-                                                  </div>
+                                                     
                                                         <div class="form-floating mb-4">
                                                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                                                             <label>Password</label>

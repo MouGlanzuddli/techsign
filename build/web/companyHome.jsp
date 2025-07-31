@@ -54,18 +54,18 @@
                     <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
                     <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="grid-style-1.html">Job List</a></li>
+                            <li><a href="SearchandView">Job List</a></li>
                             
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="employer-grid-1.html">Company List</a></li>
+                            <li><a href="CompanyListServlet">Company List</a></li>
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Candidates<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a>Candidate List</a></li>
+                            <li><a href="${pageContext.request.contextPath}/company-candidate-list.jsp">Candidate List</a></li>
                             
                             
                         </ul>
@@ -75,9 +75,9 @@
                 <ul class="nav-menu nav-menu-social align-to-right">
                      
                      <li>
-                        <a href="JavaScript:Void(0);" class="post-job-btn">
-                            Post Job <i class="fas fa-arrow-up"></i>
-                        </a>
+                       <a href="company-submit-job.jsp" class="post-job-btn">
+    Post Job <i class="fas fa-arrow-up"></i>
+</a>
                     </li>
                     <li>
                         <a href="JavaScript:Void(0);"><i class="fas fa-comment me-2"></i></a>
@@ -90,8 +90,8 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="JavaScript:Void(0);">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="LogoutServlet""JavaScript:Void(0);">Logout</a></li>
+                            <li><a class="dropdown-item" href="CompanyDashboardServlet">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -1278,7 +1278,10 @@
 		<!-- This page plugins -->
 		<!-- ============================================================== -->		
 
-	</body>
+	
 
-<!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:58:22 GMT -->
+</body>
+
+
+    <!-- Mirrored from shreethemes.net/jobstock-landing-2.2/jobstock/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Jun 2024 11:58:22 GMT -->
 </html>

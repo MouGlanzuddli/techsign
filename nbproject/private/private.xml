@@ -3,16 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/Constants.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/web/index.jsp</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LogoutServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LoginGoogleHandler.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/web/loginGG.jsp</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/UserDao.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/DBContext.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LoginServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/SignupServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/UserGoogleDto.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/LoginServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/candidate-profiles.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/CandidateProfilesServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/company-change-password.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/dal/UserDao.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/nbproject/build-impl.xml</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/SignupServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/model/Company.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/company-dashboard.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/job-list.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/resumeCandidate.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/dal/CompanyDAO.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/CandidateDashboardServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/dal/CandidateDAO.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/CompanyDashboardServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/AppliedJobsServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/model/Candidate.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/controller/DeleteCompanyAccountServlet.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/company-list.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/company-profiles.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/dal/JobDao.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/util/FileUploadUtil.java</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/web/candidate-dashboard.jsp</file>
+            <file>file:/D:/JobSearchManagement%20(2)/JobSearchManagement/src/java/util/DeviceInfoUtil.java</file>
         </group>
     </open-files>
 </project-private>

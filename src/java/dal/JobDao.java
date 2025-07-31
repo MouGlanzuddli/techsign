@@ -1,0 +1,306 @@
+package dal;
+
+import model.Job;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
+public class JobDao {
+
+    private final Connection connection;
+
+    public JobDao(Connection connection) {
+        this.connection = connection;
+    }
+
+// Thêm job mới với xử lý null safety
+    public boolean insertJob(Job job) throws SQLException {
+        String sql = "INSERT INTO job_postings (company_profile_id, title, description, requirements, benefits, "
+                + "job_type, job_level, salary_min, salary_max, location, category, experience_required, "
+                + "application_deadline, status, is_featured, is_urgent, created_at, updated_at, views_count, applications_count) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // Đảm bảo createdAt và updatedAt không null
+            Date now = new Date();
+            if (job.getCreatedAt() == null) {
+                job.setCreatedAt(now);
+            }
+            if (job.getUpdatedAt() == null) {
+                job.setUpdatedAt(now);
+            }
+
+            stmt.setInt(1, job.getCompanyId());
+            stmt.setString(2, job.getTitle());
+            stmt.setString(3, job.getDescription());
+            stmt.setString(4, job.getRequirements());
+            stmt.setString(5, job.getBenefits());
+            stmt.setString(6, job.getJobType());
+            stmt.setString(7, job.getJobLevel());
+            stmt.setBigDecimal(8, job.getSalaryMin());
+            stmt.setBigDecimal(9, job.getSalaryMax());
+            stmt.setString(10, job.getLocation());
+            stmt.setString(11, job.getCategory());
+            stmt.setInt(12, job.getExperienceRequired());
+            stmt.setTimestamp(13, job.getApplicationDeadline() != null
+                    ? new Timestamp(job.getApplicationDeadline().getTime()) : null);
+            stmt.setString(14, job.getStatus() != null ? job.getStatus() : "active");
+            stmt.setBoolean(15, job.isFeatured());
+            stmt.setBoolean(16, job.isUrgent());
+            stmt.setTimestamp(17, new Timestamp(job.getCreatedAt().getTime()));
+            stmt.setTimestamp(18, new Timestamp(job.getUpdatedAt().getTime()));
+            stmt.setInt(19, job.getViewsCount());       // Bổ sung tham số thứ 19
+            stmt.setInt(20, job.getApplicationsCount()); // Bổ sung tham số thứ 20
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                ResultSet rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    job.setId(rs.getInt(1));
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+// Lấy tất cả job_postings của một công ty
+    public List<Job> getJobsByCompanyId(int companyId) throws SQLException {
+        String sql = "SELECT * FROM job_postings WHERE company_profile_id = ? ORDER BY created_at DESC";
+        List<Job> job_postings = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, companyId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                job_postings.add(mapResultSetToJob(rs));
+            }
+        }
+        return job_postings;
+    }
+
+// Lấy job theo ID
+    public Job getJobById(int id) throws SQLException {
+        String sql = "SELECT * FROM job_postings WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToJob(rs);
+            }
+        }
+        return null;
+    }
+
+// Cập nhật job
+    public boolean updateJob(Job job) throws SQLException {
+        String sql = "UPDATE job_postings SET title = ?, description = ?, requirements = ?, benefits = ?, "
+                + "job_type = ?, job_level = ?, salary_min = ?, salary_max = ?, location = ?, "
+                + "category = ?, experience_required = ?, application_deadline = ?, status = ?, "
+                + "is_featured = ?, is_urgent = ?, updated_at = ? WHERE id = ? AND company_profile_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Đảm bảo updatedAt không null
+            if (job.getUpdatedAt() == null) {
+                job.setUpdatedAt(new Date());
+            }
+
+            stmt.setString(1, job.getTitle());
+            stmt.setString(2, job.getDescription());
+            stmt.setString(3, job.getRequirements());
+            stmt.setString(4, job.getBenefits());
+            stmt.setString(5, job.getJobType());
+            stmt.setString(6, job.getJobLevel());
+            stmt.setBigDecimal(7, job.getSalaryMin());
+            stmt.setBigDecimal(8, job.getSalaryMax());
+            stmt.setString(9, job.getLocation());
+            stmt.setString(10, job.getCategory());
+            stmt.setInt(11, job.getExperienceRequired());
+            stmt.setTimestamp(12, job.getApplicationDeadline() != null
+                    ? new Timestamp(job.getApplicationDeadline().getTime()) : null);
+            stmt.setString(13, job.getStatus());
+            stmt.setBoolean(14, job.isFeatured());
+            stmt.setBoolean(15, job.isUrgent());
+            stmt.setTimestamp(16, new Timestamp(job.getUpdatedAt().getTime()));
+            stmt.setInt(17, job.getId());
+            stmt.setInt(18, job.getCompanyId());
+
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+// Xóa job
+    public boolean deleteJob(int id, int companyId) throws SQLException {
+        String deleteBookmarks = "DELETE FROM bookmarks WHERE job_postings_id = ?";
+        String deleteApplications = "DELETE FROM applications WHERE job_posting_id = ?";
+        String deleteJob = "DELETE FROM job_postings WHERE id = ? AND company_profile_id = ?";
+
+        try {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement stmt1 = connection.prepareStatement(deleteBookmarks)) {
+                stmt1.setInt(1, id);
+                stmt1.executeUpdate();
+            }
+
+            try (PreparedStatement stmt2 = connection.prepareStatement(deleteApplications)) {
+                stmt2.setInt(1, id);
+                stmt2.executeUpdate();
+            }
+
+            boolean deleted;
+            try (PreparedStatement stmt3 = connection.prepareStatement(deleteJob)) {
+                stmt3.setInt(1, id);
+                stmt3.setInt(2, companyId);
+                deleted = stmt3.executeUpdate() > 0;
+            }
+
+            connection.commit();
+            return deleted;
+
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+        }
+    }
+
+// Thay đổi trạng thái job
+    public boolean updateJobStatus(int id, int companyId, String status) throws SQLException {
+        String sql = "UPDATE job_postings SET status = ?, updated_at = ? WHERE id = ? AND company_profile_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            stmt.setInt(3, id);
+            stmt.setInt(4, companyId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+// Lấy tất cả job_postings active (cho trang chủ và job list)
+    public List<Job> getAllActiveJobs() throws SQLException {
+        String sql = "SELECT * FROM job_postings WHERE status = 'active' ORDER BY is_featured DESC, is_urgent DESC, created_at DESC";
+        List<Job> job_postings = new ArrayList<>();
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                job_postings.add(mapResultSetToJob(rs));
+            }
+        }
+        return job_postings;
+    }
+
+// Lấy danh sách categories
+    public List<String> getAllCategories() throws SQLException {
+        String sql = "SELECT DISTINCT category FROM job_postings WHERE status = 'active' AND category IS NOT NULL ORDER BY category";
+        List<String> categories = new ArrayList<>();
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String category = rs.getString("category");
+                if (category != null && !category.trim().isEmpty()) {
+                    categories.add(category);
+                }
+            }
+        }
+        return categories;
+    }
+
+// Lấy danh sách locations
+    public List<String> getAllLocations() throws SQLException {
+        String sql = "SELECT DISTINCT location FROM job_postings WHERE status = 'active' AND location IS NOT NULL ORDER BY location";
+        List<String> locations = new ArrayList<>();
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String location = rs.getString("location");
+                if (location != null && !location.trim().isEmpty()) {
+                    locations.add(location);
+                }
+            }
+        }
+        return locations;
+    }
+
+// Tăng view count
+    public boolean incrementViewCount(int jobId) throws SQLException {
+        String sql = "UPDATE job_postings SET views_count = views_count + 1 WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, jobId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+// Lấy job_postings liên quan
+    public List<Job> getRelatedJobs(int currentJobId, String category, int companyId, int limit) throws SQLException {
+        String sql = "SELECT * FROM job_postings WHERE status = 'active' AND id != ? AND "
+                + "(category = ? OR company_profile_id = ?) ORDER BY created_at DESC";
+
+        if (limit > 0) {
+            sql += " OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
+        }
+
+        List<Job> job_postings = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, currentJobId);
+            stmt.setString(2, category);
+            stmt.setInt(3, companyId);
+            if (limit > 0) {
+                stmt.setInt(4, limit);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                job_postings.add(mapResultSetToJob(rs));
+            }
+        }
+        return job_postings;
+    }
+
+// Helper method để map ResultSet về Job object với null safety
+    private Job mapResultSetToJob(ResultSet rs) throws SQLException {
+        Job job = new Job();
+        job.setId(rs.getInt("id"));
+        job.setCompanyId(rs.getInt("company_profile_id"));
+        job.setTitle(rs.getString("title"));
+        job.setDescription(rs.getString("description"));
+        job.setRequirements(rs.getString("requirements"));
+        job.setBenefits(rs.getString("benefits"));
+        job.setJobType(rs.getString("job_type"));
+        job.setJobLevel(rs.getString("job_level"));
+        job.setSalaryMin(rs.getBigDecimal("salary_min"));
+        job.setSalaryMax(rs.getBigDecimal("salary_max"));
+        job.setLocation(rs.getString("location"));
+        job.setCategory(rs.getString("category"));
+        job.setExperienceRequired(rs.getInt("experience_required"));
+
+        Timestamp deadline = rs.getTimestamp("application_deadline");
+        job.setApplicationDeadline(deadline != null ? new Date(deadline.getTime()) : null);
+
+        job.setStatus(rs.getString("status"));
+        job.setFeatured(rs.getBoolean("is_featured"));
+        job.setUrgent(rs.getBoolean("is_urgent"));
+        job.setViewsCount(rs.getInt("views_count"));
+        job.setApplicationsCount(rs.getInt("applications_count"));
+
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        job.setCreatedAt(createdAt != null ? new Date(createdAt.getTime()) : new Date());
+
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        job.setUpdatedAt(updatedAt != null ? new Date(updatedAt.getTime()) : new Date());
+
+        return job;
+    }
+    
+
+}

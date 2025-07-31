@@ -14,12 +14,12 @@ public class UserDao {
         this.connection = connection;
     }
 
-    // Thêm user mới
+    // Thêm user mới và lấy ID tự động tạo
     public boolean insertUser(User user) throws SQLException {
         String sql = "INSERT INTO users (role_id, email, phone, password_hash, full_name, "
                 + "is_email_verified, is_phone_verified, avatar_url, status, created_at, updated_at) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, user.getRoleId());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPhone());
@@ -31,8 +31,18 @@ public class UserDao {
             stmt.setString(9, user.getStatus());
             stmt.setTimestamp(10, new Timestamp(user.getCreatedAt().getTime()));
             stmt.setTimestamp(11, new Timestamp(user.getUpdatedAt().getTime()));
-            return stmt.executeUpdate() > 0;
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        user.setId(generatedKeys.getInt(1)); // Set the generated ID back to the user object
+                    }
+                }
+                return true;
+            }
         }
+        return false;
     }
 
     public User login(String email, String rawPassword) {
@@ -44,20 +54,7 @@ public class UserDao {
                 String storedHashedPassword = rs.getString("password_hash");
                 // So sánh mật khẩu người dùng nhập với hash trong DB
                 if (BCrypt.checkpw(rawPassword, storedHashedPassword)) {
-                    return new User(
-                            rs.getInt("id"),
-                            rs.getInt("role_id"),
-                            rs.getString("email"),
-                            rs.getString("phone"),
-                            storedHashedPassword,
-                            rs.getString("full_name"),
-                            rs.getBoolean("is_email_verified"),
-                            rs.getBoolean("is_phone_verified"),
-                            rs.getString("avatar_url"),
-                            rs.getString("status"),
-                            rs.getTimestamp("created_at"),
-                            rs.getTimestamp("updated_at")
-                    );
+                    return mapResultSetToUser(rs); // Sử dụng helper method để map đầy đủ
                 }
             }
         } catch (SQLException e) {
@@ -71,6 +68,19 @@ public class UserDao {
         String sql = "SELECT * FROM users WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToUser(rs);
+            }
+        }
+        return null;
+    }
+
+    // Lấy user theo Email
+    public User getUserByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return mapResultSetToUser(rs);
@@ -156,26 +166,81 @@ public class UserDao {
             return rs.next();
         }
     }
-    public User getUserByEmail(String email) {
-    String sql = "SELECT * FROM Users WHERE email = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, email);
-        ResultSet rs = ps.executeQuery();
+    public int getCandidateProfileId(int userId) throws SQLException {
+    String sql = "SELECT id FROM candidate_profiles WHERE user_id = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, userId);
+        ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
-            User u = new User();
-            u.setId(rs.getInt("id"));
-            u.setEmail(rs.getString("email"));
-            u.setFullName(rs.getString("full_name"));
-            u.setRoleId(rs.getInt("role_id"));
-            u.setAvatarUrl(rs.getString("avatar_url"));
-            u.setStatus(rs.getString("status"));
-            // ... các trường khác
-            return u;
+            return rs.getInt("id");
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-    return null;
+    return -1; // Trả về -1 nếu không tìm thấy candidate profile
+}
+    // Đăng ký tài khoản mới
+    public boolean register(User user) throws SQLException {
+        String sql = "INSERT INTO users (role_id, username, password_hash, email, phone, full_name, " +
+                     "is_email_verified, is_phone_verified, avatar_url, status, created_at, updated_at) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, user.getRoleId());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getPasswordHash());
+            stmt.setString(4, user.getEmail());
+            stmt.setString(5, user.getPhone());
+            stmt.setString(6, user.getFullName());
+            stmt.setBoolean(7, user.isEmailVerified());
+            stmt.setBoolean(8, user.isPhoneVerified());
+            stmt.setString(9, user.getAvatarUrl());
+            stmt.setString(10, user.getStatus());
+            stmt.setTimestamp(11, new Timestamp(user.getCreatedAt().getTime()));
+            stmt.setTimestamp(12, new Timestamp(user.getUpdatedAt().getTime()));
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+
+    // Kiểm tra username đã tồn tại
+    public boolean isUsernameExists(String username) throws SQLException {
+        String sql = "SELECT 1 FROM users WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    // Kiểm tra email đã tồn tại
+    public boolean isEmailExists(String email) throws SQLException {
+        String sql = "SELECT 1 FROM users WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+
+
+    // Cập nhật profile cơ bản (email, phone, address, avatar)
+    public boolean updateProfile(int userId, String email, String phone, String address, String avatarUrl) throws SQLException {
+        String sql = "UPDATE users SET email = ?, phone = ?, full_name = ?, avatar_url = ?, updated_at = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.setString(2, phone);
+            stmt.setString(3, address); // Sử dụng address cho full_name tạm thời
+            stmt.setString(4, avatarUrl);
+            stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            stmt.setInt(6, userId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    
+
+    
 }
 
-}
+

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class DBContext {
 
     // Thông tin cấu hình kết nối
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=TechSignDB;encrypt=false";
+    private static final String URL = "jdbc:sqlserver://KHANHDUONG\\KHDUONG:1433;databaseName=TechSignDB;encrypt=false";
     private static final String USERNAME = "sa";
     private static final String PASSWORD = "123";
 
