@@ -15,13 +15,10 @@
                     <file>${file.reference.mssql-jdbc-12.8.1.jre8.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jbcrypt-0.4.jar-1}</file>
+                    <file>${file.reference.json-20250107.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.json-20250107-javadoc.jar}</file>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.fluent-hc-4.5.14.jar-1}</file>
+                    <file>${file.reference.fluent-hc-4.5.14.jar}</file>
                 </library>
                 <library dirs="200">
                     <file>${file.reference.jakarta.servlet-api-5.0.0.jar}</file>
@@ -45,27 +42,17 @@
                     <file>${file.reference.javers-core-7.1.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jbcrypt-0.4.jar-2}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.fluent-hc-4.5.14.jar-2}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.jakarta.mail-2.0.1.jar-1}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.jakarta.websocket-client-api-2.2.0-M1.jar-1}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
+                    <file>${file.reference.jakarta.mail-2.0.1.jar}</file>
                 </library>
                 <library dirs="200">
                     <file>${file.reference.javax.mail-1.6.2.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jakarta.servlet-api-5.0.0.jar-1}</file>
+                    <file>${file.reference.jbcrypt-0.4.jar}</file>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jakarta.mail-2.0.1.jar-1}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
