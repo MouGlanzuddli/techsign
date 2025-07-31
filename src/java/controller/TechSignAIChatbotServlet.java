@@ -19,8 +19,8 @@ import dao.DBContext;
 import model.User;
 
 public class TechSignAIChatbotServlet extends HttpServlet {
-    private static final String API_KEY = "AIzaSyAl0qgyIdPRk-69Avt5iYps3Gm1YZdFY-A";
-    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+//    private static final String API_KEY = "AIzaSyAl0qgyIdPRk-69Avt5iYps3Gm1YZdFY-A";
+//    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

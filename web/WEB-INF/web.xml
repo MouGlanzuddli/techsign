@@ -191,10 +191,7 @@
 <servlet-name>JobReportServlet</servlet-name>
 <url-pattern>/jobReport</url-pattern>
 </servlet-mapping>
-<servlet-mapping>
-<servlet-name>FileDownloadServlet</servlet-name>
-<url-pattern>/uploads/*</url-pattern>
-</servlet-mapping>
+
 <servlet-mapping>
 <servlet-name>JobPostingServlet</servlet-name>
 <url-pattern>/job-posting</url-pattern>

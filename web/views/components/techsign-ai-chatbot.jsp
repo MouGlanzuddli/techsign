@@ -10,22 +10,29 @@
     }
 
     .chatbot-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: #1b5e20;
-        color: white;
+        background: linear-gradient(135deg, #1b5e20 0%, #43ea7c 100%);
         border: none;
+        color: white;
         font-size: 24px;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        transition: all 0.3s;
-        z-index: 1001;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .chatbot-toggle:hover {
-        background: #43ea7c;
         transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #0d4a14 0%, #2dd65f 100%);
     }
 
     .chatbot-container {
@@ -234,8 +241,12 @@
 
     function toggleChatbot() {
         const container = document.getElementById('chatbot-container');
+        const toggleBtn = document.querySelector('.chatbot-toggle');
+        
         if (container.style.display === 'none' || container.style.display === '') {
             container.style.display = 'flex';
+            toggleBtn.innerHTML = '🤖'; // Robot icon when open
+            
             // Hiển thị tin nhắn chào mừng thông minh
             if (document.getElementById('chatbot-messages').children.length === 0) {
                 const currentPage = window.location.pathname;
@@ -270,6 +281,7 @@
             }
         } else {
             container.style.display = 'none';
+            toggleBtn.innerHTML = '🤖'; // Keep robot icon when closed
         }
     }
 
@@ -379,18 +391,18 @@
 </script>
 
 <div class="techsign-ai-chatbot">
-    <button class="chatbot-toggle" onclick="toggleChatbot()">💬</button>
-
+    <button class="chatbot-toggle" onclick="toggleChatbot()">🤖</button>
+    
     <div id="chatbot-container" class="chatbot-container">
         <div class="chatbot-header">
-            TechSign AI Assistant
+            <span>🤖 TechSign AI Assistant</span>
             <button class="close-btn" onclick="toggleChatbot()">×</button>
         </div>
-
+        
         <div id="chatbot-messages" class="chatbot-messages">
-            <!-- Tin nhắn sẽ được thêm vào đây -->
+            <!-- Messages will be displayed here -->
         </div>
-
+        
         <div class="chatbot-input">
             <input type="text" id="chatbot-input-field" placeholder="Nhập câu hỏi của bạn..." autocomplete="off">
             <button id="chatbot-send-btn" onclick="sendMessage()">Gửi</button>

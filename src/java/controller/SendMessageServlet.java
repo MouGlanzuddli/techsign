@@ -1,19 +1,21 @@
 package controller;
 
-import dao.MessageDao;
-import model.Message;
-import model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
-import controller.ChatboxSessionManager;
+import java.sql.Timestamp;
+import java.util.Date;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dao.MessageDao;
+import model.Message;
+import model.User;
 
 public class SendMessageServlet extends HttpServlet {
     @Override

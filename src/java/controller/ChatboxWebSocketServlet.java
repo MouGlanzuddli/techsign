@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import controller.ChatboxSessionManager;
 
 @ServerEndpoint("/chatbox")
 public class ChatboxWebSocketServlet {
@@ -17,16 +16,25 @@ public class ChatboxWebSocketServlet {
 
     @OnOpen
     public void onOpen(Session session) {
+        System.out.println("[WebSocket] New connection: " + session.getId());
         ChatboxSessionManager.add(session);
+        sessions.add(session);
     }
 
     @OnMessage
     public void onMessage(String message, Session senderSession) throws IOException {
-        // Broadcast message to all connected clients except sender
+        System.out.println("[WebSocket] Received message from " + senderSession.getId() + ": " + message);
+        
+        // Broadcast message to all connected clients EXCEPT sender
         synchronized (sessions) {
             for (Session session : sessions) {
                 if (session.isOpen() && !session.equals(senderSession)) {
-                    session.getBasicRemote().sendText(message);
+                    try {
+                        session.getBasicRemote().sendText(message);
+                        System.out.println("[WebSocket] Sent to " + session.getId());
+                    } catch (Exception e) {
+                        System.err.println("[WebSocket] Error sending to " + session.getId() + ": " + e.getMessage());
+                    }
                 }
             }
         }
@@ -34,6 +42,8 @@ public class ChatboxWebSocketServlet {
 
     @OnClose
     public void onClose(Session session) {
+        System.out.println("[WebSocket] Connection closed: " + session.getId());
         ChatboxSessionManager.remove(session);
+        sessions.remove(session);
     }
 }

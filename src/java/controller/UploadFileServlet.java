@@ -27,13 +27,19 @@ public class UploadFileServlet extends HttpServlet {
                 return;
             }
             String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
-            String uploadDir = getServletContext().getRealPath("/uploads");
+            
+            // Lưu vào thư mục uploads trong project root (không phải build)
+            String projectRoot = getServletContext().getRealPath("/").replace("build\\web", "").replace("build/web", "");
+            String uploadDir = projectRoot + "uploads";
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
             File file = new File(dir, fileName);
+            
             try (InputStream input = filePart.getInputStream()) {
                 Files.copy(input, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
+            
+            // URL để truy cập file
             String fileUrl = request.getContextPath() + "/uploads/" + fileName;
             response.getWriter().write("{\"url\":\"" + fileUrl + "\"}");
         } catch (Exception e) {

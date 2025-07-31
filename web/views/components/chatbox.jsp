@@ -13,11 +13,10 @@
     <div id="chatbox-header">
       <div id="chatbox-header-avatar"><i class="fas fa-user"></i></div>
       <div id="chatbox-header-info">
-        <div id="chatbox-header-name">server-server</div>
-        <div id="chatbox-header-status">Online</div>
+        <div id="chatbox-header-name">Select a user to chat</div>
+        <div id="chatbox-header-status"></div>
       </div>
       <div id="chatbox-header-actions">
-        <i class="fas fa-ellipsis-v"></i>
         <i class="fas fa-times" id="chatbox-close"></i>
       </div>
     </div>
