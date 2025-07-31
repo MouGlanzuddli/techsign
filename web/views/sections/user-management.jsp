@@ -413,57 +413,57 @@
             }
         }
 
-        function updatePagination(data) {
-            currentPage = data.currentPage;
-            pageSize = data.pageSize;
-            totalPages = data.totalPages;
-            totalCount = data.totalCount;
-
-            const paginationContainer = document.getElementById('paginationContainer');
-            const paginationInfo = document.getElementById('paginationInfo');
-            const pagination = document.getElementById('pagination');
-
-            if (totalPages > 1) {
-                paginationContainer.style.display = 'flex';
-                
-                // Update pagination info
-                const start = (currentPage - 1) * pageSize + 1;
-                const end = Math.min(currentPage * pageSize, totalCount);
-                paginationInfo.textContent = `Hiển thị ${start}-${end} trong tổng số ${totalCount} bản ghi`;
-
-                // Generate pagination buttons
-                pagination.innerHTML = '';
-                
-                // Previous button
-                const prevLi = document.createElement('li');
-                prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-                prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Trước</a>`;
-                pagination.appendChild(prevLi);
-
-                // Page numbers
-                for (let i = 1; i <= totalPages; i++) {
-                    if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-                        const li = document.createElement('li');
-                        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-                        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
-                        pagination.appendChild(li);
-                    } else if (i === currentPage - 3 || i === currentPage + 3) {
-                        const li = document.createElement('li');
-                        li.className = 'page-item disabled';
-                        li.innerHTML = '<span class="page-link">...</span>';
-                        pagination.appendChild(li);
-                    }
-                }
-
-                // Next button
-                const nextLi = document.createElement('li');
-                nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-                nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Sau</a>`;
-                pagination.appendChild(nextLi);
-            } else {
-                paginationContainer.style.display = 'none';
-            }
-        }
+//        function updatePagination(data) {
+//            currentPage = data.currentPage;
+//            pageSize = data.pageSize;
+//            totalPages = data.totalPages;
+//            totalCount = data.totalCount;
+//
+//            const paginationContainer = document.getElementById('paginationContainer');
+//            const paginationInfo = document.getElementById('paginationInfo');
+//            const pagination = document.getElementById('pagination');
+//
+//            if (totalPages > 1) {
+//                paginationContainer.style.display = 'flex';
+//                
+//                // Update pagination info
+//                const start = (currentPage - 1) * pageSize + 1;
+//                const end = Math.min(currentPage * pageSize, totalCount);
+//                paginationInfo.textContent = `Hiển thị ${start}-${end} trong tổng số ${totalCount} bản ghi`;
+//
+//                // Generate pagination buttons
+//                pagination.innerHTML = '';
+//                
+//                // Previous button
+//                const prevLi = document.createElement('li');
+//                prevLi.className = `page-item `;
+//                prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Trước</a>`;
+//                pagination.appendChild(prevLi);
+//
+//                // Page numbers
+//                for (let i = 1; i <= totalPages; i++) {
+//                    if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+//                        const li = document.createElement('li');
+//                        li.className = `page-item `;
+//                        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+//                        pagination.appendChild(li);
+//                    } else if (i === currentPage - 3 || i === currentPage + 3) {
+//                        const li = document.createElement('li');
+//                        li.className = 'page-item disabled';
+//                        li.innerHTML = '<span class="page-link">...</span>';
+//                        pagination.appendChild(li);
+//                    }
+//                }
+//
+//                // Next button
+//                const nextLi = document.createElement('li');
+//                nextLi.className = `page-item `;
+//                nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Sau</a>`;
+//                pagination.appendChild(nextLi);
+//            } else {
+//                paginationContainer.style.display = 'none';
+//            }
+//        }
 
         function changePage(page) {
             if (page >= 1 && page <= totalPages) {
