@@ -1,12 +1,12 @@
 package controller;
 
-import dao.StatisticsDAO;
+import dal.StatisticsDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 import com.google.gson.Gson;
 import java.util.List;
-import dao.DBConnection;
+import dal.DBContext;
 import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +49,7 @@ public class StatisticsServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
         
-        try (Connection conn = DBConnection.getConnection()) {
+        try (Connection conn = DBContext.getConnection()) {
             StatisticsDAO statisticsDAO = new StatisticsDAO();
             Map<String, Object> statistics = statisticsDAO.getAllStatistics();
             

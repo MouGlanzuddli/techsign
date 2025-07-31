@@ -185,7 +185,7 @@
 
 <!-- Before closing </body> -->
 <script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/admin-2.js"></script>  Fixed filename 
+<script src="${pageContext.request.contextPath}/assets/js/admin-2.js"></script>  
 <script src="${pageContext.request.contextPath}/assets/js/chatbox.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/job-postings.js"></script><!--
 --><script src="${pageContext.request.contextPath}/assets/js/section-loader.js"></script><!--

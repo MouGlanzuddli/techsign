@@ -1122,3 +1122,18 @@
     padding: 12px 6px 4px 6px;
   }
 }
+
+/* Application Analysis Grid */
+.application-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .application-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

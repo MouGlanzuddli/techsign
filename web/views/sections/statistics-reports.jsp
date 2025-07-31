@@ -416,16 +416,26 @@
             </div>
             
             <div class="dashboard-wrapper">
+                <div class="update-info-bar">
+                    <div class="update-left">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Cập nhật: <span id="applicationLastUpdate">--:--</span></span>
+                    </div>
+                    <div class="update-right">
+                        <button class="btn btn-sm btn-primary" onclick="refreshApplicationAnalysis()">
+                            <i class="fas fa-sync-alt"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
                 <div class="application-stats-grid">
                     <div class="stat-card blue fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Tổng đơn ứng tuyển</h3>
-                                <div class="stat-number blue" id="totalApplications"></div>
-                                <span class="stat-change" id="totalApplicationsChange"></span>
+                                <h3>Tỷ lệ thành công</h3>
+                                <div class="stat-number blue" id="successRate"></div>
                             </div>
                             <div class="stat-icon blue">
-                                <i class="fas fa-file-alt"></i>
+                                <i class="fas fa-percentage"></i>
                             </div>
                         </div>
                     </div>
@@ -433,66 +443,41 @@
                     <div class="stat-card green fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Đã phê duyệt</h3>
-                                <div class="stat-number green" id="approvedApplications"></div>
-                                <span class="stat-change" id="approvedApplicationsChange"></span>
+                                <h3>Thời gian xử lý TB</h3>
+                                <div class="stat-number green" id="avgProcessingTime"></div>
                             </div>
                             <div class="stat-icon green">
-                                <i class="fas fa-check"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card yellow fade-in">
-                        <div class="stat-content">
-                            <div class="stat-info">
-                                <h3>Đang xử lý</h3>
-                                <div class="stat-number yellow" id="pendingApplications"></div>
-                                <span class="stat-change" id="pendingApplicationsChange"></span>
-                            </div>
-                            <div class="stat-icon yellow">
                                 <i class="fas fa-clock"></i>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="stat-card red fade-in">
+                    <div class="stat-card purple fade-in">
                         <div class="stat-content">
                             <div class="stat-info">
-                                <h3>Từ chối</h3>
-                                <div class="stat-number red" id="rejectedApplications"></div>
-                                <span class="stat-change" id="rejectedApplicationsChange"></span>
+                                <h3>Ứng viên đã duyệt</h3>
+                                <div class="stat-number purple" id="approvedCandidates"></div>
                             </div>
-                            <div class="stat-icon red">
-                                <i class="fas fa-times"></i>
+                            <div class="stat-icon purple">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card orange fade-in">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3>Cần chú ý</h3>
+                                <div class="stat-number orange" id="attentionNeeded"></div>
+                            </div>
+                            <div class="stat-icon orange">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="application-charts">
-                    <div class="chart-section fade-in">
-                        <div class="chart-header">
-                            <h3 class="chart-title">Tỷ lệ phê duyệt theo thời gian</h3>
-                            <p class="chart-subtitle">Xu hướng xử lý đơn ứng tuyển</p>
-                        </div>
-                        
-                        <div class="chart-container">
-                            <canvas id="applicationTrendChart"></canvas>
-                        </div>
-                    </div>
 
-                    <div class="chart-section fade-in">
-                        <div class="chart-header">
-                            <h3 class="chart-title">Phân bố ứng viên theo ngành</h3>
-                            <p class="chart-subtitle">Thống kê ứng viên theo lĩnh vực</p>
-                        </div>
-                        
-                        <div class="chart-container">
-                            <canvas id="applicationSectorChart"></canvas>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 

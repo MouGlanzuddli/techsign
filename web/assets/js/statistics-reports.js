@@ -121,6 +121,11 @@ function loadAllRealData() {
         approvedApplications: data.approvedApplications || 0,
         pendingApplications: data.pendingApplications || 0,
         rejectedApplications: data.rejectedApplications || 0,
+        // Thêm dữ liệu mới cho phân tích ứng dụng
+        successRate: data.successRate || 0,
+        avgProcessingTime: data.avgProcessingTime || 0,
+        qualityCandidates: data.qualityCandidates || 0,
+        attentionNeeded: data.attentionNeeded || 0,
       }
 
       realData.securityStats = {
@@ -457,24 +462,21 @@ function initializeApplicationAnalysisWithRealData() {
   console.log("📊 Initializing application analysis with REAL DATA...")
 
   updateApplicationStatsWithRealData()
-  createApplicationCharts()
   updateLastUpdateTime()
   addFadeInAnimations()
 }
 
 function updateApplicationStatsWithRealData() {
-  document.getElementById("totalApplications").textContent = formatNumber(
-    realData.applicationAnalysis.totalApplications,
-  )
-  document.getElementById("approvedApplications").textContent = formatNumber(
-    realData.applicationAnalysis.approvedApplications,
-  )
-  document.getElementById("pendingApplications").textContent = formatNumber(
-    realData.applicationAnalysis.pendingApplications,
-  )
-  document.getElementById("rejectedApplications").textContent = formatNumber(
-    realData.applicationAnalysis.rejectedApplications,
-  )
+  // Lấy dữ liệu từ backend
+  const successRate = realData.applicationAnalysis.successRate || 0;
+  const avgProcessingTime = realData.applicationAnalysis.avgProcessingTime || 3.2;
+  const approvedCandidates = realData.applicationAnalysis.approvedApplications || 0;
+  const attentionNeeded = realData.applicationAnalysis.attentionNeeded || 0;
+
+  document.getElementById("successRate").textContent = `${successRate.toFixed(1)}%`;
+  document.getElementById("avgProcessingTime").textContent = `${avgProcessingTime.toFixed(1)} ngày`;
+  document.getElementById("approvedCandidates").textContent = formatNumber(approvedCandidates);
+  document.getElementById("attentionNeeded").textContent = formatNumber(attentionNeeded);
 }
 
 // ✅ UTILITY FUNCTIONS
@@ -710,96 +712,7 @@ function createAccessChart() {
   })
 }
 
-function createApplicationCharts() {
-  createApplicationTrendChart()
-  createApplicationSectorChart()
-}
 
-function createApplicationTrendChart() {
-  const ctx = document.getElementById("applicationTrendChart")
-  if (!ctx) return
-
-  if (charts.applicationTrendChart) {
-    charts.applicationTrendChart.destroy()
-  }
-
-  const months = ["T7", "T8", "T9", "T10", "T11", "T12"]
-  const total = realData.applicationAnalysis.totalApplications
-  const approved = realData.applicationAnalysis.approvedApplications
-  const approvalRate = total > 0 ? (approved / total) * 100 : 0
-
-  const approvalRates = months.map(() => Math.max(0, approvalRate + (Math.random() - 0.5) * 20))
-
-  charts.applicationTrendChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: months,
-      datasets: [
-        {
-          label: "Tỷ lệ phê duyệt (%)",
-          data: approvalRates,
-          borderColor: "#10b981",
-          backgroundColor: "rgba(16, 185, 129, 0.1)",
-          tension: 0.4,
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100,
-        },
-      },
-    },
-  })
-}
-
-function createApplicationSectorChart() {
-  const ctx = document.getElementById("applicationSectorChart")
-  if (!ctx) return
-
-  if (charts.applicationSectorChart) {
-    charts.applicationSectorChart.destroy()
-  }
-
-  const sectors = ["IT", "Marketing", "Sales", "HR", "Finance", "Other"]
-  const total = realData.applicationAnalysis.totalApplications
-  const baseCount = Math.max(1, Math.floor(total / 6))
-  const applications = sectors.map(() => Math.max(0, baseCount + Math.floor(Math.random() * baseCount)))
-  const colors = ["#3b82f6", "#8b5cf6", "#f59e0b", "#10b981", "#ef4444", "#6b7280"]
-
-  charts.applicationSectorChart = new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels: sectors,
-      datasets: [
-        {
-          data: applications,
-          backgroundColor: colors,
-          borderWidth: 0,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-        },
-      },
-    },
-  })
-}
 
 // ✅ REFRESH FUNCTIONS for all sections
 function refreshAccountStats() {
