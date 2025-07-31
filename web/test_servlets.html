@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Servlets</title>
+</head>
+<body>
+    <h2>Test Chat Servlets</h2>
+    
+    <h3>1. Test SendMessageServlet</h3>
+    <button onclick="testSendMessage()">Test Send Message</button>
+    <div id="sendResult"></div>
+    
+    <h3>2. Test ChatHistoryServlet</h3>
+    <button onclick="testChatHistory()">Test Load Chat History</button>
+    <div id="historyResult"></div>
+    
+    <script>
+        function testSendMessage() {
+            const data = new URLSearchParams({
+                receiver_id: '2',
+                content: 'Test message from HTML',
+                message_type: 'text'
+            });
+            
+            fetch('SendMessageServlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: data
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Response text:', text);
+                document.getElementById('sendResult').innerHTML = '<pre>' + text + '</pre>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('sendResult').innerHTML = '<p style="color:red;">Error: ' + error + '</p>';
+            });
+        }
+        
+        function testChatHistory() {
+            fetch('ChatHistoryServlet?receiver_id=2')
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Response text:', text);
+                document.getElementById('historyResult').innerHTML = '<pre>' + text + '</pre>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('historyResult').innerHTML = '<p style="color:red;">Error: ' + error + '</p>';
+            });
+        }
+    </script>
+</body>
+</html> 
