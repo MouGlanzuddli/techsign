@@ -22,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import util.EmailUtil;
 
 public class UserServlet extends HttpServlet {
 
@@ -636,7 +637,7 @@ public class UserServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
             
-            boolean configValid = // EmailUtil.testConfiguration();
+            boolean configValid =  EmailUtil.testConfiguration();
             
             if (configValid) {
                 resp.getWriter().write("{\"success\":true,\"message\":\"Email configuration is valid and working correctly\"}");
@@ -664,10 +665,10 @@ public class UserServlet extends HttpServlet {
             json.append("\"config\":{");
             json.append("\"smtpHost\":\"smtp.gmail.com\",");
             json.append("\"smtpPort\":587,");
-            json.append("\"smtpUsername\":\"").append(// EmailUtil.getSmtpUsername()).append("\",");
-            json.append("\"smtpPasswordConfigured\":").append(// EmailUtil.isPasswordConfigured()).append(",");
-            json.append("\"configurationValid\":").append(// EmailUtil.testConfiguration()).append(",");
-            json.append("\"configFilePath\":\"").append(// EmailUtil.getConfigFilePath()).append("\"");
+            json.append("\"smtpUsername\":\"").append( EmailUtil.getSmtpUsername()).append("\",");
+            json.append("\"smtpPasswordConfigured\":").append( EmailUtil.isPasswordConfigured()).append(",");
+            json.append("\"configurationValid\":").append( EmailUtil.testConfiguration()).append(",");
+            json.append("\"configFilePath\":\"").append( EmailUtil.getConfigFilePath()).append("\"");
             json.append("}");
             json.append("}");
             
@@ -694,7 +695,7 @@ public class UserServlet extends HttpServlet {
             }
             
             // Update email configuration
-            boolean updated = // EmailUtil.updateConfiguration(smtpUsername, smtpPassword);
+            boolean updated =  EmailUtil.updateConfiguration(smtpUsername, smtpPassword);
             
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
