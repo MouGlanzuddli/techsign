@@ -49,15 +49,14 @@
 							</div>
 						</div>
 						<div class="nav-menus-wrapper">
-							<ul class="nav-menu">
-							
+							<ul class="nav-menu">							
 								<li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a>
 									
 								</li>
 								
 								<li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
 									<ul class="nav-dropdown nav-submenu">
-										<li><a href="JavaScript:Void(0);">Job List<span class="submenu-indicator"></span></a>	
+										<li><a href="SearchandView">Job List<span class="submenu-indicator"></span></a>	
 										</li>
 										
 										

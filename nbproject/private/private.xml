@@ -3,16 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/Constants.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/web/index.jsp</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LogoutServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LoginGoogleHandler.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/web/loginGG.jsp</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/UserDao.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/dal/DBContext.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/LoginServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/SignupServlet.java</file>
-            <file>file:/D:/KÌ%205/JobSearchManagement/src/java/controller/UserGoogleDto.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/CreateNewCV.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/controller/CreateNewCVServlet.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/controller/EditSystemCVServlet.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/editSystemCV.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/controller/UpdateSystemCVServlet.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/resumeCandidate.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/controller/UploadServlet.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/jobdetail.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/controller/JobDetail.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/assets/js/reviewbeforeupload.js</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/assets/css/styles.css</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/DAO/BookmarkDAO.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/controller/UploadCVforjobdetailServlet.java</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/web/searchandview.jsp</file>
+            <file>file:/C:/Users/Thien%20An/Documents/NetBeansProjects/TechDB/src/java/DAO/ApplicationDAO.java</file>
         </group>
     </open-files>
 </project-private>

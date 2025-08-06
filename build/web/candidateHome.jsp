@@ -39,7 +39,7 @@
         <nav id="navigation" class="navigation navigation-landscape">
             <div class="nav-header">
                 <a class="nav-brand static-logo" href="#"><img src="${pageContext.request.contextPath}/assets/img/logo-light.png" class="logo" alt=""></a>
-                <a class="nav-brand fixed-logo" href="#"><img src="${pageContext.request.contextPath}/assets/img/logo.png" class="logo" alt=""></a>
+             
                 <div class="nav-toggle"></div>
                 <div class="mobile_nav">
                     <ul>
@@ -51,16 +51,17 @@
             </div>
             <div class="nav-menus-wrapper">
                 <ul class="nav-menu">
-                    <li class="active"><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
+                    <li><a href="JavaScript:Void(0);">Home<span class="submenu-indicator"></span></a></li>
                     <li><a href="JavaScript:Void(0);">Jobs<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="grid-style-1.html">Job List</a></li>
+                            <li><a href="SearchandView">Job List</a></li>
                             <li><a href="grid-style-2.html">Suitable Jobs</a></li>
+                           
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Company<span class="submenu-indicator"></span></a>
                         <ul class="nav-dropdown nav-submenu">
-                            <li><a href="employer-grid-1.html">Company List</a></li>
+                           <li><a href="SearchCompaniesServlet">Company List</a></li>
                         </ul>
                     </li>
                     <li><a href="JavaScript:Void(0);">Profile CV<span class="submenu-indicator"></span></a>
@@ -70,6 +71,20 @@
                             
                         </ul>
                     </li>
+
+                                <li><a href="JavaScript:Void(0);">Pages<span class="submenu-indicator"></span></a>
+                                    <ul class="nav-dropdown nav-submenu">
+                                        <li><a href="about-us.html">About Us</a></li> 
+
+
+
+                                        <li><a href="faq.html">FAQ's</a></li>
+                                        <li><a href="contact.html">Contacts</a></li>
+                                        <li><a href="evaluateSystem.jsp">Evaluate System</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="#">Help</a></li>
                    
                 </ul>
                 <ul class="nav-menu nav-menu-social align-to-right">
@@ -87,8 +102,8 @@
                             <img src="${pageContext.request.contextPath}/assets/img/logo-account.png" class="nav-logo" alt="aa">
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accountLogoDropdown">
-                            <li><a class="dropdown-item" href="JavaScript:Void(0);">Dashboard</a></li>
-                            <li><a class="dropdown-item" href= "LogoutServlet""JavaScript:Void(0);">Logout</a></li>
+                            <li><a class="dropdown-item" href="dashboardcandidate.jsp">Dashboard</a></li>
+                            <li><a class="dropdown-item" href= "LogoutServlet">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
